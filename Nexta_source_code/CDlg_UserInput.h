@@ -1,0 +1,27 @@
+#pragma once
+
+
+// CDlg_UserInput dialog
+
+class CDlg_UserInput : public CDialog
+{
+	DECLARE_DYNAMIC(CDlg_UserInput)
+
+public:
+	CDlg_UserInput(CWnd* pParent = nullptr);   // standard constructor
+	virtual ~CDlg_UserInput();
+
+// Dialog Data
+#ifdef AFX_DESIGN_TIME
+	enum { IDD = IDD_DIALOG_USER_INPUT };
+#endif
+
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+
+	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedOk();
+	CString m_StrQuestion;
+	CString m_InputValue;
+};
