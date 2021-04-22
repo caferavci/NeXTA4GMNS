@@ -4,33 +4,40 @@ Prepared by Dr. Xuesong (Simon) Zhou’ research group at Arizona State Universi
 
 Contact: xzhou74\@asu.edu
 
-Data set
+Table of Contents
 
-**release**
+[Table of Contents	1](#_Toc69941395)
 
-Software:
+[Part I: Basic Understanding of GMNS and visualization	1](#_Toc69941396)
 
-QGIS, NeXTA
+>   [1. Introduction of GMNS, AMS, QGIS and NeXTA	1](#_Toc69941397)
 
-Audiences:
+>   [2. Import GMNS file with geometry field in QGIS	3](#_Toc69941398)
 
-GIS users, city planners and transportation planners
+>   [3. Load XYZ Tiles in QGIS with background maps	4](#_Toc69941399)
 
-Learning Objectives:
+>   [4. Visualize output file link_performance.csv in QGIS	5](#_Toc69941400)
 
-1.  Understand how to view/edit network attributes in NeXTA
+>   [5. View/edit GMNS network in NeXTA	8](#_Toc69941401)
 
-2.  Understand the user interface of NEXTA
+>   [6. Load GMNS network with background image in NeXTA through the help of
+>   QGIS	14](#_Toc69941402)
 
-3.  Understand node and link files in GMNS format
+[Part II: Advanced Topics: Create GMNS Networks	18](#_Toc69941403)
 
-4.  Use QGIS to visualize GMNS network
+>   [7. Create a GMNS Network in NeXTA without background
+>   image	18](#_Toc69941404)
 
-# Part I: Basic Understanding of GMNS and visualization 
+>   [8. Create a Network in NeXTA from the background map
+>   image	27](#_Toc69941405)
+
+>   [9. Create network through QuickOSM QGIS Plugin	40](#_Toc69941406)
+
+# Part I: Basic Understanding of GMNS and visualization
 
 ## 1. Introduction of GMNS, AMS, QGIS and NeXTA
 
-What is GMNS?
+**What is GMNS?**
 
 General Travel Network Format Specification is a product of Zephyr Foundation,
 which aims to advance the field through flexible and efficient support,
@@ -39,7 +46,7 @@ education, guidance, encouragement, and incubation.
 Further Details in
 <https://zephyrtransport.org/projects/2-network-standard-and-tools/>
 
-What is AMS?
+**What is AMS?**
 
 As stated in FHWA website,
 <https://cms7.fhwa.dot.gov/research/operations/analysis-modeling-simulation/analysis-modeling-simulation-overview>,
@@ -51,7 +58,7 @@ solutions to a wide range of issues. These solutions include leveraging emerging
 technologies, data sources, and alternative (non-traditional) strategies. AMS
 tools will continue to play a critical role in evaluating these solutions.
 
-What is QGIS?
+**What is QGIS?**
 
 QGIS is a free and open-source cross-platform desktop geographic information
 system (GIS) application that supports viewing, editing, and analysis of
@@ -70,7 +77,7 @@ georeference images.
 
 **Source:** <https://en.wikipedia.org/wiki/QGIS>
 
-What is NEXTA?
+**What is NEXTA?**
 
 NeXTA: Network explorer for Traffic Analysis
 
@@ -109,11 +116,12 @@ field.
 You now have the completed QGIS-compatible file by steps 1 and 2. Open QGIS and
 click on menu LayerAdd LayerAdd Delimited Text Layer. In the following dialogue
 box, load GMNS node.csv and link.csv, and ensure WKT is selected as geometry
-definition.
+definition. Sample data set:
+<https://github.com/asu-trans-ai-lab/NeXTA-QGIS_for_AMS_GMNS/tree/gh-pages/release>
 
 ![](media/79125164d610fd87d8e4b44e55a73ca8.png)
 
-The imported West Jordon network is shown as follows.
+The imported sample network is shown as follows.
 
 ![](media/6a9a985bdcd586189fe49cdb0d7ca35b.png)
 
@@ -129,7 +137,7 @@ Refence:
 
 ![](media/a91eb5417dbf0d19408d851652edef9f.png)
 
-## 4. Visualize output file link_performance.csv in QGIS 
+## 4. Visualize output file link_performance.csv in QGIS
 
 The 'geometry' field can be obtained from link.csv file. Then open this file in
 the same way as above. (LayerAdd LayerAdd Delimited Text Layer)
@@ -157,7 +165,7 @@ Then you can display traffic assignment result with following picture.
 
 ![](media/dbacff02995f468ad926646ac0cf731e.png)
 
-## 5. View/edit GMNS network in NeXTA 
+## 5. View/edit GMNS network in NeXTA
 
 Step 1: Download and Open NeXTA, Open the Tempe ASU Network
 
@@ -228,8 +236,9 @@ Alternatively, after selecting the link or node, **right-click** near the object
 and select either Edit Link Properties or Node Properties. Selecting Edit Link
 Properties opens the Link Properties dialog box, shown below. These dialog boxes
 offer the ability to edit individual link and node attributes quickly and easily
-- simply replace the text/values in the appropriate field, select OK, and click
-the Save button
+
+-   simply replace the text/values in the appropriate field, select OK, and
+    click the Save button
 
 ![](media/859247d946f5f96286733bdadea5bec0.jpeg)
 
@@ -302,21 +311,21 @@ map.
 
 ![](media/8cdf10ddb7b764bf5ef8e959317759a5.jpeg)
 
-# Part II: Advanced Topics: Create GMNS Networks 
+# Part II: Advanced Topics: Create GMNS Networks
 
 ## 7. Create a GMNS Network in NeXTA without background image
 
 Learning objectives:
 
-1. How to create a network by yourself.
+1.  How to create a network by yourself.
 
-2. How to adjust network elements size.
+2.  How to adjust network elements size.
 
-3. How to edit and view the attributes of Network.
+3.  How to edit and view the attributes of Network.
 
-4. How to create a network from the background map image.
+4.  How to create a network from the background map image.
 
-5. How to verify the network connectivity.
+5.  How to verify the network connectivity.
 
 Step 1: Open NeXTA
 
@@ -625,13 +634,7 @@ Note that, output field type is Text, unlimited length (text).
 Then select necessary field to modify node.csv to adhere to the following
 format.
 
-![](media/2c84e32086a2c164a1bf079b25a1e2f8.png)
-
 Similarly, for link layer, obtain geometry by 'geom_to_wkt(\$geometry)'
 expression and export to link.csv.
 
 ![](media/381aac6221f90c6ec381f3c1a435eac2.png)
-
-## 10. Create GMNS network from Openstreet Maps (OSM) file
-
-## 11. Create multi-resolution GMNS network through open-source Ocean Tool
