@@ -215,6 +215,7 @@ string g_time_coding(float time_stamp)
 	return strm.str();
 } // transform hhmm to minutes 
 
+
 vector<float> g_time_parser(string str)
 {
 	vector<float> output_global_second;
@@ -1389,9 +1390,9 @@ bool CTLiteDoc::ReadNodeCSVFile(LPCTSTR lpszFileName, int LayerNo)
 
 		//test
 		parser_test.ReadRecord();
-		int node_id;
+		long node_id;
 		string name;
-		int zone_id = 0;
+		long zone_id = 0;
 		string control_type;
 		double X;
 		double Y;

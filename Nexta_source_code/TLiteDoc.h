@@ -388,6 +388,8 @@ public:
 	void IdentifyBottleNeckAndOnOffRamps();
 	void Modify(BOOL bModified=true)
 {
+	if (bModified == true)
+			return;  //already modified , return 
 
    SetModifiedFlag(bModified);
 
@@ -1680,15 +1682,16 @@ public:
 
 	int GetUnusedNodeNo()
 	{
-		int NewNodeNo = 0;
+		int NewNodeNo = 1000000;
 
-		for (std::list<DTANode*>::iterator  iNode = m_NodeSet.begin(); iNode != m_NodeSet.end(); iNode++)
-		{
-			if(NewNodeNo <= (*iNode)->m_NodeID)
-				NewNodeNo = (*iNode)->m_NodeID +1;
-		}
 
-		return NewNodeNo;
+		//for (std::list<DTANode*>::iterator  iNode = m_NodeSet.begin(); iNode != m_NodeSet.end(); iNode++)
+		//{
+		//	if(NewNodeNo <= (*iNode)->m_NodeID)
+		//		NewNodeNo = (*iNode)->m_NodeID +1;
+		//}
+
+		return NewNodeNo + m_NodeSet.size();
 
 	}
 

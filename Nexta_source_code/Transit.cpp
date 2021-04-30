@@ -35,6 +35,7 @@
 #include "TLiteDoc.h"
 #include "TLiteView.h"
 #include "MainFrm.h"
+#include <iomanip>      // std::setw
 extern string g_time_coding(float time_stamp);
 bool PT_Network::ReadGTFFiles(GDRect network_rect)  // Google Transit files
 {
@@ -421,8 +422,8 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 		int count = 0;
 		std::map<int, int> RouteMap;
 
-		std::map<CString, int> TransitLinkMap;
-		std::map<CString, int> TransitLegMap;
+		std::map<string, int> TransitLinkMap;
+		std::map<string, int> TransitLegMap;
 
 		// step 1: for each trip
 		for (iPT_TripMap = m_PT_network.m_PT_TripMap.begin(); iPT_TripMap != m_PT_network.m_PT_TripMap.end(); iPT_TripMap++)
@@ -441,8 +442,8 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 					if (stop_id_to_no_map.find(stopid_1) != stop_id_to_no_map.end() && stop_id_to_no_map.find(stopid_2) != stop_id_to_no_map.end())
 					{
 
-						CString transit_link_key;
-						transit_link_key.Format("%s-%s", stopid_1.c_str(), stopid_2.c_str());
+						string transit_link_key;
+						transit_link_key = stopid_1 + "_" +  stopid_2;
 
 						if (TransitLinkMap.find(transit_link_key) == TransitLinkMap.end())  //find nothing
 						{ //not defined yet
@@ -462,6 +463,8 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 							int stop_no_2 = stop_id_to_no_map[stopid_2];
 
 							DTALink* pLink = AddNewLink(stop_no_1, stop_no_2, false, true);
+							if (pLink != NULL)
+							{
 							pLink->m_Name = m_PT_network.m_PT_RouteMap[(*iPT_TripMap).second.route_id].route_short_name;
 //								(*iPT_TripMap).second.trip_id,
 //								stopid_2,
@@ -469,11 +472,12 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 
 							//define this link
 							TransitLinkMap[transit_link_key] = TransitLinkMap.size();
+							}
 						}
 
 						// added for legs
-						CString transit_leg_key;
-						transit_leg_key.Format("%d-%s-%s", (*iPT_TripMap).second.route_id, stopid_1.c_str(), stopid_2.c_str());
+						string transit_leg_key;
+						transit_leg_key = (*iPT_TripMap).second.route_id + "_" + stopid_1 +"_" + stopid_2;
 
 						if (TransitLegMap.find(transit_leg_key) == TransitLegMap.end())  //find nothing
 						{ //not defined yet
@@ -493,6 +497,9 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 							int stop_no_2 = stop_id_to_no_map[stopid_2];
 
 							DTALink* pLink = AddNewLink(stop_no_1, stop_no_2, false, true);
+						
+							if(pLink!=NULL)
+							{
 							pLink->m_Name = m_PT_network.m_PT_RouteMap[(*iPT_TripMap).second.route_id].route_short_name;
 							//								(*iPT_TripMap).second.trip_id,
 							//								stopid_2,
@@ -500,6 +507,7 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 
 														//define this link
 							TransitLinkMap[transit_link_key] = TransitLinkMap.size();
+							}
 						}
 
 
@@ -527,7 +535,7 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 	if (st != NULL)
 	{
 
-		fprintf(st, "agent_id,agent_type,trip_id,route_id,route_id_short_name,o_zone_id,d_zone_id,travel_time,distance,node_sequence,time_sequence\n");
+		fprintf(st, "agent_id,agent_type,trip_id,route_id,route_id_short_name,o_zone_id,d_zone_id,travel_time,distance,node_sequence,time_sequence,geometry\n");
 
 		int count = 0;
 		std::map<int, int> RouteMap;
@@ -625,6 +633,18 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 				}
 				fprintf(st, ",");
 			}
+
+			fprintf(st, "\"LINESTRING (");
+
+			for (int i = 0; i < (*iPT_TripMap).second.m_PT_StopTimeVector.size(); i++)
+			{
+				fprintf(st, "%f %f", (*iPT_TripMap).second.m_PT_StopTimeVector[i].pt.x, (*iPT_TripMap).second.m_PT_StopTimeVector[i].pt.y);
+				if(i!=(*iPT_TripMap).second.m_PT_StopTimeVector.size()-1)
+				fprintf(st, ",");
+			}
+
+			fprintf(st, ")\"");
+
 
 
 			fprintf(st, "\n");
@@ -829,6 +849,17 @@ void CTLiteDoc::ReadTransitFiles(CString TransitDataProjectFolder)
 //	}
 //	return true;
 //}
+
+
+string g_time_period_coding(int hour)
+{
+	ostringstream strm;
+	strm.fill('0');
+	strm << setw(2) << hour;
+//		<< setw(2) << minute << ":" << setw(2) << second;
+
+	return strm.str();
+} // transform hhmm to minutes 
 
 bool PT_Network::ReadGTFFiles_Leg(GDRect network_rect)  // Google Transit files
 {
@@ -1084,7 +1115,8 @@ bool PT_Network::ReadGTFFiles_Leg(GDRect network_rect)  // Google Transit files
 				route_id = m_PT_TripMap[TransitStopTime.trip_id].route_id;
 			}
 
-			string route_stop_id = route_id +"_ "+ TransitStopTime.stop_id;  // create route_stop vertex
+			string time_period_str = g_time_period_coding(hour);
+			string route_stop_id = time_period_str +"."+route_id +"."+ TransitStopTime.stop_id;  // create route_stop vertex
 			TransitStopTime.route_stop_id = route_stop_id;
 
 			
@@ -1245,8 +1277,8 @@ void CTLiteDoc::ReadTransitFiles_Leg(CString TransitDataProjectFolder)
 	int count = 0;
 	std::map<int, int> RouteMap;
 
-	std::map<CString, int> TransitLinkMap;
-	std::map<CString, int> TransitLegMap;
+	std::map<string, int> TransitLinkMap;
+	std::map<string, int> TransitLegMap;
 
 	// step 1: for each trip
 	for (iPT_TripMap = m_PT_network.m_PT_TripMap.begin(); iPT_TripMap != m_PT_network.m_PT_TripMap.end(); iPT_TripMap++)
@@ -1265,8 +1297,9 @@ void CTLiteDoc::ReadTransitFiles_Leg(CString TransitDataProjectFolder)
 				if (route_stop_id_to_no_map.find(route_stopid_1) != route_stop_id_to_no_map.end() && route_stop_id_to_no_map.find(route_stopid_2) != route_stop_id_to_no_map.end())
 				{
 
-					CString transit_link_key;
-					transit_link_key.Format("%s-%s", route_stopid_1.c_str(), route_stopid_2.c_str());
+					
+					string transit_link_key;
+					transit_link_key= route_stopid_1 +"_"+ route_stopid_2;
 
 					if (TransitLinkMap.find(transit_link_key) == TransitLinkMap.end())  //find nothing
 					{ //not defined yet
@@ -1287,6 +1320,8 @@ void CTLiteDoc::ReadTransitFiles_Leg(CString TransitDataProjectFolder)
 
 
 						DTALink* pLink = AddNewLink(stop_no_1, stop_no_2, false, true);
+						if(pLink!=NULL)
+						{ 
 						string LinkName = route_stopid_1 + "->" + route_stopid_2;
 						pLink->m_Name = LinkName;
 						//								(*iPT_TripMap).second.trip_id,
@@ -1295,6 +1330,7 @@ void CTLiteDoc::ReadTransitFiles_Leg(CString TransitDataProjectFolder)
 
 													//define this link
 						TransitLinkMap[transit_link_key] = TransitLinkMap.size();
+						}
 					}
 
 				}
@@ -1320,7 +1356,7 @@ void CTLiteDoc::ReadTransitFiles_Leg(CString TransitDataProjectFolder)
 	if (st != NULL)
 	{
 
-		fprintf(st, "agent_id,agent_type,trip_id,route_id,route_id_short_name,o_zone_id,d_zone_id,travel_time,distance,node_sequence,time_sequence\n");
+		fprintf(st, "agent_id,agent_type,trip_id,route_id,route_id_short_name,o_zone_id,d_zone_id,travel_time,distance,node_sequence,time_sequence,geometry\n");
 
 		int count = 0;
 		std::map<int, int> RouteMap;
@@ -1416,6 +1452,18 @@ void CTLiteDoc::ReadTransitFiles_Leg(CString TransitDataProjectFolder)
 				fprintf(st, ",");
 			}
 
+			if ((*iPT_TripMap).second.m_PT_StopTimeVector.size() >= 2)
+			{
+				fprintf(st, "\"LINESTRING (");
+
+				for (int i = 0; i < (*iPT_TripMap).second.m_PT_StopTimeVector.size(); i++)
+				{
+					fprintf(st, "%f %f", (*iPT_TripMap).second.m_PT_StopTimeVector[i].pt.x, (*iPT_TripMap).second.m_PT_StopTimeVector[i].pt.y);
+					if (i != (*iPT_TripMap).second.m_PT_StopTimeVector.size() - 1)
+						fprintf(st, ",");
+				}
+				fprintf(st, ")\"");
+			}
 
 			fprintf(st, "\n");
 		}
@@ -1425,6 +1473,68 @@ void CTLiteDoc::ReadTransitFiles_Leg(CString TransitDataProjectFolder)
 		fclose(st);
 	}
 
+	fopen_s(&st, m_PT_network.m_ProjectDirectory + "trace.csv", "w");
+	if (st == NULL)
+	{
+		AfxMessageBox("Error: File trace.csv cannot be opened.\nIt might be currently used and locked by EXCEL.");
+		return;
+	}
+
+	if (st != NULL)
+	{
+
+		fprintf(st, "agent_id,trip_id,route_id,node_id,station_no,timestamp,h,m,s,travel_time,x_coord,y_coord\n");
+
+		int count = 0;
+		std::map<int, int> RouteMap;
+
+		int agent_id = 1;
+
+		// step 1: for each trip
+		std::map<int, PT_Trip>::iterator iPT_TripMap;
+		for (iPT_TripMap = m_PT_network.m_PT_TripMap.begin(); iPT_TripMap != m_PT_network.m_PT_TripMap.end(); iPT_TripMap++)
+		{
+
+			agent_id++;
+
+
+			for (int i = 0; i < (*iPT_TripMap).second.m_PT_StopTimeVector.size(); i++)
+			{
+				int time_stamp = (*iPT_TripMap).second.m_PT_StopTimeVector[i].arrival_time;
+
+				int hour = time_stamp / 60;
+				int minute = time_stamp - hour * 60;
+				int second = (time_stamp - hour * 60 - minute) * 60;
+
+				float travel_time = 0;
+				
+				if (i != (*iPT_TripMap).second.m_PT_StopTimeVector.size() - 1)
+				{
+					travel_time = (*iPT_TripMap).second.m_PT_StopTimeVector[i+1].arrival_time
+					- (*iPT_TripMap).second.m_PT_StopTimeVector[i].arrival_time;
+
+				}
+
+				fprintf(st, "%d,%d,%s,%d,%d,%s,%d,%d,%d,%f,%f,%f,\n",
+					agent_id,
+					(*iPT_TripMap).second.trip_id,
+					(*iPT_TripMap).second.route_id.c_str(), 
+					route_stop_id_to_no_map[(*iPT_TripMap).second.m_PT_StopTimeVector[i].route_stop_id],
+					i,
+					g_time_coding((*iPT_TripMap).second.m_PT_StopTimeVector[i].arrival_time).c_str(),
+					hour, minute, second,
+					travel_time,
+					(*iPT_TripMap).second.m_PT_StopTimeVector[i].pt.x, 
+					(*iPT_TripMap).second.m_PT_StopTimeVector[i].pt.y);
+			}
+
+
+		}
+
+		AfxMessageBox("File trace.csv has been created.", MB_ICONINFORMATION);
+
+		fclose(st);
+	}
 	//	m_TransitDataLoadingStatus.Format ("%d transit trips have been loaded.",m_PT_network.m_PT_TripMap.size() );
 
 		/*	if( m_PT_network.m_PT_TripMap.size()>0 && AfxMessageBox("Do you want to generate bus trip data?",MB_YESNO|MB_ICONINFORMATION)==IDYES)
