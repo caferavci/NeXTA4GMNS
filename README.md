@@ -6,32 +6,30 @@ Contact: xzhou74\@asu.edu
 
 Table of Contents
 
-[Table of Contents	1](#_Toc69941395)
+[Part I: Basic Understanding of GMNS and visualization](#_Toc69942389)
 
-[Part I: Basic Understanding of GMNS and visualization	1](#_Toc69941396)
+>   [1. Introduction of GMNS, AMS, QGIS and NeXTA](#_Toc69942390)
 
->   [1. Introduction of GMNS, AMS, QGIS and NeXTA	1](#_Toc69941397)
+>   [2. Import GMNS file with geometry field in QGIS](#_Toc69942391)
 
->   [2. Import GMNS file with geometry field in QGIS	3](#_Toc69941398)
+>   [3. Load XYZ Tiles in QGIS with background maps](#_Toc69942392)
 
->   [3. Load XYZ Tiles in QGIS with background maps	4](#_Toc69941399)
+>   [4. Visualize output file link_performance.csv in QGIS](#_Toc69942393)
 
->   [4. Visualize output file link_performance.csv in QGIS	5](#_Toc69941400)
-
->   [5. View/edit GMNS network in NeXTA	8](#_Toc69941401)
+>   [5. View/edit GMNS network in NeXTA](#_Toc69942394)
 
 >   [6. Load GMNS network with background image in NeXTA through the help of
->   QGIS	14](#_Toc69941402)
+>   QGIS](#_Toc69942395)
 
-[Part II: Advanced Topics: Create GMNS Networks	18](#_Toc69941403)
+[Part II: Advanced Topics: Create GMNS Networks](#_Toc69942396)
 
->   [7. Create a GMNS Network in NeXTA without background
->   image	18](#_Toc69941404)
+>   [7. Create a GMNS Network in NeXTA without background image](#_Toc69942397)
 
->   [8. Create a Network in NeXTA from the background map
->   image	27](#_Toc69941405)
+>   [8. Create a Network in NeXTA from the background map image](#_Toc69942398)
 
->   [9. Create network through QuickOSM QGIS Plugin	40](#_Toc69941406)
+>   [9. Conversion between SHAPE file and CSV file](#_Toc69942399)
+
+>   [10. How to use NEXTA to visualize the trajectory](#_Toc69942400)
 
 # Part I: Basic Understanding of GMNS and visualization
 
@@ -42,8 +40,6 @@ Table of Contents
 General Travel Network Format Specification is a product of Zephyr Foundation,
 which aims to advance the field through flexible and efficient support,
 education, guidance, encouragement, and incubation.
-
-Further Details in
 <https://zephyrtransport.org/projects/2-network-standard-and-tools/>
 
 **What is AMS?**
@@ -100,30 +96,22 @@ context, while NeXTA can provide time-dependent link performance visualization,
 path-level and agent-level analysis, and time-dependent agent trajectory
 visualization.
 
-The full user guide of NeXTA can be found at
-https://github.com/xzhou99/NeXTA-GMNS.
-
 This document describes the process of obtaining [node.csv, link.csv, etc]
 GMNS-compatible files for use in QGIS from an OSM network and how to display
 GMNS file including node.csv, link.csv, timing.csv, agent.csv and
-link_performance.csv in QGIS.
+link_performance.csv in NeXTA.
 
 ## 2. Import GMNS file with geometry field in QGIS
 
 Open GMNS node.csv and link.csv in Excel to verify the existence of the geometry
 field.
 
-You now have the completed QGIS-compatible file by steps 1 and 2. Open QGIS and
-click on menu LayerAdd LayerAdd Delimited Text Layer. In the following dialogue
-box, load GMNS node.csv and link.csv, and ensure WKT is selected as geometry
-definition. Sample data set:
+Open QGIS and click on menu Layer-\>Add Layer-\>Add Delimited Text Layer. In the
+following dialogue box, load GMNS node.csv and link.csv, and ensure WKT is
+selected as geometry definition. Sample data set:
 <https://github.com/asu-trans-ai-lab/NeXTA-QGIS_for_AMS_GMNS/tree/gh-pages/release>
 
 ![](media/79125164d610fd87d8e4b44e55a73ca8.png)
-
-The imported sample network is shown as follows.
-
-![](media/6a9a985bdcd586189fe49cdb0d7ca35b.png)
 
 ## 3. Load XYZ Tiles in QGIS with background maps
 
@@ -137,21 +125,21 @@ Refence:
 
 ![](media/a91eb5417dbf0d19408d851652edef9f.png)
 
-## 4. Visualize output file link_performance.csv in QGIS
+## 4. Visualize output file link.csv in QGIS
 
 The 'geometry' field can be obtained from link.csv file. Then open this file in
-the same way as above. (LayerAdd LayerAdd Delimited Text Layer)
+the same way as above. (Layer-\>Add Layer-\>Add Delimited Text Layer)
 
 ![](media/7e70321ba5af758f5240d3fcf1478ffd.png)
 
 Then you can show the width of links by field VOC with different color according
-level of VOC in link_performance layer. Right click on link_performance layer
-and click on propertiescontrol feature symbology
+level of VOC in link layer. Right click on link layer and click on
+properties-\>control feature-\>symbology
 
 ![](media/ae326791b6f2bea0148e3c7853a63d99.png)
 
-. Select GraduatedValue: VOCMethodSizeClasses: 6Classify and set the value of
-the VOC level.
+. Select Graduated-\>Value: VOC-\>MethodSize-\>Classes: -\>Classify and set the
+value of the VOC level.
 
 ![](media/76db664897b54bab6789c591b77f5985.png)
 
@@ -176,8 +164,9 @@ Step 2: Open the Tempe ASU Network in NeXTA
 
 In NeXTA, go to File -\> Open Traffic Network Project
 
-In the Lesson 1, go to the Tempe_ASU_network folder, select the **node.csv**
-file, and click **Open**
+In the Lesson 1, go to a select GMNS data folder, select the **node.csv** file,
+and click **Open** (you need to ignore a number of warning messages reported by
+NeXTA due to missing values)
 
 ![](media/1b0405782410c5113e19243436e48230.jpeg)
 
@@ -306,8 +295,8 @@ Save it as .bmp format image and the same folder of the STALite/NeXTA project.
 
 ![](media/2f92ab385520f0a1ceda437a182c9ac5.jpeg)
 
-Open node.csv and the related GMNS folder within NeXTA directly, with background
-map.
+Open node.csv within NeXTA directly, and the background map will be loaded
+automatically.
 
 ![](media/8cdf10ddb7b764bf5ef8e959317759a5.jpeg)
 
@@ -315,23 +304,9 @@ map.
 
 ## 7. Create a GMNS Network in NeXTA without background image
 
-Learning objectives:
-
-1.  How to create a network by yourself.
-
-2.  How to adjust network elements size.
-
-3.  How to edit and view the attributes of Network.
-
-4.  How to create a network from the background map image.
-
-5.  How to verify the network connectivity.
-
 Step 1: Open NeXTA
 
 open NeXTA.exe
-
-![](media/d827766b24676bb26241790f0406aeb3.jpeg)
 
 Step 2: Add new one-way links
 
@@ -371,33 +346,31 @@ toggle button.
 
 Step 3.2: Add an one-way link according to Step2.
 
-Step 3.3: Press the left mouse on the location you want the link to start. A set
-of links will be created between these two locations as, as shown below:
+Step 3.3: Press the left mouse on the location you want the link to start and
+(carefully) release your mouse on the location you want the link to end (or on
+an existing node if you want to connect to another link). A set of links will be
+created between these two locations as, as shown below:
 
 ![](media/8ddee4757ba578f27fc8abc15eceb865.jpeg)
 
-Step 3.4: Press the
+Step 3.4: To increase the overlapping range for detecting if links are
+overlapping, you can click on the
 
 ![](media/47f051aabd633a0697ea37bad63ce7fd.jpeg)
 
-toggle button and adjust node size. It is obvious that the link (1,2) is
-connected with link(2,3), as shown below:
+toggle button continuously on the top of the GIS layer panel to enlarge the node
+display area first. It is obvious that the link (1,2) is connected with
+link(2,3), as shown below:
 
 ![](media/03ad1b12b004b6be479133a5023a7a99.jpeg)
 
-Step 4: Create a Network
-
-Step 4.1: Repeat Step3.1-Step3.3 and create a network, as shown below:
-
-![](media/d73fbf8ae9857083d1e601d9d64ab137.jpeg)
-
-Step 5: Adjust node size for display
+Adjust node size for display
 
 Related toolbar buttons:
 
 ![](media/6e5ae76ca69b2dcdd11edad0def7313a.jpeg)
 
-Step 5.1: Press the
+Press the
 
 ![](media/47f051aabd633a0697ea37bad63ce7fd.jpeg)
 
@@ -405,236 +378,259 @@ toggle button and adjust node size, as shown below:
 
 ![](media/0dcfe25f770c0d00d41fad1a7871549b.jpeg)
 
-Step 6: Edit and view the attribute of a link
+Save GMNS data of node and link csv files
 
 Related toolbar buttons:
 
 ![](media/0114ced0c105bbea9e8eaa3be42f7714.jpeg)
 
-Step 6.1: Click the “select”
-
-![](media/06c2ed1d91572968a84cbd9a5648dcc5.jpeg)
-
-toggle button.
-
-Step 6.2: Click the “link” layer in the “Active layer panel”, the corresponding
-layer is then highlighted in red, as shown below:
-
-![](media/24701a9167cd4de326b2feecb1bd4529.jpeg)
-
-Step 6.3: Click on the link to select it.
-
-![](media/2cde4422d73fdb6458f4f7fe21175ee9.jpeg)
-
-Step 6.4: Click the right mouse on the position of a selected link and you can
-select to view or edit the attributes of the selected link, as shown below:
-
-![](media/a9e7f3607da51e3320cb6e89adf26593.jpeg)
-
-Step 7: Edit and view the attributes of a node
-
-Related toolbar buttons:
-
-![](media/0114ced0c105bbea9e8eaa3be42f7714.jpeg)
-
-Step 6.1: Click the “select”
-
-![](media/06c2ed1d91572968a84cbd9a5648dcc5.jpeg)
-
-toggle button.
-
-Step 6.2: Click the “node” layer in the “Active layer panel”, as shown below:
-
-![](media/6c1531dcd9f31b348746b391a022290f.jpeg)
-
-Step 6.3: Click on the node and then it will be selected, as shown below:
-
-![](media/937558538f9013b39ff3f66f843c5030.jpeg)
-
-Step 6.4: Click the right mouse on the position of selected node and you can
-select to view or edit the attributes of the selected node, as shown below:
-
-![](media/61a6a5f2c6a740971035d51d19d14820.jpeg)
-
-Step 8: Save GMNS data of node and link csv files
-
-Related toolbar buttons:
-
-![](media/0114ced0c105bbea9e8eaa3be42f7714.jpeg)
-
-Step 8.1: Click the “save”
+Click the “save”
 
 ![](media/87c3e9c41e25d3493d7c11b5964f2ed6.jpeg)
 
 toggle button and to save the files of “node.csv” and “link.csv” to the local
 project folder.
 
-## 8. Create a Network in NeXTA from the background map image
+## 8. Conversion between SHAPE file and CSV file
 
-Step 1: Create a new project folder with 3 files: image.bmp, and node.csv
+Shape files are commonly used in different GIS and transportation planning
+tools.
 
-Step 1.1: First, prepare a map image in the BMP format and rename it as
-“image.bmp”.
+Two-way conversion allows users to easily use Excel to edit field names and
+field values, e.g. using VLOOKUP functions to batch-process the values based on
+link attributes, and then GIS to display the network geometry in a standard way.
 
-Step 1.2: Prepare an “image.ini” file in Notepad with the following value for
-the real world width (the unit could be mile or km).
+>   The tools used in this user guide is summarized below.
 
-Step 1.3: Create a csv file and rename it as “node.csv”. This can be empty.
+>   Table Tools used in this user guide
 
-Step 1.4: Put all the files and NeXTA.exe in the new project folder, as shown
-below:
+| Number | Tool        | Address or format                                                                                                                                                                                                                                                                                                     |
+|--------|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1      | Nexta       | \\releases                                                                                                                                                                                                                                                                                                            |
+| 2      | Nexta_GIS   | \\tools\\GIS_shape_file_CSV_file_conversion\\NEXTA_GIS                                                                                                                                                                                                                                                                |
+| 3      | Excel       |                                                                                                                                                                                                                                                                                                                       |
+| 4      | QGIS/ArcGIS |                                                                                                                                                                                                                                                                                                                       |
+| 5      | CSV files   | node.csv, link.csv                                                                                                                                                                                                                                                                                                    |
+| 6      | Shape files | \*.dbf, \*.shp, \*.shx The shapefile format is a geospatial vector data format for geographic information system (GIS) software. It is developed and regulated by Esri as a mostly open specification for data interoperability among Esri and other GIS software products. https://en.m.wikipedia.org/wiki/Shapefile |
 
-Step 2: Run NeXTA to load node.csv
+## 8.1 Step-by-step process for converting shape file to csv file
 
-Step 2.1: First, double click and run NeXTA.exe, resulting in the following
-screen.
+First, please download the NEXTA-GIS tool package, NEXTA_GIS.zip at
 
-![](media/d827766b24676bb26241790f0406aeb3.jpeg)
+[/tools/GIS_shape_file_CSV_file_conversion](https://github.com/xzhou99/NeXTA-GMNS/tree/master/tools/GIS_shape_file_CSV_file_conversion)
 
-Step 3: Verify if the background image is automatically loaded.
+Second, please unzip the package to find 1) NEXTA-GIS.exe executable and 2)
+three sets of sample GIS files. Note that, there are a large number of DLL files
+in the same folder, which are required as part of GIS SHAPE file reading
+utility.
 
-Step 3.1: Click the “link” layer in the “Active layer panel”, as shown below:
+<https://en.wikipedia.org/wiki/QGIS>
 
-![](media/601e04313445c3f321c8b5dc68f1638c.jpeg)
+<https://en.wikipedia.org/wiki/Shapefile>
 
-Step 3.2: Click “file menu” and select “Open Traffic Network Project”. Then,
-open the “node.csv” in the new window, as shown below:
+![](media/a3eb8c26029cf623cc0d2445df0e5422.png)
 
-![](media/c8a033bbf1147bdebaeedafea1f206cf.jpeg)
+**Step 1: Ensure GIS Shape file is readable.**
 
-Step 4: Add a sequence of new two-way links based on background image
+Open QGIS, go to menu-\>layer-\>add layer-\> add vector layer, and open a GIS
+shp file, e.g. in data folder “1.Cube_sample_GIS_files”. For more information
+about QGIS, one can refer to the user guide for QGIS at:
+<https://docs.qgis.org/3.10/en/docs/user_manual/>
 
-Step 5: Create a Traffic Network
+![](media/67d0732293eede590e71f3930ef75576.png)
 
-Step 5.1: Repeat Step 4 and create a traffic network, as shown below:
+**Step 2:** Click on NEXTA-GIS.exe, Select menu ToolsShapefile to CSV two-way
+converter,
 
-![](media/9688124e24ca5a110d86e8193f3ca900.jpeg)
+![](media/23178866d0b977f4a06f4652553898ad.png)
 
-Step 5.2: Click the “Background Image” layer in the “Active layer panel” and
-close it, as shown below:
+Now one can find the dialog of Import/Export Data File. Click the “…” to choose
+the Shape file, then click “Export to CSV File”.
 
-![](media/51ae584b0a567a56845dd7de6635e8f9.jpeg)
+![](media/713feeff3f0936183b81b053b8e9fb01.png)
 
-![](media/5875624b798d1b0e5ae42fa1e4d4f5a5.jpeg)
+**Step 3: Export Shape file to CSV file**: On the left side of Import/Export
+Data File dialog, you can select a GIS Shape file (e.g., SLC_Network_Link.shp)
+and then click on the button “Export to CSV File” to save the shape file data
+into a new CSV file (e.g. link.csv).
 
-Step 6: Verify the network connectivity by searching the shortest path between a
-pair of nodes
+![](media/83a9166c1375c4146baaab7bf5a8d4fa.png)
 
-Step 6.1: Click the “Path” layer in the “Active layer panel”, as shown below:
+As shown above, the sample file has 378 links. The user can check the
+saved/converted csv file road link in Excel, where the true shape coordinate
+information has been stored in the required field for representing “geometry” in
+GMNS.
 
-![](media/55ba311daaccc4159d8d54e69d79054f.jpeg)
+![](media/776d82901350fdb45833ba1f7ef8c2b4.png)
 
-Fig 26 Select Path layer
+One can also use the similar step to convert a node shape file to node.csv.
 
-Step 6.2: Click the right mouse on the location you want to start, and select
-“Direction from here”. This should be on an existing node. Move the cursor to
-the desired destination. Click the right mouse on the location you want to
-arrive, and select “Direction to here”, as shown below:
+![](media/8044e5a2394a1c78d0528cd28f4972b3.png)
 
-![](media/b870753d99a32b97d263c7864ec99403.png)
+**Step 4:** One can carefully change the field name for required fields in GMNS,
+such as from_node_id or to_node_id in Excel. If the shape file does not consist
+of the “from_node_id” and “to_node_id” messages, the csv file will not have this
+filed. Note that, the node.csv file requires x_coord and y_coord fields, which
+can be converted from the field of geometry, manually using the “text to column”
+feature in Excel.
 
-![](media/a6e6fb6350804f7f0aa776646b00e5ac.png)
+**Step 5: Convert two-way links to one-way links.**
 
-![](media/799176c0d79108ad16b3fa3b42f098f3.jpeg)
+In a common shape file for the link layer, a link can be coded as a two-way
+link. Note that, GMNS requires one-way directional links.
 
-Step 6.3: Click the right mouse on the location where next to the path, and
-select “View Path Data Table and Plot”, as shown below:
+1.  One can first add a field of “direction” with a value of 0 in link.csv, then
+    use standard NEXTA tool to open the network, and then a two-way link will be
+    automatically split to two one-way links in the interface, but without
+    offset (so that two links are displayed as overlapping links).
 
-![](media/b3938cb0237a6b78bd59bdf67728154a.png)
+2.  Then continuously click on the NEXTA toolbar highlighted in yellow below,
+    increase and decrease link offset to make two related being displayed
+    separately.
 
-![](media/81cc5f1e16c0c1b34e0078b1422f2f99.jpeg)
+3.  The user can further save the project through menu file-\>save project, then
+    the saved link file will have one-way links with offset geometry coordinates
+    and the filed of “direction” = 1. This “direction” field is not required in
+    GMNS but convenient for distinguishing two-way links and one-way links.
 
-Step 6.4: Click the right mouse on the location where next to the path, and
-chose “Clear All Path Display” to clear paths, as shown below:
+4.  In some cases, original fields such as AB_speed, or BA_speed are coded to
+    represent different speed limits for different directions of a two-way link,
+    the then user needs to manually transfer the information carefully.
 
-![](media/4b510c52878dc2b4a05039595a9f998a.png)
+5.  **Step-by-step process for converting csv file to shape file, using
+    2-corridor example**
 
-Step 7: Try an action of deleting a link
+Now we use a simple two-corridor example (with 4 nodes and 4 links) to
+illustrate the conversion process. For any CSV files with a “geometry” field
+following the WKT format, one can seamlessly generate a shape file based on the
+CSV files.
 
-Related toolbar buttons:
+**Hints:** If the GMNS link CSV files do not have “geometry” field, you can use
+NEXTA to first open the CSV file and save the project, to generate “geometry”
+field automatically.
 
-![](media/410a5520924f3262ee3b479b3da5c31e.jpeg)
+## 8.2 Step-by-step process for converting CSV file to SHAPE file
 
-Step 7.1: Press the “mouse”
+**Step 1: Open the CSV file in Excel to check the “geometry” field**
 
-![](media/abe57a87cb7d5400b6e965842319e272.jpeg)
+In this example, the “geometry” field in node.csv and link.csv is empty, so you
+can turn to step 2 to generate “geometry” messages, if the CSV file has a
+“geometry” field, you are able to turn to step 4.
 
-toggle button.
+![](media/d551acdce51db952b8793e4c0acd9499.png)
 
-Step 7.2: Click the “link” layer in the “Active layer panel”, as shown below:
+**Step 2: Use standard NEXTA to generate “geometry” field in both node and link
+files**
 
-![](media/24701a9167cd4de326b2feecb1bd4529.jpeg)
+Use the standard NEXTA_GMNS executable, then click menu “File’’-\>Open Traffic
+Network Project-\> choose node.csv, and finally click on the menu item “Save
+Project’’ or the related toolbar button.
 
-Step 7.3: Click the left mouse on the link which you want to delete, as shown
-below:
+After this step, one can open the files node.csv and road_link.csv again, to
+check the generated geometry field as shown below.
 
-![](media/3b289b82dbd348bb6bc319ebe4decf82.jpeg)
+![](media/ec7cb8652e2c8434ccb93a728acc9238.png)
 
-Step 7.4: Click the right mouse on the link which you want to delete and select
-“Delete Link”, as shown below:
+![](media/38003316b5fc9f811505bcb8a92502f5.png)
 
-![](media/e02ed9d9508946507887305bf14a34a9.png)
+**Step 3: Use NeXTA_GIS to convert CSV file to SHAPE file**
 
-![](media/7047d336b041b55099d22c23660b0488.jpeg)
+Open the NeXTA_GIS executable. On the right side of the Import/Export Data File
+dialog, please load a CSV file, choose the type (point/line/polygon) of geometry
+field, and then click on the button “Export to GIS Shape File”.
 
-Step 8: Save GMNS data file
+![](media/713feeff3f0936183b81b053b8e9fb01.png)
 
-Related toolbar buttons:
+>   Step 4: use QGIS to verify and display node.shp and link.shp.
 
-![](media/0114ced0c105bbea9e8eaa3be42f7714.jpeg)
+![](media/825993647680eb23b556307594f0ac38.png)
 
-Step 8.1: Click the “save”
+![](media/18a370c54848467709596971324f9a34.png)
 
-![](media/87c3e9c41e25d3493d7c11b5964f2ed6.jpeg)
+## 10. How to use NEXTA to visualize the trajectory in space time diagram
 
-toggle button and to save the files of “node.csv” and “link.csv” to the local
-project folder.
+NGSIM data set
 
-## 9. Create network through QuickOSM QGIS Plugin
+<https://ops.fhwa.dot.gov/trafficanalysistools/ngsim.htm>
 
-For this example, we will use the West Jordan network in Utah, United States.
-Click on menu PluginsManage and install plugins to install QuickOSM plugin. Then
-click on QuickOSM
+| Category     | File                        | Remark                                                         |
+|--------------|-----------------------------|----------------------------------------------------------------|
+| Main program | NEXTA_4_Trajectory.exe      | Open source NEXTA visualization tool                           |
+| Input        | trajectories-0400-0415      | Sample file from NGSIM                                         |
+| Input        | test_one_linetest_two_lines | Sample file from Pan Shang, for one vehicle\&\#39;s trajectory |
+| Output       | Trajectory.csv              | Export to more user readable format                            |
 
-![](media/753cd4aedd8c7832ffac59c3796bd0a7.png)
+**Format**
 
-to download West Jordan network and Layer panel will show the obtained network.
+Each line is a record of trajectory
 
-![](media/91357d90e129ca975ba71cc824035d11.png)
+Please use space or comma to separate fields.
 
-![](media/75a379c80c9d5121ea42b66e565b8c79.png)
+| No | Field Name           | Example 1     | Example 2     | Unit        | Remark                |
+|----|----------------------|---------------|---------------|-------------|-----------------------|
+| 1  | Vehicle_ID           | 1             | 1             |             |                       |
+| 2  | Frame_ID             | 12            | 13            | 0.1 seconds |                       |
+| 3  | Total_Frames         | 884           | 884           | 0.1 seconds |                       |
+| 4  | Global_Time          | 1113433136100 | 1113433136200 | text        | you can put any value |
+| 5  | Local_X              | 16.884        | 16.938        |             | not used              |
+| 6  | Local_Y              | 48.213        | 49.463        | feet        |                       |
+| 7  | Global_X             | 6042842.116   | 6042842.012   |             | not used              |
+| 8  | Global_Y             | 2133117.662   | 2133118.909   |             | not used              |
+| 9  | Vehicle_Length       | 14.3          | 14.3          | feet        |                       |
+| 10 | Vehicle_Width        | 6.4           | 6.4           | feet        |                       |
+| 11 | Vehicle_Class        | 2             | 2             |             | pax or truck          |
+| 12 | Vehicle_Velocity     | 12.5          | 12.5          |             |                       |
+| 13 | Vehicle_Acceleration | 0             | 0             |             |                       |
+| 14 | Lane_Identification  | 2             | 2             |             | very important        |
+| 15 | Preceding_Vehicle    | 0             | 0             |             |                       |
+| 16 | Following_Vehicle    | 0             | 0             |             |                       |
+| 17 | Spacing              | 0             | 0             |             |                       |
+| 18 | Headway              | 0             | 0             |             |                       |
 
-![](media/75a379c80c9d5121ea42b66e565b8c79.png)
+**Steps**
 
-Then obtain geometry information of point and link layer. For x coordinate of
-node layer
+Step 1: Open the customized NEXTA from this folder.
 
-![](media/949a001151370514686acc6962ab9f81.png)
+https://github.com/asu-trans-ai-lab/NeXTA4GMNS/tree/gh-pages/2Dtrajectory_visulization
 
-, right click on node layerOpen Attribute TableOpen field calculator
+<https://github.com/asu-trans-ai-lab/NeXTA4GMNS/blob/gh-pages/2Dtrajectory_visulization/NeXTA4_Trajectory_package.zip>
 
-![](media/debf5f2920deb4c6545870e16832e806.png)
+![](https://github.com/xzhou99/NeXTA_4_Trajectory_Visualization/blob/master/1.PNG)
 
-Create a new field Expression Geometry '\$x'. Similarly, you can obtain y
-coordinate by '\$y' expression.
+Step 2: Select menu Tools-NGSIM Tools- **Active Space-Time View, and then load**
+trajectory file for Visualizing trajectory data
 
-![](media/14fbe7eae336da03345033beb9b3f5aa.png)
+Step 3:
 
-Additionally, you can obtain geometry by 'geom_to_wkt(\$geometry)' expression.
-Note that, output field type is Text, unlimited length (text).
+![](https://github.com/xzhou99/NeXTA_4_Trajectory_Visualization/blob/master/3.PNG)
 
-![](media/6b1f49b44fff794a28981cdda8c0e8e8.png)
+Main functions
 
-1.  Export shape file to GMNS file. Right click on node layerExportSave feature
-    as and ensure Comma separated Value (CSV) format is selected. You now should
-    have exported [node, link] files.
+1.  **Display trajectories for each lane.**
 
-![](media/d48012c2b9252d196e310006abd708e4.png)
+![](https://github.com/xzhou99/NeXTA_4_Trajectory_Visualization/blob/master/4.PNG)
 
-Then select necessary field to modify node.csv to adhere to the following
-format.
+In the menu Tools-NASIM Tools:
 
-Similarly, for link layer, obtain geometry by 'geom_to_wkt(\$geometry)'
-expression and export to link.csv.
+![](https://github.com/xzhou99/NeXTA_4_Trajectory_Visualization/blob/master/4.PNG)
 
-![](media/381aac6221f90c6ec381f3c1a435eac2.png)
+You can choose each lane number to see the trajectory;
+
+![](https://github.com/xzhou99/NeXTA_4_Trajectory_Visualization/blob/master/5.PNG)
+
+1.  You can show Vehicle ID, and you can use mouse wheeler to zoom in and zoom
+    out the display in the certain portion.
+
+2.  You can use the mouse to click and draw a line in the space-time plate, and
+    the NeXTA will automatically calculate the flow, density, and speed values
+    across the line
+
+![](https://github.com/xzhou99/NeXTA_4_Trajectory_Visualization/blob/master/6.PNG)
+
+1.  You can show cumulative flow count and density
+
+![](https://github.com/xzhou99/NeXTA_4_Trajectory_Visualization/blob/master/7.PNG)
+
+You can show the space-time Density Contour
+
+![](https://github.com/xzhou99/NeXTA_4_Trajectory_Visualization/blob/master/8.PNG)
