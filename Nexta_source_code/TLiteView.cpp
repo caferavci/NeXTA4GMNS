@@ -1426,20 +1426,6 @@ void CTLiteView::DrawObjects(CDC* pDC)
 				case link_display_link_type_in_number:
 					str_text.Format ("%d", (*iLink)->m_link_type  ); break;
 
-				case link_display_main_node_id:
-
-					str_text.Format("%s", (*iLink)->main_node_id.c_str()); 
-					
-					break;
-
-				case link_display_NEMA_phase_number:
-					str_text.Format("%s", (*iLink)->NEMA_phase_number.c_str()); 
-					break;
-
-				case link_display_movement_str:
-					str_text.Format("%s", (*iLink)->movement_str.c_str()); break;
-
-
 				case link_display_LevelOfService:
 					str_text.Format ("%s",(*iLink)->m_LevelOfService    ); break;
 
@@ -4356,12 +4342,6 @@ void CTLiteView::OnLinkEditlink()
 		dlg.ToNode = pLink->m_ToNodeID ;
 		dlg.m_NumLeftTurnLanes  = pLink-> m_NumberOfLeftTurnLanes;
 		dlg.m_NumRightTurnLanes  = pLink-> m_NumberOfRightTurnLanes;
-
-		dlg.main_node_id = pLink->main_node_id.c_str();
-		dlg.NEMA_phase_number = pLink->NEMA_phase_number.c_str();
-		dlg.movement_str = pLink->movement_str.c_str();
-
-
 			dlg.LinkLength = pLink->m_Length ;
 			dlg.FreeSpeed = pLink->m_FreeSpeed ;
 
@@ -4375,10 +4355,6 @@ void CTLiteView::OnLinkEditlink()
 
 				pLink->m_Length = dlg.LinkLength;
 				pLink->m_FreeSpeed = dlg.FreeSpeed;
-
-				pLink->main_node_id = pDoc->CString2StdString(dlg.main_node_id);
-				pLink->NEMA_phase_number = pDoc->CString2StdString(dlg.NEMA_phase_number);
-				pLink->movement_str = pDoc->CString2StdString(dlg.movement_str);
 
 
 			pLink->m_Name  = pDoc->CString2StdString(dlg.StreetName);

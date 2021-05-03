@@ -41,12 +41,15 @@ public:
 	mapped_node_id = -1;
 	stop_id = -1;
 	number_of_nearby_transfer_stations = 0;
+	bIs_used = false;  //default
+	route_stop_node_sequence_no = 1;
 	}
 
 	int number_of_nearby_transfer_stations;
 	int stop_no;
 	string stop_id;  
-	string route_stop_id;
+	string directed_route_id;
+	string route_stop_id;  //directed
 
 	int stop_code;
 	string stop_name;
@@ -56,8 +59,14 @@ public:
 	string direction;
 	string position;
     GDPoint m_ShapePoint;
-
+	bool bIs_used; 
 	int mapped_node_id;
+
+	// used in static physical node
+	std::map<string, int>  route_stop_node_sequence_no_map;
+
+	// used in service node
+	int  route_stop_node_sequence_no;
 
 };
 
@@ -70,10 +79,11 @@ public:
 	number_of_nearby_transfer_stop_time = 0;
 	}
 	int trip_id;
+	string directed_route_id;
 	int arrival_time;  
 	int departure_time;
 	string stop_id;
-	string route_stop_id;
+	string directed_route_stop_id;
 	string stop_name;
 	int stop_sequence;
 	int stop_headsign;
@@ -94,10 +104,12 @@ class PT_Trip
 public:
 	int trip_id;
 	string route_id;
+	string directed_route_id;
 	int shape_id;	
 	string service_id;
-	int direction_id;
+	string direction_id;
 	int block_id;
+	int time_period_id;
 
 	int trip_type;
 
@@ -173,10 +185,11 @@ public:
  
 
 	std::map<string, PT_Route> m_PT_RouteMap;
+
 	std::map<int, PT_Trip> m_PT_TripMap;
 	std::map<string, PT_Stop> m_PT_StopMap;
 
-	std::map<string, PT_Stop> m_PT_RouteStopMap;
+	std::map<string, PT_Stop> m_PT_DirectedRouteStopMap;
 
   	//bus stop schedule
 	std::vector<PT_StopTime> m_PT_StopTimeVector;

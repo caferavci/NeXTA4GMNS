@@ -2424,12 +2424,22 @@ bool CTLiteDoc::ReadLinkCSVFile(LPCTSTR lpszFileName, bool bCreateNewNodeFlag = 
 			string link_key;
 			parser.GetValueByFieldName("link_key", link_key);
 
-			string main_node_id;
-			string movement_str;
-			string NEMA_phase_number;
-			parser.GetValueByFieldName("main_node_id", main_node_id);
-			parser.GetValueByFieldName("movement_str", movement_str);
-			parser.GetValueByFieldName("NEMA_phase_number", NEMA_phase_number);
+			float VDF_FFTT[10] = { 0 };
+			float VDF_cap[10] = { 10000 };
+			float VDF_alpha[10] = { 0.15 };
+			float VDF_beta[10] = { 4 };
+			float VDF_frequency[10] = { 0 };
+
+
+			int k = 1;
+
+			// to be fixed later. Zhou
+			parser.GetValueByFieldName("VDF_FFTT1", VDF_FFTT[k]);
+			parser.GetValueByFieldName("VDF_cap1", VDF_cap[k]);
+			parser.GetValueByFieldName("VDF_alpha1", VDF_alpha[k]);
+			parser.GetValueByFieldName("VDF_beta1", VDF_beta[k]);
+
+
 
 			string geo_string;
 
@@ -2604,10 +2614,15 @@ bool CTLiteDoc::ReadLinkCSVFile(LPCTSTR lpszFileName, bool bCreateNewNodeFlag = 
 				}
 				pLink->m_NumberOfLanes = number_of_lanes;
 
-				pLink->main_node_id = main_node_id;
-				pLink->movement_str = movement_str;
-				pLink->NEMA_phase_number = NEMA_phase_number;
 
+				for(int k=1; k<=5;k++)
+				{
+				pLink->VDF_FFTT[k] = VDF_FFTT[k];
+				pLink->VDF_cap[k] = VDF_cap[k];
+				pLink->VDF_alpha[k] = VDF_alpha[k];
+				pLink->VDF_beta[k] = VDF_beta[k];
+				pLink->VDF_frequency[k] = VDF_frequency[k];
+				}
 				pLink->m_FreeSpeed = max(10, free_speed);  // minimum Free Speed is 1 mph
 				//	pLink->m_Length= max(length_in_mile, pLink->m_FreeSpeed*0.1f/60.0f);  // minimum distance, special note: we do not consider the minimum constraint here, but a Agent cannot travel longer then 0.1 seconds
 				pLink->m_Length = length_in_mile;
@@ -2919,7 +2934,13 @@ BOOL CTLiteDoc::SaveLinkData()
 	{
 		std::list<DTALink*>::iterator iLink;
 
-		fprintf(st,"link_id,name,from_node_id,to_node_id,facility_type,link_type,dir_flag,length,lanes,free_speed,capacity,main_node_id,movement_str,NEMA_phase_number,geometry,");
+		fprintf(st,"link_id,name,from_node_id,to_node_id,facility_type,link_type,dir_flag,length,lanes,free_speed,capacity,");
+
+		for (int k = 1; k <= 5; k++)
+			fprintf(st, "VDF_FFTT%d,VDF_cap%d,VDF_alpha%d,VDF_beta%d,VDF_frequency%d,",k,k,k,k,k);
+
+		fprintf(st, "geometry,");
+
 		fprintf(st,"\n");	
 
 		for (iLink = m_LinkSet.begin(); iLink != m_LinkSet.end(); iLink++)
@@ -2957,11 +2978,16 @@ BOOL CTLiteDoc::SaveLinkData()
 					);
 
 
-					fprintf(st, "%s,%s,%s,",
-						(*iLink)->main_node_id.c_str(),
-						(*iLink)->movement_str.c_str(),
-						(*iLink)->NEMA_phase_number.c_str());
-				// geometry
+			for(int k=1; k<=5; k++)
+			{
+				fprintf(st, "%.3f,%.2f,%.2f,%.2f,%d,",
+						(*iLink)->VDF_FFTT[k],
+						(*iLink)->VDF_cap[k],
+						(*iLink)->VDF_alpha[k],
+						(*iLink)->VDF_beta[k],
+						(*iLink)->VDF_frequency[k]);
+			}
+					// geometry
 				fprintf(st,"\"LINESTRING (");
 
 				for(unsigned int si = 0; si< (*iLink)->m_ShapePoints.size(); si++)

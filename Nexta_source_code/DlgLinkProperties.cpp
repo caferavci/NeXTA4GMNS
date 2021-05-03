@@ -42,9 +42,6 @@ void CDlgLinkProperties::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_LANE_CAPACITY, LaneCapacity);
 	DDV_MinMaxInt(pDX, LaneCapacity, 0, 300000);
 	DDX_Text(pDX, IDC_EDIT_NUMLANES, nLane);
-	DDX_Text(pDX, IDC_EDIT_MAIN_NODE_ID, main_node_id);
-	DDX_Text(pDX, IDC_EDIT_NEMA_PHASE_NUMBER, NEMA_phase_number);
-	DDX_Text(pDX, IDC_EDIT_MOVMENT_STR, movement_str);
 
 	DDV_MinMaxInt(pDX, nLane, 0, 10);
 	DDX_Control(pDX, IDC_COMBO1, m_LinkTypeComboBox);

@@ -1247,7 +1247,7 @@ public:
 	int m_NodeID;  //  original node number
 	int m_ZoneID;  // If ZoneID > 0 --> centroid,  otherwise a physical node.
 	int m_ControlType; // Type: ....
-	int m_NodeType;
+	string m_NodeType;
 	string m_node_type;
 	string m_ctrl_type;
 	int m_Connections;  // number of connections
@@ -1508,6 +1508,18 @@ public:
 	bool m_bActive; 
 	DTALink(int TimeHorizon)  // TimeHorizon's unit: per min
 	{
+
+		for(int k = 0; k< 10; k++)
+		{
+		VDF_FFTT[k] = 0;
+		VDF_cap[k] = 10000;
+		VDF_alpha[k] = 0.15;
+		VDF_beta[k] = 4;
+		VDF_frequency[k] = 0;
+		}
+
+		int VDF_headway[10];
+
 		m_bActive = true;
 		m_Length = 10;
 		m_network_design_flag = 0;
@@ -1966,9 +1978,11 @@ void AdjustLinkEndpointsWithSetBack()
 	float   m_SpeedAtCapacity;
 	float	m_ReversedSpeedLimit;
 
-	string main_node_id;
-	string movement_str;
-	string NEMA_phase_number;
+	float VDF_FFTT[10];
+	float VDF_cap[10];
+	float VDF_alpha[10];
+	float VDF_beta[10];
+	int VDF_frequency[10];
 
 	int m_prohibited_u_turn;
 
