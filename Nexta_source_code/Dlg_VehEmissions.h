@@ -56,8 +56,6 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	CListBox m_AgentList;
-	vector<string> m_AgentID_vector;
 	afx_msg void OnLbnSelchangeListLink();
 	CListBox m_LinkList;
 	CComboBox m_OriginBox;

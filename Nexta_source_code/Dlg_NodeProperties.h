@@ -32,4 +32,14 @@ public:
 
 	CString m_ControlType;
 	CString m_NodeType;
+	CStatic AddField1;
+	CStatic AddField2;
+	CStatic AddField3;
+	CStatic AddField4;
+	CStatic AddField5;
+	CString AddFieldValue1;
+	CString AddFieldValue2;
+	CString AddFieldValue3;
+	CString AddFieldValue4;
+	CString AddFieldValue5;
 };

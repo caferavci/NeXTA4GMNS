@@ -51,12 +51,10 @@ void CDlg_VehPathAnalysis::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST, m_ListCtrl);
 	DDX_Control(pDX, IDC_PATHLIST, m_PathListCtrl);
-	DDX_Control(pDX, IDC_LIST_Agent, m_AgentList);
 	DDX_Control(pDX, IDC_COMBO_Origin, m_OriginBox);
 	DDX_Control(pDX, IDC_COMBO_Destination, m_DestinationBox);
 	DDX_Control(pDX, IDC_COMBO_DepartureTime, m_DepartureTimeBox);
 	DDX_Control(pDX, IDC_COMBO_Min_Number_of_Agents, m_MinAgentSizeBox);
-	DDX_Control(pDX, IDC_COMBO_TimeInterval, m_TimeIntervalBox);
 	DDX_Control(pDX, IDC_COMBO_ImpactLink, m_ImpactLinkBox);
 	DDX_Control(pDX, IDC_SUMMARY_INFO, m_Summary_Info_Edit);
 	DDX_Control(pDX, IDC_COMBO_AgentType, m_AgentTypeBox);
@@ -170,33 +168,19 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 	m_AgentTypeBox.SetCurSel(0);
 
 
-	for(i=0; i <= 1440 ; i+=15)
-	{
-		str.Format ("%d (%s)", i,m_pDoc->GetTimeStampString24HourFormat (i));
-		m_DepartureTimeBox.AddString(str);
-	}
-	m_DepartureTimeBox.SetCurSel (0);
+	std::map<string, int>::const_iterator itr;
+	
+	m_DepartureTimeBox.AddString("All");
+
+		char text[100];
+		for (itr = m_pDoc->m_demand_period_Map.begin(); itr != m_pDoc->m_demand_period_Map.end(); itr++)
+		{
+			sprintf_s(text, "%s", itr->first.c_str());
+			m_DepartureTimeBox.AddString(text);
+		}
+		m_DepartureTimeBox.SetCurSel(0);
 
 
-	m_TimeIntervalBox.AddString("1440");
-	m_TimeIntervalBox.AddString("15");
-	m_TimeIntervalBox.AddString("30");
-	m_TimeIntervalBox.AddString("60");
-	m_TimeIntervalBox.AddString("120");
-	m_TimeIntervalBox.AddString("240");
-	m_TimeIntervalBox.AddString("480");
-	m_TimeIntervalBox.SetCurSel (0);
-
-	m_MinAgentSizeBox.AddString ("0");
-	m_MinAgentSizeBox.AddString ("2");
-	m_MinAgentSizeBox.AddString ("5");
-	m_MinAgentSizeBox.AddString ("10");
-	m_MinAgentSizeBox.AddString ("20");
-	m_MinAgentSizeBox.AddString ("50");
-	m_MinAgentSizeBox.AddString ("75");
-	m_MinAgentSizeBox.AddString ("100");
-	m_MinAgentSizeBox.AddString ("200");
-	m_MinAgentSizeBox.AddString ("500");
 
 	if(m_pDoc->m_ZoneNoSize <100)
 		m_MinAgentSizeBox.SetCurSel (0);  //2
@@ -305,6 +289,7 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 		m_PathListCtrl.InsertColumnTrait((int)i,ColumnPathLabelVector[i],LVCFMT_LEFT,-1,-1, pTrait);
 		m_PathListCtrl.SetColumnWidth((int)i,80);
 	}
+	
 	FilterOriginDestinationPairs();
 
 
@@ -376,11 +361,9 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 		//Destination = 1767;
 
 		char str[MAX_STRING_LENGTH];
-		m_DepartureTimeBox.GetLBText(m_DepartureTimeBox.GetCurSel(), str);
-		int DepartureTime = atoi(str);
 
-		m_TimeIntervalBox.GetLBText(m_TimeIntervalBox.GetCurSel(), str);
-		int TimeInterval = atoi(str);
+		int demand_peroid_no = m_DepartureTimeBox.GetCurSel();
+
 
 		m_MinAgentSizeBox.GetLBText(m_MinAgentSizeBox.GetCurSel(), str);
 		int MinAgentSize = atoi(str);
@@ -393,91 +376,89 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 
 	std::list<CTLiteDoc*>::iterator  iDoc = g_DocumentList.begin ();
 
-	 p = 0 ;
+	p = 0;
 	while (iDoc != g_DocumentList.end())
 	{
-		if((*iDoc)->m_ProjectTitle.GetLength () >0)  
+
+		if ((*iDoc)->m_ProjectTitle.GetLength() > 0)
 		{
 
-			if(p >=m_ProjectSize)  // additional project loaded. 
-				continue; 
-
-		for (iAgent = (*iDoc)->m_AgentSet.begin(); iAgent != (*iDoc)->m_AgentSet.end(); iAgent++, count++)
-		{
-			DTAAgent* pAgent = (*iAgent);
-
-
-			int OrgNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_o_ZoneID];
-			int DesNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_d_ZoneID];
-
-
-			if(OrgNo>=0 && DesNo >=0  && pAgent->m_bComplete )  // with physical path in the network
+			for (iAgent = (*iDoc)->m_RouteAssignmentSet.begin(); iAgent != (*iDoc)->m_RouteAssignmentSet.end(); iAgent++, count++)
 			{
-				if( 
-					
-					(pAgent->m_o_ZoneID == Origin ||Origin ==0)&&
-					(pAgent->m_d_ZoneID  == Destination ||Destination ==0)&&
-					(pAgent->m_AgentTypeNo  == AgentTypeNo ||AgentTypeNo ==0)&&
-					(pAgent->m_DepartureTime >= DepartureTime && pAgent->m_DepartureTime <= DepartureTime+TimeInterval))
+				DTAAgent* pAgent = (*iAgent);
+
+
+				int OrgNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_o_ZoneID];
+				int DesNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_d_ZoneID];
+
+
+				if (OrgNo >= 0 && DesNo >= 0 && pAgent->m_bComplete)  // with physical path in the network
 				{
+					if (
 
-					m_ODMOEMatrix[p][OrgNo][DesNo].TotalAgentSize+= pAgent->m_Volume ;
-
-					m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTime += (pAgent->m_TripTime * pAgent->m_Volume);
-					m_ODMOEMatrix[p][OrgNo][DesNo].TotalDistance += (pAgent->m_Distance* pAgent->m_Volume);
-					
-
-					if(ImpactLinkNo>=0)
-					{
-					for(int link= 1; link<pAgent->m_NodeSize; link++)
-					{
-						if ( pAgent->m_NodeAry[link].LinkNo  == ImpactLinkNo)
+						(pAgent->m_o_ZoneID == Origin || Origin == 0) &&
+						(pAgent->m_d_ZoneID == Destination || Destination == 0) &&
+						(pAgent->m_AgentTypeNo == AgentTypeNo || AgentTypeNo == 0) &&
+						(demand_peroid_no==0 || pAgent->m_demand_period_no == demand_peroid_no))
 						{
-							m_ODMOEMatrix[p][OrgNo][DesNo].bImpactFlag = true;
+
+						m_ODMOEMatrix[p][OrgNo][DesNo].TotalAgentSize += pAgent->m_Volume;
+
+						m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTime += (pAgent->m_Simu_TripTime * pAgent->m_Volume);
+						m_ODMOEMatrix[p][OrgNo][DesNo].TotalDistance += (pAgent->m_Distance * pAgent->m_Volume);
+
+
+						if (ImpactLinkNo >= 0)
+						{
+							for (int link = 1; link < pAgent->m_NodeSize; link++)
+							{
+								if (pAgent->m_NodeAry[link].LinkNo == ImpactLinkNo)
+								{
+									m_ODMOEMatrix[p][OrgNo][DesNo].bImpactFlag = true;
+								}
+
+							}
 						}
-
-					}
 					}
 				}
+
 			}
 
-		}
+			count = 0;
+			//		m_ODList.ResetContent ();
 
-		count = 0;
-//		m_ODList.ResetContent ();
-
-		// variability measure
-		for (iAgent = (*iDoc)->m_AgentSet.begin(); iAgent != (*iDoc)->m_AgentSet.end(); iAgent++, count++)
-		{
-			DTAAgent* pAgent = (*iAgent);
-			int OrgNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_o_ZoneID];
-			int DesNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_d_ZoneID];
-
-
-			if(OrgNo>=0 && DesNo >=0 /*pAgent->m_NodeSize >= 2 && */ && pAgent->m_bComplete )  // with physical path in the network
+					// variability measure
+			for (iAgent = (*iDoc)->m_RouteAssignmentSet.begin(); iAgent != (*iDoc)->m_RouteAssignmentSet.end(); iAgent++, count++)
 			{
-				if( 
-					
-					(pAgent->m_o_ZoneID == Origin ||Origin ==0)&&
-					(pAgent->m_d_ZoneID  == Destination ||Destination ==0)&&
-					(pAgent->m_AgentTypeNo  == AgentTypeNo ||AgentTypeNo ==0)&&
-					(pAgent->m_DepartureTime >= DepartureTime && pAgent->m_DepartureTime <= DepartureTime+TimeInterval))
-				{
-					float AvgTravelTime = m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTime/max(1,m_ODMOEMatrix[p][OrgNo][DesNo].TotalAgentSize );
+				DTAAgent* pAgent = (*iAgent);
+				int OrgNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_o_ZoneID];
+				int DesNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_d_ZoneID];
 
-					m_ODMOEMatrix[p][OrgNo][DesNo].AvgDistance = m_ODMOEMatrix[p][OrgNo][DesNo].TotalDistance /max(1,m_ODMOEMatrix[p][OrgNo][DesNo].TotalAgentSize );;
-					m_ODMOEMatrix[p][OrgNo][DesNo].AvgTravelTime = AvgTravelTime;
-					m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTimeVariance  += (pAgent->m_TripTime - AvgTravelTime)*(pAgent->m_TripTime- AvgTravelTime);
-					m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTimePerMileVariance  += (pAgent->m_TripTime - AvgTravelTime)*(pAgent->m_TripTime- AvgTravelTime)/max(0.01,pAgent->m_Distance * pAgent->m_Distance);
+
+				if (OrgNo >= 0 && DesNo >= 0 /*pAgent->m_NodeSize >= 2 && */ && pAgent->m_bComplete)  // with physical path in the network
+				{
+					if (
+
+						(pAgent->m_o_ZoneID == Origin || Origin == 0) &&
+						(pAgent->m_d_ZoneID == Destination || Destination == 0) &&
+						(pAgent->m_AgentTypeNo == AgentTypeNo || AgentTypeNo == 0) &&
+						(demand_peroid_no == 0 || pAgent->m_demand_period_no == demand_peroid_no))
+					{
+						float AvgTravelTime = m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTime / max(1, m_ODMOEMatrix[p][OrgNo][DesNo].TotalAgentSize);
+
+						m_ODMOEMatrix[p][OrgNo][DesNo].AvgDistance = m_ODMOEMatrix[p][OrgNo][DesNo].TotalDistance / max(1, m_ODMOEMatrix[p][OrgNo][DesNo].TotalAgentSize);;
+						m_ODMOEMatrix[p][OrgNo][DesNo].AvgTravelTime = AvgTravelTime;
+						m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTimeVariance += (pAgent->m_Simu_TripTime - AvgTravelTime) * (pAgent->m_Simu_TripTime - AvgTravelTime);
+						m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTimePerMileVariance += (pAgent->m_Simu_TripTime - AvgTravelTime) * (pAgent->m_Simu_TripTime - AvgTravelTime) / max(0.01, pAgent->m_Distance * pAgent->m_Distance);
+					}
 				}
 			}
+
+
 		}
 
-		p++;
-		}
 		iDoc++;
 	}
-
 
 		AgentStatistics total_summary;
 		count = 0;
@@ -620,7 +601,6 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 void CDlg_VehPathAnalysis::FilterPaths()
 {
 	m_PathVector.clear();
-	m_AgentList.ResetContent ();
 	m_PathListCtrl.DeleteAllItems();  // OD changed, refresh
 
 	UpdateData(1);
@@ -631,12 +611,8 @@ void CDlg_VehPathAnalysis::FilterPaths()
 	int AgentTypeNo = m_AgentTypeBox.GetCurSel();
 	
 	char str[50];
-	m_DepartureTimeBox.GetLBText(m_DepartureTimeBox.GetCurSel(), str);
-	int DepartureTime = atoi(str);
 
-	m_TimeIntervalBox.GetLBText(m_TimeIntervalBox.GetCurSel(), str);
-	int TimeInterval = atoi(str);
-
+	int demand_peroid_no = m_DepartureTimeBox.GetCurSel();
 	m_MinAgentSizeBox.GetLBText(m_MinAgentSizeBox.GetCurSel(), str);
 	int MinAgentSize = atoi(str);
 
@@ -645,7 +621,7 @@ void CDlg_VehPathAnalysis::FilterPaths()
 	float Agent_count = 0;
 	std::list<DTAAgent*>::iterator iAgent;
 
-	for (iAgent = m_pDoc->m_AgentSet.begin(); iAgent != m_pDoc->m_AgentSet.end(); iAgent++, count++)
+	for (iAgent = m_pDoc->m_RouteAssignmentSet.begin(); iAgent != m_pDoc->m_RouteAssignmentSet.end(); iAgent++, count++)
 	{
 		DTAAgent* pAgent = (*iAgent);
 			pAgent->m_bODMarked = false;
@@ -657,7 +633,7 @@ void CDlg_VehPathAnalysis::FilterPaths()
 				(Origin==-1 ||pAgent->m_o_ZoneID == Origin)&&
 				(Destination == -1 || pAgent->m_d_ZoneID  == Destination)&&
 				(pAgent->m_AgentTypeNo  == AgentTypeNo ||AgentTypeNo ==0)&&
-				(DepartureTime <1 || (pAgent->m_DepartureTime >= DepartureTime && pAgent->m_DepartureTime <= DepartureTime+TimeInterval)))
+				(demand_peroid_no == 0 || pAgent->m_demand_period_no == demand_peroid_no))
 			{
 
 				bool bFingFlag =  false;
@@ -676,10 +652,10 @@ void CDlg_VehPathAnalysis::FilterPaths()
 						
 						m_PathVector[p].departure_time_in_min = pAgent->m_DepartureTime ;
 						m_PathVector[p].TotalAgentSize+= pAgent->m_Volume ;
-						m_PathVector[p].TotalTravelTime  += (pAgent->m_TripTime* pAgent->m_Volume);
+						m_PathVector[p].TotalTravelTime  += (pAgent->m_Simu_TripTime* pAgent->m_Volume);
 						m_PathVector[p].TotalDistance   += (pAgent->m_Distance* pAgent->m_Volume);
 
-						m_PathVector[p].m_TravelTimeVector.push_back(pAgent->m_TripTime);
+						m_PathVector[p].m_TravelTimeVector.push_back(pAgent->m_Simu_TripTime);
 
 						Agent_count += pAgent->m_Volume;
 
@@ -696,10 +672,10 @@ void CDlg_VehPathAnalysis::FilterPaths()
 					ps_element.NodeSize = pAgent->m_NodeSize;
 					ps_element.departure_time_in_min = pAgent->m_DepartureTime ;
 					ps_element.TotalAgentSize = pAgent->m_Volume;
-					ps_element.TotalTravelTime  += (pAgent->m_TripTime * pAgent->m_Volume);
+					ps_element.TotalTravelTime  += (pAgent->m_Simu_TripTime * pAgent->m_Volume);
 					ps_element.TotalDistance   += (pAgent->m_Distance * pAgent->m_Volume);
-					ps_element.m_TravelTimeVector.push_back((pAgent->m_TripTime));
-					ps_element.m_TravelTimeVector.push_back((pAgent->m_TripTime)/max(0.01,pAgent->m_Distance));
+					ps_element.m_TravelTimeVector.push_back((pAgent->m_Simu_TripTime));
+					ps_element.m_TravelTimeVector.push_back((pAgent->m_Simu_TripTime)/max(0.01,pAgent->m_Distance));
 
 						Agent_count += pAgent->m_Volume ;
 
@@ -771,36 +747,7 @@ void CDlg_VehPathAnalysis::FilterPaths()
 void CDlg_VehPathAnalysis::ShowAgents()
 {
 
-	m_AgentList.ResetContent ();
-	m_AgentID_vector.clear();
-	int PathNo = m_SelectedPath;
-	if(PathNo>=0 && PathNo < m_PathVector.size())
-	{
-		for(unsigned int v = 0; v< m_PathVector[PathNo].m_AgentVector.size(); v++)
-		{
-			DTAAgent* pAgent = m_PathVector[PathNo].m_AgentVector[v];
-			CString AgentInfoString;
 
-			if( v == 0)  // only for the first  Agent
-			{
-
-			m_pDoc->m_SelectedAgentID = pAgent->m_AgentID ;
-
-			}
-
-			AgentInfoString.Format ("No. %s, @%3.1f min, %3.1f min",pAgent->m_AgentID.c_str() , pAgent->m_DepartureTime, pAgent->m_ArrivalTime-pAgent->m_DepartureTime);
-	
-			if(m_AgentList.GetCount () <= 20000)
-			{
-				if(m_AgentList.GetCount () == 20000)
-				{
-					m_AgentList.AddString ("Reaching maximum number of items in a list..");
-				}else
-				m_AgentList.AddString (AgentInfoString);
-				m_AgentID_vector.push_back(pAgent->m_AgentID);
-			}
-		}
-	}
 }
 void CDlg_VehPathAnalysis::OnLbnSelchangeListLink()
 {
@@ -810,18 +757,6 @@ void CDlg_VehPathAnalysis::OnLbnSelchangeListLink()
 
 void CDlg_VehPathAnalysis::OnLbnSelchangeListAgent()
 {
-	char m_Text[MAX_STRING_LENGTH];
-	string agent_id;
-	m_AgentList.GetText(m_AgentList.GetCurSel(), m_Text);
-	agent_id = m_Text;
-
-	if(agent_id.size()>0)
-	{
-		m_pDoc->m_SelectedAgentID = m_AgentID_vector[m_AgentList.GetCurSel()];
-		m_pDoc->UpdateAllViews(0);
-
-	}
-
 
 
 }

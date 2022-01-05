@@ -34,7 +34,9 @@
 #pragma once
 #include "resource.h"       // main symbols
 #include "resource.h"       // main symbols
+
 #include <list>
+
 
 enum eLanguageSupport
 {
@@ -48,8 +50,6 @@ extern void g_ClearLinkSelectionList();
 extern void g_ClearTrajectorySelectionList();
 enum _cursor_type {_cursor_standard_arrow=0,_cursor_movement_network,_cursor_create_link,_cursor_create_node,_cursor_create_subarea,_cursor_create_zone,_cursor_wait};
 
-
-enum eVisulizationTemplate {e_traffic_assignment, e_train_scheduling };
 
 
 extern double g_GetPrivateProfileDouble( LPCTSTR section, LPCTSTR key, double def_value, LPCTSTR filename) ;
@@ -65,19 +65,18 @@ public:
 
 	CString m_Simulator;
 
-	eVisulizationTemplate m_VisulizationTemplate;
-	eLanguageSupport m_LanguageSupport;
+eLanguageSupport m_LanguageSupport;
 	int m_NEXTA_use_flag;
 
-	COLORREF m_FreewayColor;
-	COLORREF m_RampColor;
-	COLORREF m_ArterialColor;
-	COLORREF m_ConnectorColor;
-	COLORREF m_TransitColor;
-	COLORREF m_WalkingColor, m_ParkingandRideColor;
+	COLORREF m_Link1Color;
+	COLORREF m_Link2Color;
+	COLORREF m_Link3Color;
+	COLORREF m_Link4Color;
+	COLORREF m_Link5Color;
+	COLORREF m_Link6Color, m_ParkingandRideColor;
 	COLORREF m_PickupColor, m_DropoffColor;
 
-	COLORREF m_AgentColor[5];
+	COLORREF m_AgentColor[10];
 
 	COLORREF m_BackgroundColor;
 
@@ -89,6 +88,8 @@ public:
 	CString m_SimulatorString_32;
 	CString m_SimulatorString_64;
 
+	CString m_Node_Additional_Field[6];
+	CString m_Link_Additional_Field[6];
 
 	CTLiteApp();
 
@@ -102,6 +103,7 @@ public:
 
 	bool m_bLoadNetworkOnly;
 	virtual BOOL InitInstance();
+
 
 // Implementation
 	afx_msg void OnAppAbout();

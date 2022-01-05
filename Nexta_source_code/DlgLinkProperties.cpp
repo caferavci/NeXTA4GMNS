@@ -21,6 +21,15 @@ CDlgLinkProperties::CDlgLinkProperties(CWnd* pParent /*=NULL*/)
 	, nLane(0)
 	, m_LinkID("")
 	, StreetName(_T(""))
+	, m_cycle_length(0)
+	, m_start_green(0)
+	, m_end_of_green(0)
+	, m_AddFieldValue1(_T(""))
+	, m_AddFieldValue2(_T(""))
+	, m_AddFieldValue3(_T(""))
+	, m_AddFieldValue4(_T(""))
+	, m_AddFieldValue5(_T(""))
+	, LinkType(0)
 {
 m_bEditChange = false;
 }
@@ -34,6 +43,7 @@ void CDlgLinkProperties::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT_FROM_NODE, FromNode);
 	DDX_Text(pDX, IDC_EDIT_To_NODE, ToNode);
+	DDX_Text(pDX, IDC_EDIT_LINK_TYPE_INDEX, LinkType);
 	DDX_Text(pDX, IDC_EDIT_LENGTH, LinkLength);
 	DDV_MinMaxFloat(pDX, LinkLength, 0.0001f, 10000);
 	DDX_Text(pDX, IDC_EDIT_SPEEDLIMIT, FreeSpeed);
@@ -44,10 +54,25 @@ void CDlgLinkProperties::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_NUMLANES, nLane);
 
 	DDV_MinMaxInt(pDX, nLane, 0, 10);
-	DDX_Control(pDX, IDC_COMBO1, m_LinkTypeComboBox);
 	DDX_Text(pDX, IDC_EDIT_LINKID, m_LinkID);
 	DDX_Text(pDX, IDC_EDIT_STREET_NAME, StreetName);
+	DDX_Text(pDX, IDC_EDIT_MAIN_NODE_ID, main_node_id);
+	DDX_Text(pDX, IDC_EDIT_MOVMENT_STR, mvmt_txt_id);
 	DDV_MaxChars(pDX, StreetName, 100);
+
+	DDX_Text(pDX, IDC_EDIT_CYCLE_LENGTH, m_cycle_length);
+	DDX_Text(pDX, IDC_EDIT_Start_of_Green, m_start_green);
+	DDX_Text(pDX, IDC_EDIT_End_of_Green, m_end_of_green);
+	DDX_Control(pDX, IDC_LINK_ADDFIELD1, m_AddField1);
+	DDX_Control(pDX, IDC_LINK_ADDFIELD2, m_AddField2);
+	DDX_Control(pDX, IDC_LINK_ADDFIELD3, m_AddField3);
+	DDX_Control(pDX, IDC_LINK_ADDFIELD4, m_AddField4);
+	DDX_Control(pDX, IDC_LINK_ADDFIELD5, m_AddField5);
+	DDX_Text(pDX, IDC_EDIT_LINK_ADD_FILED1, m_AddFieldValue1);
+	DDX_Text(pDX, IDC_EDIT_LINK_ADD_FILED2, m_AddFieldValue2);
+	DDX_Text(pDX, IDC_EDIT_LINK_ADD_FILED3, m_AddFieldValue3);
+	DDX_Text(pDX, IDC_EDIT_LINK_ADD_FILED4, m_AddFieldValue4);
+	DDX_Text(pDX, IDC_EDIT_LINK_ADD_FILED5, m_AddFieldValue5);
 
 }
 
@@ -81,20 +106,58 @@ BOOL CDlgLinkProperties::OnInitDialog()
 	CDialog::OnInitDialog();
 	std::map<int, DTALinkType>:: const_iterator itr;
 
-	for(itr = m_pDoc->m_LinkTypeMap.begin(); itr != m_pDoc->m_LinkTypeMap.end(); itr++)
-	{
-	
-		CString str;
-		str.Format("%d,%s",itr->first,itr->second .link_type_name.c_str ());
-		m_LinkTypeComboBox.AddString (str);
-
-		if(LinkType == itr->first)
-		{
-			m_LinkTypeComboBox.SetCurSel (m_LinkTypeComboBox.GetCount ()-1);
-		}
-	}
 
 	EnableDataBasedOnLinkType();
+
+	if (theApp.m_Link_Additional_Field[1].GetLength() > 0)
+	{
+		m_AddField1.SetWindowText(theApp.m_Link_Additional_Field[1]);
+	}
+	else
+	{
+		CWnd* tLabel = GetDlgItem(IDC_EDIT_LINK_ADD_FILED1);
+		tLabel->EnableWindow(0);
+	}
+
+	if (theApp.m_Link_Additional_Field[2].GetLength() > 0)
+	{
+		m_AddField2.SetWindowText(theApp.m_Link_Additional_Field[2]);
+	}
+	else
+	{
+		CWnd* tLabel = GetDlgItem(IDC_EDIT_LINK_ADD_FILED2);
+		tLabel->EnableWindow(0);
+	}
+
+	if (theApp.m_Link_Additional_Field[3].GetLength() > 0)
+	{
+		m_AddField3.SetWindowText(theApp.m_Link_Additional_Field[3]);
+	}
+	else
+	{
+		CWnd* tLabel = GetDlgItem(IDC_EDIT_LINK_ADD_FILED3);
+		tLabel->EnableWindow(0);
+	}
+
+	if (theApp.m_Link_Additional_Field[4].GetLength() > 0)
+	{
+		m_AddField3.SetWindowText(theApp.m_Link_Additional_Field[4]);
+	}
+	else
+	{
+		CWnd* tLabel = GetDlgItem(IDC_EDIT_LINK_ADD_FILED4);
+		tLabel->EnableWindow(0);
+	}
+
+	if (theApp.m_Link_Additional_Field[5].GetLength() > 0)
+	{
+		m_AddField3.SetWindowText(theApp.m_Link_Additional_Field[5]);
+	}
+	else
+	{
+		CWnd* tLabel = GetDlgItem(IDC_EDIT_LINK_ADD_FILED5);
+		tLabel->EnableWindow(0);
+	}
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
@@ -103,25 +166,7 @@ BOOL CDlgLinkProperties::OnInitDialog()
 
 void CDlgLinkProperties::EnableDataBasedOnLinkType()
 {
-		int SelectLinkType = m_LinkTypeComboBox.GetCurSel ();
-
-	std::map<int, DTALinkType>:: const_iterator itr;
-
-	int count = 0;
-	int link_type = -1;
-	for(itr = m_pDoc->m_LinkTypeMap.begin(); itr != m_pDoc->m_LinkTypeMap.end(); itr++)
-	{
 	
-		if(SelectLinkType == count)
-		{
-		link_type = itr->first;
-			break;
-		}
-		count++;
-	}
-
-	if(link_type ==-1)
-		return ;
 }
 void CDlgLinkProperties::OnCbnEditchangeCombo1()
 {
@@ -130,17 +175,6 @@ void CDlgLinkProperties::OnCbnEditchangeCombo1()
 
 void CDlgLinkProperties::OnBnClickedOk()
 {
-	char m_Text[100];
-
-	int CurSelNo = m_LinkTypeComboBox.GetCurSel ();
-
-
-	char LinkTypeString[50]; 
-	
-	m_LinkTypeComboBox.GetLBText (CurSelNo,m_Text);
-	sscanf_s(m_Text, "%d,%s", &LinkType, LinkTypeString,sizeof(LinkTypeString));
-	TRACE("updated link type = %d", LinkType);
-
 	OnOK();
 }
 
@@ -175,7 +209,7 @@ void CDlgLinkProperties::OnEnChangeEditLength()
 void CDlgLinkProperties::OnBnClickedButtonUpdate()
 {
 	UpdateData(1);
-	FreeFlowTravelTime = LinkLength / max(0.001,FreeSpeed);
+	FreeFlowTravelTime = LinkLength/1000.0 / max(0.001,FreeSpeed);
 	UpdateData(0);
 
 }

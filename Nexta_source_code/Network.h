@@ -76,237 +76,9 @@ enum DTA_Turn
 };
 
 
-enum DTA_SIG_MOVEMENT
-   {
-		DTA_SIG_MOVEMENT_NODE_ID = 0,
-		DTA_SIG_MOVEMENT_SCENARIO_NO,
-		DTA_SIG_MOVEMENT_START_DAY_NO,
-		DTA_SIG_MOVEMENT_END_DAY_NO,
-		DTA_SIG_MOVEMENT_START_MIN_IN_SECOND,
-		DTA_SIG_MOVEMENT_END_MIN_IN_SECOND,
-		DTA_SIG_MOVEMENT_NOTES,
-		DTA_SIG_MOVEMENT_RECORD_NAME,
-		DTA_SIG_MOVEMENT_REFERENCE_ID,
-		DTA_NBL2,
-		DTA_NBL,
-		DTA_NBT,
-		DTA_NBR,
-		DTA_NBR2,
-		DTA_SBL2,
-		DTA_SBL,
-		DTA_SBT,
-		DTA_SBR,
-		DTA_SBR2,
-		DTA_EBL2,
-		DTA_EBL,
-		DTA_EBT,
-		DTA_EBR,
-		DTA_EBR2,
-		DTA_WBL2,
-		DTA_WBL,
-		DTA_WBT,
-		DTA_WBR,
-		DTA_WBR2,
-		DTA_NEL,
-		DTA_NET,
-		DTA_NER,
-		DTA_NWL,
-		DTA_NWT,
-		DTA_NWR,
-		DTA_SEL,
-		DTA_SET,
-		DTA_SER,
-		DTA_SWL,
-		DTA_SWT,
-		DTA_SWR,
-		DTA_PED,
-		DTA_HOLD,
-		DTA_SIG_MOVEMENT_GEOMETRY,
-		DTA_SIG_MOVEMENT_MAX_COLUMN,
-		DTA_LANES_COLUME_init
-   };
-
-
-enum DTA_SIG_MOVEMENT_ROW
-   {
-	    DTA_MOVEMENT_ATTRIBUTE_UpNode = 0,
-		DTA_MOVEMENT_ATTRIBUTE_DestNode,
-		DTA_MOVEMENT_ATTRIBUTE_StreetName,
-		DTA_MOVEMENT_ATTRIBUTE_TurnVolume,
-		DTA_MOVEMENT_ATTRIBUTE_Lanes,
-		DTA_MOVEMENT_ATTRIBUTE_Shared,
-		DTA_MOVEMENT_ATTRIBUTE_Width,
-		DTA_MOVEMENT_ATTRIBUTE_Storage,
-		DTA_MOVEMENT_ATTRIBUTE_StLanes,
-		DTA_MOVEMENT_ATTRIBUTE_Grade,
-		DTA_MOVEMENT_ATTRIBUTE_Speed,
-		DTA_MOVEMENT_ATTRIBUTE_FirstDetect,
-		DTA_MOVEMENT_ATTRIBUTE_LastDetect,
-		DTA_MOVEMENT_ATTRIBUTE_Phase1,
-		DTA_MOVEMENT_ATTRIBUTE_PermPhase1,
-		DTA_MOVEMENT_ATTRIBUTE_DetectPhase1,
-		DTA_MOVEMENT_ATTRIBUTE_EffectiveGreen,
-		DTA_MOVEMENT_ATTRIBUTE_Capacity,
-		DTA_MOVEMENT_ATTRIBUTE_VOC,
-		DTA_MOVEMENT_ATTRIBUTE_Delay,
-		DTA_MOVEMENT_ATTRIBUTE_LOS,
-		DTA_MOVEMENT_ATTRIBUTE_IdealFlow,
-		DTA_MOVEMENT_ATTRIBUTE_LostTime,
-		DTA_MOVEMENT_ATTRIBUTE_SatFlow,
-		DTA_MOVEMENT_ATTRIBUTE_SatFlowPerm,
-		DTA_MOVEMENT_ATTRIBUTE_SatFlowRTOR,
-		DTA_MOVEMENT_ATTRIBUTE_HeadwayFact,
-		DTA_MOVEMENT_ATTRIBUTE_Volume,
-		DTA_MOVEMENT_ATTRIBUTE_Peds,
-		DTA_MOVEMENT_ATTRIBUTE_Bicycles,
-		DTA_MOVEMENT_ATTRIBUTE_PHF,
-		DTA_MOVEMENT_ATTRIBUTE_Growth,
-		DTA_MOVEMENT_ATTRIBUTE_HeavyAgents,
-		DTA_MOVEMENT_ATTRIBUTE_BusStops,
-		DTA_MOVEMENT_ATTRIBUTE_Midblock,
-		DTA_MOVEMENT_ATTRIBUTE_Distance,
-		DTA_MOVEMENT_ATTRIBUTE_TravelTime,
-		DTA_MOVEMENT_ATTRIBUTE_Street_Name,
-		DTA_MOVEMENT_ATTRIBUTE_MAX_ROW
-   };
-
-
-
-enum DTA_SIG_PHASE
-   {
-		DTA_SIG_PHASE_TIMING_PLAN_NAME = 0,
-		DTA_SIG_PHASE_NODE_ID,
-		DTA_SIG_PHASE_KEY,
-		DTA_SIG_PHASE_VALUE,
-		DTA_SIG_PHASE_D1,
-		DTA_SIG_PHASE_D2,
-		DTA_SIG_PHASE_D3,
-		DTA_SIG_PHASE_D4,
-		DTA_SIG_PHASE_D5,
-		DTA_SIG_PHASE_D6,
-		DTA_SIG_PHASE_D7,
-		DTA_SIG_PHASE_D8,
-		DTA_SIG_PHASE_D9,
-		DTA_SIG_PHASE_D10,
-		DTA_SIG_PHASE_D11,
-		DTA_SIG_PHASE_D12,
-		DTA_SIG_PHASE_D13,
-		DTA_SIG_PHASE_D14,
-		DTA_SIG_PHASE_D15,
-		DTA_SIG_PHASE_D16,
-		DTA_SIG_PHASE_D17,
-		DTA_SIG_PHASE_D18,
-		DTA_SIG_PHASE_P1,
-		DTA_SIG_PHASE_P2,
-		DTA_SIG_PHASE_P3,
-		DTA_SIG_PHASE_P4,
-		DTA_SIG_PHASE_P5,
-		DTA_SIG_PHASE_P6,
-		DTA_SIG_PHASE_P7,
-		DTA_SIG_PHASE_P8,
-		DTA_SIG_Geometry,
-		DTA_SIG_PHASE_MAX_COLUMN
-};
-
-enum DTA_SIG_PHASE_ROW
-{
-	PHASE_GreenDuration=0,
-	PHASE_NextPhaseNo,
-	PHASE_MOVEMENT_VECTOR,
-	PHASE_MOVEMENT_DIR_VECTOR,
-	DTA_PHASE_ATTRIBUTE_MAX_ROW};
-
 enum eLinkMOEMode {no_display,lane_volume,speed, link_outflow_volume,link_travel_time,link_density,link_queue_length_ratio,number_of_queued_Agents,link_traveltime, Agent_trajectory};
 
-class DTA_Movement_Data_Matrix
-{
-public: 
 
-	string m_AMSMovementData[DTA_MOVEMENT_ATTRIBUTE_MAX_ROW][DTA_SIG_MOVEMENT_MAX_COLUMN];
-
-	float GetValue(DTA_SIG_MOVEMENT movement_index, DTA_SIG_MOVEMENT_ROW attribute_index)
-	{
-		return atof(m_AMSMovementData[attribute_index][movement_index] .c_str());	
-		
-	}
-
-	string GetString(DTA_SIG_MOVEMENT movement_index, DTA_SIG_MOVEMENT_ROW attribute_index)
-	{
-	
-		return m_AMSMovementData[attribute_index][movement_index]. c_str();
-	}
-
-	void SetValue(DTA_SIG_MOVEMENT movement_index, DTA_SIG_MOVEMENT_ROW attribute_index, float value)
-	{
-
-		std::ostringstream ss;
-		ss << value;
-		std::string s(ss.str());
-		m_AMSMovementData[attribute_index][movement_index]  	= s;
-		
-	}
-	void SetString(DTA_SIG_MOVEMENT movement_index, DTA_SIG_MOVEMENT_ROW attribute_index, string s)
-	{
-		m_AMSMovementData[attribute_index][movement_index] 	= s;
-		
-	}
-
-	void InitializeKeyValue(int node_id, string geometry_str);
-
-	void AddMovementData()
-	{
-	
-	
-	}
-	
-
-};
-
-class DTA_Phasing_Data_Matrix
-{
-	public: 
-	string m_AMSPhasingData[DTA_PHASE_ATTRIBUTE_MAX_ROW][DTA_SIG_PHASE_MAX_COLUMN];
-
-
-	float GetValue(DTA_SIG_PHASE phase_index, DTA_SIG_PHASE_ROW attribute_index)
-	{
-		return atof(m_AMSPhasingData[attribute_index][phase_index] .c_str());	
-		
-	}
-
-	CString GetString(DTA_SIG_PHASE phase_index, DTA_SIG_PHASE_ROW attribute_index)
-	{
-	
-		return m_AMSPhasingData[attribute_index][phase_index]. c_str();
-	}
-
-	std::string GetSTDString(DTA_SIG_PHASE phase_index, DTA_SIG_PHASE_ROW attribute_index)
-	{
-	
-		return m_AMSPhasingData[attribute_index][phase_index];
-	}
-
-	void SetValue(DTA_SIG_PHASE phase_index, DTA_SIG_PHASE_ROW attribute_index, float value)
-	{
-
-		std::ostringstream ss;
-		ss << value;
-		std::string s(ss.str());
-		m_AMSPhasingData[attribute_index][phase_index]  	= s;
-		
-	}
-	void SetString(DTA_SIG_PHASE phase_index, DTA_SIG_PHASE_ROW attribute_index, string s)
-	{
-		m_AMSPhasingData[attribute_index][phase_index] 	= s;
-		
-	}
-
-	void InitializeKeyValue(int node_id, string geometry_str);
-
-};
-
-
-#include ".\\cross-resolution-model\\SignalNode.h"
 
 extern float g_GetRandomRatio();
 
@@ -319,7 +91,7 @@ using std::string;
 
 #define MAX_AdjLinkSize 15
 #define	MAX_SPLABEL 99999
-#define MAX_NODE_SIZE_IN_A_PATH 4000
+#define MAX_NODE_SIZE_IN_A_PATH 40000
 #define _MAX_LINK_FOR_LOAD_MOVEMENT_DATA  20000
 
 #define NUM_PATHMOES 8  // Distance, Travel Time, Emissions, Safety
@@ -472,7 +244,7 @@ extern double g_GetPoint2Point_Distance(GDPoint p1, GDPoint p2);
 extern DTA_Turn g_RelativeAngle_to_Turn(int RelativeAngle);
 
 extern double g_GetPoint2LineDistance(GDPoint pt, GDPoint FromPt, GDPoint ToPt, double UnitFeet = 1, bool requirement_for_full_intersection = true);
-extern double g_CalculateP2PDistanceInMileFromLatitudeLongitude(GDPoint p1, GDPoint p2);
+extern double g_CalculateP2PDistanceInMeterFromLatitudeLongitude(GDPoint p1, GDPoint p2);
 extern bool g_get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y,float p2_x, float p2_y, float p3_x, float p3_y, float *i_x, float *i_y) ;
 
 
@@ -757,12 +529,11 @@ public:
 
 	bool IsConnector()
 	{
-		if(type_code.find('c')!= string::npos)
+		if(type_code.find('c')!= string::npos  || type_code.find("access") != string::npos)
 			return true;
 		else
 			return false;
 	}
-
 	bool IsTransit()
 	{
 		if(type_code.find('t')!= string::npos)
@@ -803,183 +574,6 @@ public:
 	int stop_sign_flag;
 	int yield_sign_flag;
 };
-
-
-class DTANodeMovement
-{
-public:
-
-	DTANodeMovement()
-	{
-	bOverlappingTurnFlag = false;
-
-	pair_key ="";
-	starting_time_in_min = 0;
-	ending_time_in_min = 1440;
-	turning_percentage = 0;
-	turning_prohibition_flag = 0;
-	turning_protected_flag = 0;
-	turning_permitted_flag = 0;
-	phase_index = 0;
-	
-	movement_hourly_capacity = 10000;
-
-	for(int h = 0; h<24; h++)
-		HourlyCount[h] = 0;
-
-
-sim_turn_count = 0;
-sim_turn_percentage = 0;
-sim_turn_delay = 0; 
-
-obs_turn_count = 0;
-obs_turn_hourly_count = 0;
-obs_turn_percentage = 0; 
-obs_turn_delay = 0; 
-
-
-   QEM_TurnVolume = 0;
-   QEM_LinkVolume = 0;
-   QEM_Lanes = 0;
-   QEM_Shared = 0;
-   QEM_Width = 12; 
-   QEM_Storage = 0;
-   QEM_StLanes = 0;
-   QEM_Grade = 0;
-   QEM_Speed = 40;
-   QEM_IdealFlow = 1900;
-   QEM_LostTime = 4;
-   QEM_Phase1 = 0;
-   QEM_PermPhase1 = 0;
-   QEM_DetectPhase1 = 0;
-
-   QEM_TurnPercentage = 0;
-   QEM_EffectiveGreen = 0;
-   QEM_Capacity = 0;
-   QEM_VOC = 0;
-   QEM_SatFlow = 0;
-   QEM_Delay = 0;
-   QEM_reference_node_number = 0;
-   angle = -100;
-   QEM_StartTime = 0;
-   QEM_EndTime = 0;
-
-
-   bNonspecifiedTurnDirectionOnFreewayAndRamps = false;
-	}
-
-std::vector<GDPoint> m_ShapePoints;
-
-bool bNonspecifiedTurnDirectionOnFreewayAndRamps;
-CString pair_key;
-int HourlyCount[24];
-
-
-int IncomingLinkNo;
-int OutgoingLinkNo;
-DTA_Turn movement_turn;
-DTA_Direction movement_direction;
-int angle;
-DTA_SIG_MOVEMENT movement_approach_turn;
-bool bOverlappingTurnFlag;
-string QEM_dir_string;
-
-int QEM_reference_node_number;
-
-int in_link_from_node_id;
-int in_link_to_node_id;  
-int out_link_to_node_id;
-
-int movement_hourly_capacity;
-int starting_time_in_min;
-int ending_time_in_min;
-float turning_percentage;
-int turning_prohibition_flag;
-int turning_protected_flag;
-int turning_permitted_flag;
-
-
-float sim_turn_count; 
-float sim_turn_percentage; 
-float sim_turn_delay; 
-
-int obs_turn_count; 
-int obs_turn_hourly_count;
-float obs_turn_percentage; 
-int obs_turn_delay; 
-
-   int QEM_TurnVolume;
-   int QEM_LinkVolume;
-   float QEM_TurnPercentage;
-
-   int QEM_Lanes;
-   int QEM_Shared;
-   int QEM_Width;
-   int QEM_Storage;
-   int QEM_StLanes;
-   float QEM_Grade;
-   float QEM_Speed;
-   float QEM_IdealFlow;
-   float QEM_LostTime;
-   int QEM_Phase1;
-   int QEM_PermPhase1;
-   int QEM_DetectPhase1;
-
-   float QEM_EffectiveGreen;
-   float QEM_Capacity;
-   float QEM_VOC;
-   float QEM_SatFlow;
-   float QEM_Delay;
-   CString QEM_LOS;
-
-
-   float QEM_StartTime;
-   float QEM_EndTime;
-
-
- //  std::map<int,bool> m_PhaseMap;
-
-int phase_index;
-
-};
-
-class DTANodeLaneTurn
-{
-public:
-	DTANodeMovement movement_info;
-
-int in_lane_index;
-int out_lane_index;
-
-};
-
-
-  class DTANodePhase
-   {
-   public:
-      DTANodePhase()
-	  {
-      min_green = 0;
-	  max_green = 0;
-	  amber = 0;
-	  VehExt1 = 0;
-	  }
-
-      int phase_number;
-      int min_green;
-	  int max_green;
-	  int amber;
-	  float VehExt1;
-
-      std::vector<CString> movement_vector;
-
-
-	  // if a link is added or deleted from a link, the corresponding movement array should be adjusted. 
-
-
-	};
-
-extern bool compare_MovementData (DTANodeMovement first, DTANodeMovement second);
 
 
 
@@ -1040,91 +634,6 @@ public:
 	std::vector<int> m_IncomingLinkVector;
 	
 	int m_IncomingNonConnectors;
-	std::vector <DTANodeMovement> m_MovementVector;
-	
-
-
-	void SetupNodeMovementVector(DTANodeMovement movement_element)
-	{
-	
-		m_MovementVector.push_back(movement_element);
-		
-	}
-
-	DTANodeMovement GetNodeMovementVector( int MovementIndex)
-	{
-			// FREE as the backup value
-			return m_MovementVector[MovementIndex];
-		
-	}
-
-	bool IsEmptyPhaseNumber()
-	{
-		for(unsigned int i  = 0; i < m_MovementVector.size(); i++)
-		{
-			if(m_MovementVector[i].QEM_Phase1 >0)
-			{
-				return false;
-			}
-		}
-
-		return true;
-	
-	}
-
-
-	void ResetToDefaultPhaseNumbers()
-	{
-		for(unsigned int i  = 0; i <  m_MovementVector.size(); i++)
-		{
-			switch(m_MovementVector[i].movement_direction)
-			{
-			case DTA_North: m_MovementVector[i].QEM_Phase1 = 2; 
-				break;
-			case DTA_South: m_MovementVector[i].QEM_Phase1 = 6; 
-				break;
-			case DTA_East: m_MovementVector[i].QEM_Phase1 = 4; 
-				break;
-			case DTA_West: m_MovementVector[i].QEM_Phase1 = 8; 
-				break;
-			}
-	
-		}
-	}
-	void SortMovementVector()
-	{
-
-	std::sort(m_MovementVector.begin(), m_MovementVector.end(), compare_MovementData);
-	
-	}
-
-	int FindMovementIndexFromDirecion(DTA_SIG_MOVEMENT movement_approach_turnection)
-	{
-	
-		for(unsigned int i  = 0; i < m_MovementVector.size(); i++)
-		{
-			if(m_MovementVector[i].movement_approach_turn == movement_approach_turnection)
-				return i;
-
-		}
-
-		return -1;
-	}
-
-	int FindHourlyCountFromDirection( DTA_Direction movement_approach)
-	{
-	
-		int link_count = 0;
-		// sum up all movement along the same approach
-		for(unsigned int i  = 0; i < m_MovementVector.size(); i++)
-		{
-			if(m_MovementVector[i].movement_direction   == movement_approach)
-				link_count+= m_MovementVector[i].QEM_TurnVolume;
-
-		}
-
-		return link_count;
-	}
 
 	CString pair_key;
 
@@ -1138,88 +647,6 @@ public:
 	}
 
 
-	void make_Link_Pair_to_Movement_Map()
-	{
-
-		for(unsigned int i  = 0; i < m_MovementVector.size(); i++)
-		{
-			CString pair_key = get_link_pair_key( m_MovementVector[i].in_link_from_node_id,m_MovementVector[i].out_link_to_node_id);
-
-			m_Link_Pair_to_Movement_Map[pair_key] = i;
-
-			if(i <  m_MovementVector.size())
-			{
-			m_MovementVector[i].pair_key = pair_key;
-			}else
-			{
-			TRACE("");
-			
-			}
-		}
-
-	}
-
-	void ResetMovementMOE()
-	{
-
-		for(unsigned int i  = 0; i < m_MovementVector.size(); i++)
-		{
-
-			m_MovementVector[i].sim_turn_count  = 0;
-			m_MovementVector[i].turning_percentage   = 0;
-			m_MovementVector[i].sim_turn_delay = 0;
-		}
-
-	}
-
-	std::map<CString, int > m_Link_Pair_to_Movement_Map;
-
-	void AddMovementCountAndDelay(int in_link_from_node_id, int out_link_to_node_id, float delay)
-	{
-	
-		if(m_Link_Pair_to_Movement_Map.size()==0)
-			make_Link_Pair_to_Movement_Map();
-
-		if(m_MovementVector.size()==0)
-			return;
-
-		CString link_pair_key = get_link_pair_key( in_link_from_node_id,out_link_to_node_id);
-
-		if(m_Link_Pair_to_Movement_Map.find(link_pair_key) == m_Link_Pair_to_Movement_Map.end())
-			return;
-
-		int movement_index = m_Link_Pair_to_Movement_Map[link_pair_key];
-
-		
-		if(movement_index>=0 && movement_index < m_MovementVector.size())
-		{
-		m_MovementVector[movement_index].sim_turn_count++;
-		m_MovementVector[movement_index].sim_turn_delay+=delay;
-		}
-
-
-	}
-
-
-
-
-	int GetMovementNo(int in_link_from_node_id, int in_link_to_node_id, int out_link_to_node_id)
-	{
-
-		for(unsigned int i  = 0; i < m_MovementVector.size(); i++)
-		{
-
-		if( m_MovementVector[i].in_link_from_node_id== in_link_from_node_id
-		&& m_MovementVector[i].in_link_to_node_id== in_link_to_node_id
-		&& m_MovementVector[i].out_link_to_node_id== out_link_to_node_id)
-		return i;
-		}
-
-		return -1;  //not found
-
-	}
-
-	std::vector <DTANodeLaneTurn> m_LaneTurnVector;
 
 	
 	bool m_bConnectedToFreewayORRamp;
@@ -1247,14 +674,13 @@ public:
 	int m_NodeID;  //  original node number
 	int m_ZoneID;  // If ZoneID > 0 --> centroid,  otherwise a physical node.
 	int m_ControlType; // Type: ....
-	string m_NodeType;
 	string m_node_type;
 	string m_ctrl_type;
 	int m_Connections;  // number of connections
+	string str_UnreadHeaders, str_LineFieldsValues;
+	string Additional_Field[6];
 
-	//DTA_NodeMovementSet m_Movementt;
-	// signal data
-	std::vector<DTANodePhase> m_node_phase_vector;
+	string osm_node_id, osm_highway, activity_type, is_boundary, main_node_id, poi_id, notes;
 
 };
 
@@ -1525,7 +951,7 @@ public:
 		m_network_design_flag = 0;
 	
 		m_total_assigned_link_volume = 0;
-		m_total_link_volume_of_incomplete_trips = 0;
+		m_static_link_volume_of_incomplete_trips = 0;
 
 		m_UserDefinedHeight = 1;
 		relative_angel_difference_from_main_direction = 0;
@@ -1556,7 +982,7 @@ public:
 		m_ReversedSpeedLimit  = 50;
 		m_Saturation_flow_rate_in_vhc_per_hour_per_lane = 1800;
 
-		m_total_link_volume = 0;
+		m_static_link_volume = 0;
 		m_hourly_link_volume = 0;
 		m_total_travel_time = 0;
 		m_total_delay = 0;
@@ -1564,7 +990,7 @@ public:
 
 		m_TotalVolumeForMovementCount = 0;
 		m_MeanSpeed  = m_FreeSpeed;
-		m_VoCRatio = 0;
+		m_StaticVoCRatio = 0;
 		m_TotalTravelTime = 0;
 		m_TotalDiffValue = 0;
 		m_NumberOfMarkedAgents = 0;
@@ -1572,9 +998,9 @@ public:
 		m_LayerNo = 0;
 		m_GateFlag = 0;
 		m_ParentLinkID = -1;
-		m_OrgDir = 1;
-		m_RailBidirectionalFlag = 1;
-		m_Direction = 1;
+		m_org_dir_flag = 1;
+		m_rail_bidirectional_revered_flag = -1;  // not applicable
+		m_dir_flag = 1;
 		m_SimulationHorizon	= TimeHorizon;
 
 		m_StochaticCapcityFlag = 0;
@@ -1600,11 +1026,11 @@ public:
 		m_LevelOfService = 'A';
 		m_avg_waiting_time_on_loading_buffer = 0;
 
-		m_total_link_volume = 0;
+		m_static_link_volume = 0;
 		m_hourly_link_volume = 0;
 		m_total_travel_time = 0;
-		m_total_speed = 0;
-		m_total_speed_count = 0;
+		m_static_speed = 0;
+		m_static_speed_count = 0;
 		m_volume_over_capacity_ratio  = 0;
 		m_volume_over_capacity_ratio = 0;
 		m_StaticTravelTime = 0;
@@ -1625,7 +1051,10 @@ public:
 	
 		m_bToBeShifted = true;
 
-
+		m_cycle_length = -1;
+		m_start_green_time = -1;
+		m_end_green_time = -1;
+		m_cell_type = -1;
 	};
 
 
@@ -1635,6 +1064,8 @@ public:
 	long m_FromNodeNo;  // index starting from 0
 	long m_ToNodeNo;    // index starting from 0
 	bool m_bSensorData;
+
+	string macro_node_id, macro_link_id, meso_link_id, notes;
 
 	std::string m_CountSensorID;
 
@@ -1665,18 +1096,21 @@ public:
 	string m_loop_code;
 	string m_orientation_code;
 
+	string Additional_Field[6];
+	string str_UnreadHeaders;
+	string str_LineFieldsValues;
 
 
 	// overall information
-	float m_total_speed;
-	float m_total_speed_count;
+	float m_static_speed;
+	float m_static_speed_count;
 
-	float m_total_link_volume;
+	float m_static_link_volume;
 	float m_hourly_link_volume;
 	float m_total_travel_time;
 	float m_total_delay;
 	float m_total_assigned_link_volume;
-	float m_total_link_volume_of_incomplete_trips;
+	float m_static_link_volume_of_incomplete_trips;
 
 	float m_volume_over_capacity_ratio;
 	std::string m_LevelOfService;
@@ -1787,11 +1221,10 @@ public:
 	void ResetMOEAry(int TimeHorizon)
 	{
 		if(m_LinkMOEAry == NULL)
-			delete m_LinkMOEAry;
-
-		m_LinkMOEAry = new SLinkMOE [TimeHorizon];
-
-		m_LinkMOEArySize = TimeHorizon;
+		{
+			m_LinkMOEAry = new SLinkMOE [TimeHorizon];
+			m_LinkMOEArySize = TimeHorizon;
+		}
 
 
 	};
@@ -1870,6 +1303,8 @@ void AdjustLinkEndpointsWithSetBack()
 
 
 	SLinkMOE* m_LinkMOEAry; 
+	std::map<int, int> TDStateMap;  // index as global second 
+	std::map<int, string> TDStateCodeMap;  // index as global second 
 
 	int m_LinkMOEArySize;
 
@@ -1935,15 +1370,23 @@ void AdjustLinkEndpointsWithSetBack()
 
 	int m_GateFlag;  /// 0 non gate: 1: low rank: 2: high rank
 	int m_ParentLinkID;
-	int m_OrgDir;
-	CString m_LinkKey;
+	int m_org_dir_flag;
 
-	int m_RailBidirectionalFlag;
+
+	int m_rail_bidirectional_revered_flag;
 	string m_TrackType;
-	int m_Direction; 
+	int m_dir_flag; 
 	bool m_bOneWayLink;
 	string m_LinkID;
+	string m_mvmt_txt_id;
+	string m_main_node_id;
+	string m_nema_phase;
 	int m_network_design_flag;
+	int m_cycle_length;
+	int m_start_green_time;
+	int m_end_green_time;
+	int m_cell_type;
+
 
 
 	std::string m_geo_string;
@@ -1996,7 +1439,7 @@ void AdjustLinkEndpointsWithSetBack()
 	float m_MaxSpeed;
 	float m_MeanSpeed;
 	float m_MeanVolume;
-	float m_VoCRatio;
+	float m_StaticVoCRatio;
 
 	/* For min-by-min train timetabling, m_LaneCapacity is 1 for each min. 
 	Example in airspace scheduling
@@ -2941,6 +2384,9 @@ public:
 	 // link list arrary of a Agent path
 
 	float m_Volume;
+	string m_AgentType;
+	string m_demand_period;
+	int m_demand_period_no;
 	unsigned int m_RandomSeed;
 	string m_AgentID; 
 	std::vector<GDPoint> m_ShapePoints;
@@ -2949,7 +2395,9 @@ public:
 	int m_d_ZoneID;  // range 0, 65535
 //	int m_FromNodeNo;
 //	int m_ToNodeNo;
-	string m_AgentType;  
+	//string m_AgentType;  
+	string m_display_code;
+	int m_PCE_unit;
 	int activity_node_flag;
 	int m_AgentTypeNo;// 
 	short m_SimLinkSequenceNo; //  range 0, 65535
@@ -2959,7 +2407,9 @@ public:
 	float m_TimeToRetrieveInfo;
 	float m_DepartureTime;
 	float m_ArrivalTime;
-	float m_TripTime;
+	float m_VDF_TripTime;
+	float m_Simu_TripTime;
+
 	float m_FreeflowTripTime;
 
 	float m_path_start_node_departure_time;
@@ -2995,6 +2445,7 @@ public:
 
 	DTAAgent()
 	{
+		m_PCE_unit = 1;
 		activity_node_flag = 0;
 		m_Volume = 1;
 		m_subarea_start_node_departure_time = 0;
@@ -3013,7 +2464,7 @@ public:
 		m_bMarked = false;
 		m_Age = 0;
 		m_NodeIDSum = 0;
-		m_AgentType = 1;
+
 
 		m_bODMarked = false;
 		pVehData=NULL;
@@ -3028,7 +2479,7 @@ public:
 		m_bLoaded = false;
 		m_bSwitched = false;
 		m_bComplete = false;
-		m_TripTime = 900;  // default: for incomplete Agents, they have an extremey long trip time
+		m_Simu_TripTime = 900;  // default: for incomplete Agents, they have an extremey long trip time
 		m_FreeflowTripTime = 0;
 		m_Distance =0;
 		m_Delay = 0;
@@ -3406,6 +2857,14 @@ public:
 	void IdentifyBottlenecks(int StochasticCapacityFlag);
 
 	int SimplifiedTDLabelCorrecting_DoubleQueue(int origin, int departure_time, int destination, int pricing_type, float VOT,int PathLinkList[MAX_NODE_SIZE_IN_A_PATH],float &TotalCost, bool distance_flag, bool check_connectivity_flag, bool debug_flag, float RandomCostCoef);   // Pointer to previous node (node)
+	int LabelCorrecting_RouteGeneration(int origin, int departure_time, std::vector<int> zone_node_vector,
+		std::map<int, int>	zone_node_map, int pricing_type, float VOT, 
+		
+	int ZoneNodePathLinkList[10][MAX_NODE_SIZE_IN_A_PATH],
+	int ZoneNodePathNoList[10],
+	int& ZoneNodePathNoSize,
+		
+		float& TotalCost, bool distance_flag, bool check_connectivity_flag, bool debug_flag, float RandomCostCoef);   // Pointer to previous node (node)
 
 	// simplifed version use a single node-dimension of LabelCostAry, NodePredAry
 
@@ -3698,4 +3157,3 @@ extern void g_AddLinkIntoSelectionList(DTALink* pLink, int link_no, int document
 extern std::list<s_link_selection>	g_LinkDisplayList;
 extern int  g_SimulationStartTime_in_min;
 
-#include "Transit.h"

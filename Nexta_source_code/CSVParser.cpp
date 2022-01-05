@@ -13,7 +13,6 @@ CCSVParser::CCSVParser(void)
 	Delimiter = ',';
 	IsFirstLineHeader = true;
 	m_bSkipFirstLine = false;
-	m_bSynchroSingleCSVFile = false;
 	m_bLastSectionRead = false;
 	m_EmptyLineCount++;
 }
@@ -133,7 +132,7 @@ bool CCSVParser::ReadRecord()
 	{
 		string s;
 		std::getline(inFile,s);
-		if (s.length() > 0)
+		if (s.length() >= 1)
 		{
 			if(m_bSynchroSingleCSVFile && s.find("[") != string::npos)  // synchro single csv file
 			{
@@ -241,7 +240,7 @@ vector<string> CCSVParser::ParseLine(string line)
 	istringstream ss(line);
 
 
-	if (line.find_first_of('"') == string::npos)
+	if (line.length() >= 1 && line.find_first_of('"') == string::npos)
 	{
 
 		while (std::getline(ss,subStr,Delimiter))

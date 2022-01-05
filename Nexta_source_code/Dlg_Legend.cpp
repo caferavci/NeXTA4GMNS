@@ -178,7 +178,7 @@ void CDlg_Legend::DrawObjects(CDC* pDC)
 	{
 	case MOE_volume: SetWindowText("Link Volume"); break;
 	case MOE_speed: SetWindowText("% of Free Speed"); break;
-	case MOE_density: SetWindowText("Density (vhc/distance/ln)"); break;
+	case MOE_density: SetWindowText("Density (veh/mile/ln)"); break;
 	case MOE_bottleneck: SetWindowText("Bottleneck Charts and Congestion Age"); break;
 
 	
@@ -295,7 +295,7 @@ void CDlg_Legend::DrawObjects(CDC* pDC)
 	else
 		lr.top = lr.bottom + 130;
 
-	double lane_offset = m_pDoc->m_UnitDistance*m_pDoc->m_LaneWidthInKM;  // 20 feet per lane
+	double lane_offset = m_pDoc->m_UnitDistance*m_pDoc->m_LaneWidthInMeter;  // 20 feet per lane
 
 	double BandWidthValue = 0;
 	CString band_width_str;

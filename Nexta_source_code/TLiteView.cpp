@@ -1,4 +1,4 @@
-	// TLiteView.cpp : implementation of the CTLiteView class
+// TLiteView.cpp : implementation of the CTLiteView class
 //
 //  Portions Copyright 2010 Xuesong Zhou (xzhou99@gmail.com)
 
@@ -38,8 +38,6 @@
 #include "DlgLinkProperties.h"
 #include "Dlg_NodeProperties.h"
 #include "Dlg_VehicleClassification.h"
-#include "Page_Node_Movement.h"
-#include "Page_Node_Phase.h"
 #include "CSVParser.h"
 
 #include "Chart_Control\\NSChartCtrl.h"
@@ -142,8 +140,6 @@ BEGIN_MESSAGE_MAP(CTLiteView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_LBUTTONDBLCLK()
 	ON_COMMAND(ID_SEARCH_FINDLINK, &CTLiteView::OnSearchFindlink)
-	ON_COMMAND(ID_VIEW_IMAGE, &CTLiteView::OnEditChangebackgroupimagethroughmouse)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_IMAGE, &CTLiteView::OnUpdateEditChangebackgroupimagethroughmouse)
 	ON_COMMAND(ID_VIEW_BACKGROUNDIMAGE, &CTLiteView::OnViewBackgroundimage)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_BACKGROUNDIMAGE, &CTLiteView::OnUpdateViewBackgroundimage)
 	ON_COMMAND(ID_SHOW_SHOWALLPATHS, &CTLiteView::OnShowShowallpaths)
@@ -156,7 +152,6 @@ BEGIN_MESSAGE_MAP(CTLiteView, CView)
 	ON_UPDATE_COMMAND_UI(ID_SHOW_GRID, &CTLiteView::OnUpdateShowGrid)
 	ON_COMMAND(ID_SHOW_LINKARROW, &CTLiteView::OnShowLinkarrow)
 	ON_UPDATE_COMMAND_UI(ID_SHOW_LINKARROW, &CTLiteView::OnUpdateShowLinkarrow)
-	ON_COMMAND(ID_IMAGE_LOCKBACKGROUNDIMAGEPOSITION, &CTLiteView::OnImageLockbackgroundimageposition)
 	ON_COMMAND(ID_VIEW_TEXTLABEL, &CTLiteView::OnViewTextlabel)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_TEXTLABEL, &CTLiteView::OnUpdateViewTextlabel)
 	ON_COMMAND(ID_LINK_DELETE, &CTLiteView::OnLinkDelete)
@@ -167,12 +162,6 @@ BEGIN_MESSAGE_MAP(CTLiteView, CView)
 	ON_COMMAND(ID_EDIT_DELETESELECTEDNODE, &CTLiteView::OnEditDeleteselectednode)
 	ON_COMMAND(ID_VIEW_SELECT_NODE, &CTLiteView::OnViewSelectNode)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_SELECT_NODE, &CTLiteView::OnUpdateViewSelectNode)
-	ON_COMMAND(ID_EDIT_CREATESUBAREA, &CTLiteView::OnEditCreatesubarea)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_CREATESUBAREA, &CTLiteView::OnUpdateEditCreatesubarea)
-	ON_COMMAND(ID_TOOLS_REMOVENODESANDLINKSOUTSIDESUBAREA, &CTLiteView::OnToolsRemovenodesandlinksoutsidesubarea)
-	ON_COMMAND(ID_EDIT_DELETELINKSOUTSIDESUBAREA, &CTLiteView::OnEditDeletelinksoutsidesubarea)
-	ON_COMMAND(ID_EDIT_MOVENETWORKCOORDINATES, &CTLiteView::OnEditMovenetworkcoordinates)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_MOVENETWORKCOORDINATES, &CTLiteView::OnUpdateEditMovenetworkcoordinates)
 	ON_WM_KEYDOWN()
 	ON_COMMAND(ID_VIEW_INCREASENODESIZE, &CTLiteView::OnViewIncreasenodesize)
 	ON_COMMAND(ID_VIEW_DECREATENODESIZE, &CTLiteView::OnViewDecreatenodesize)
@@ -188,9 +177,6 @@ BEGIN_MESSAGE_MAP(CTLiteView, CView)
 	ON_COMMAND(ID_VIEW_BACKGROUNDCOLOR, &CTLiteView::OnViewBackgroundcolor)
 	ON_UPDATE_COMMAND_UI(ID_LINK_INCREASEBANDWIDTH, &CTLiteView::OnUpdateLinkIncreasebandwidth)
 	ON_UPDATE_COMMAND_UI(ID_LINK_DECREASEBANDWIDTH, &CTLiteView::OnUpdateLinkDecreasebandwidth)
-	ON_COMMAND(ID_EXPORT_CREATEVISSIMFILES, &CTLiteView::OnExportCreatevissimfiles)
-	ON_COMMAND(ID_DEBUG_SHOWAgentSWITHINCOMPLETETRIPSONLY, &CTLiteView::OnDebugShowAgentswithincompletetripsonly)
-	ON_UPDATE_COMMAND_UI(ID_DEBUG_SHOWAgentSWITHINCOMPLETETRIPSONLY, &CTLiteView::OnUpdateDebugShowAgentswithincompletetripsonly)
 	ON_COMMAND(ID_Agent_AgentNUMBER, &CTLiteView::OnAgentAgentnumber)
 	ON_UPDATE_COMMAND_UI(ID_Agent_AgentNUMBER, &CTLiteView::OnUpdateAgentAgentnumber)
 	ON_COMMAND(ID_Agent_SHOWSELECTEDAgentONLY, &CTLiteView::OnAgentShowselectedAgentonly)
@@ -204,57 +190,22 @@ BEGIN_MESSAGE_MAP(CTLiteView, CView)
 	ON_COMMAND(ID_NODE_REMOVENODEAVOIDANCECONSTRAINT, &CTLiteView::OnNodeRemovenodeavoidanceconstraint)
 	ON_COMMAND(ID_EDIT_MOVENODE, &CTLiteView::OnEditMovenode)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_MOVENODE, &CTLiteView::OnUpdateEditMovenode)
-	ON_COMMAND(ID_BACKGROUNDIMAGE_MARKLONG_A, &CTLiteView::OnBackgroundimageMarklongA)
-	ON_COMMAND(ID_BACKGROUNDIMAGE_MARKLONG_B, &CTLiteView::OnBackgroundimageMarklongB)
-	ON_COMMAND(ID_BACKGROUNDIMAGE_ADDLAT, &CTLiteView::OnBackgroundimageAddlat)
 
-	ON_COMMAND(ID_ZONE_CREATEZONE, &CTLiteView::OnZoneCreatezone)
-	ON_COMMAND(ID_EDIT_CREATEZONE, &CTLiteView::OnEditCreatezone)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_CREATEZONE, &CTLiteView::OnUpdateEditCreatezone)
 	ON_COMMAND(ID_SUBAREA_HIGHLIGHTLINKSINSIDESUBAREA, &CTLiteView::OnSubareaHighlightlinksinsidesubarea)
 	ON_UPDATE_COMMAND_UI(ID_SUBAREA_HIGHLIGHTLINKSINSIDESUBAREA, &CTLiteView::OnUpdateSubareaHighlightlinksinsidesubarea)
 	ON_COMMAND(ID_SUBAREA_HIGHLIGHTLINKSACOSSSUBAREA, &CTLiteView::OnSubareaHighlightlinksacosssubarea)
 	ON_UPDATE_COMMAND_UI(ID_SUBAREA_HIGHLIGHTLINKSACOSSSUBAREA, &CTLiteView::OnUpdateSubareaHighlightlinksacosssubarea)
 	ON_COMMAND(ID_ODMATRIX_VIEWTOP50ODPAIRSONLY, &CTLiteView::OnOdmatrixViewtop50odpairsonly)
 	ON_UPDATE_COMMAND_UI(ID_ODMATRIX_VIEWTOP50ODPAIRSONLY, &CTLiteView::OnUpdateOdmatrixViewtop50odpairsonly)
-	ON_COMMAND(ID_MOVEMENT_HIGHLIGHTPROHIBITEDMOVEMENTS, &CTLiteView::OnMovementHighlightprohibitedmovements)
-	ON_UPDATE_COMMAND_UI(ID_MOVEMENT_HIGHLIGHTPROHIBITEDMOVEMENTS, &CTLiteView::OnUpdateMovementHighlightprohibitedmovements)
 	ON_COMMAND(ID_FILE_PRINT, &CTLiteView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CTLiteView::OnFilePrintPreview)
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CTLiteView::OnFilePrintSetup)
-	ON_COMMAND(ID_AgentDATA_SHOWCOMPLETETRAJECTORY, &CTLiteView::OnAgentdataShowcompletetrajectory)
-	ON_UPDATE_COMMAND_UI(ID_AgentDATA_SHOWCOMPLETETRAJECTORY, &CTLiteView::OnUpdateAgentdataShowcompletetrajectory)
-	ON_COMMAND(ID_AgentDATA_SHOW, &CTLiteView::OnAgentdataShow)
-	ON_UPDATE_COMMAND_UI(ID_AgentDATA_SHOW, &CTLiteView::OnUpdateAgentdataShow)
-	ON_COMMAND(ID_DETECTOR_UNLOCK, &CTLiteView::OnDetectorUnlock)
-	ON_UPDATE_COMMAND_UI(ID_DETECTOR_UNLOCK, &CTLiteView::OnUpdateDetectorUnlock)
-	ON_COMMAND(ID_DETECTOR_SHOWSENSORDESCRIPTION33769, &CTLiteView::OnDetectorShowsensordescription33769)
-	ON_UPDATE_COMMAND_UI(ID_DETECTOR_SHOWSENSORDESCRIPTION33769, &CTLiteView::OnUpdateDetectorShowsensordescription33769)
-	ON_COMMAND(ID_DETECTOR_SHOWMATCHEDLINKFORSENSOR, &CTLiteView::OnDetectorShowmatchedlinkforsensor)
-	ON_UPDATE_COMMAND_UI(ID_DETECTOR_SHOWMATCHEDLINKFORSENSOR, &CTLiteView::OnUpdateDetectorShowmatchedlinkforsensor)
-	ON_COMMAND(ID_GRID_UNLOCK, &CTLiteView::OnGridUnlock)
-	ON_UPDATE_COMMAND_UI(ID_GRID_UNLOCK, &CTLiteView::OnUpdateGridUnlock)
-	ON_COMMAND(ID_LINK_SHOWHIDEREFERENCENETWORK, &CTLiteView::OnLinkShowhidereferencenetwork)
-	ON_UPDATE_COMMAND_UI(ID_LINK_SHOWHIDEREFERENCENETWORK, &CTLiteView::OnUpdateLinkShowhidereferencenetwork)
-	ON_COMMAND(ID_EDIT_MOVEReferenceNETWORKCOORDINATES, &CTLiteView::OnEditMovereferencenetworkcoordinates)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_MOVEReferenceNETWORKCOORDINATES, &CTLiteView::OnUpdateEditMovereferencenetworkcoordinates)
-	ON_COMMAND(ID_DETECTOR_SHOWSPEEDSENSORLOCATION, &CTLiteView::OnDetectorShowspeedsensorlocation)
-	ON_UPDATE_COMMAND_UI(ID_DETECTOR_SHOWFIXEDCOUNTDETECTORLOCATION, &CTLiteView::OnUpdateDetectorShowfixedcountdetectorlocation)
-	ON_UPDATE_COMMAND_UI(ID_DETECTOR_SHOWSPEEDSENSORLOCATION, &CTLiteView::OnUpdateDetectorShowspeedsensorlocation)
-	ON_COMMAND(ID_DETECTOR_SHOWFIXEDCOUNTDETECTORLOCATION, &CTLiteView::OnDetectorShowfixedcountdetectorlocation)
-	ON_COMMAND(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_DEMANDTYPE1, &CTLiteView::OnShowallowedlinksfordemandtypeDemandtype1)
-	ON_COMMAND(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_DEMANDTYPE2, &CTLiteView::OnShowallowedlinksfordemandtypeDemandtype2)
-	ON_COMMAND(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_DEMANDTYPE3, &CTLiteView::OnShowallowedlinksfordemandtypeDemandtype3)
-	ON_COMMAND(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_DEMANDTYPE4, &CTLiteView::OnShowallowedlinksfordemandtypeDemandtype4)
-	ON_UPDATE_COMMAND_UI(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_DEMANDTYPE1, &CTLiteView::OnUpdateShowallowedlinksfordemandtypeDemandtype1)
-	ON_UPDATE_COMMAND_UI(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_DEMANDTYPE2, &CTLiteView::OnUpdateShowallowedlinksfordemandtypeDemandtype2)
-	ON_UPDATE_COMMAND_UI(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_DEMANDTYPE3, &CTLiteView::OnUpdateShowallowedlinksfordemandtypeDemandtype3)
-	ON_UPDATE_COMMAND_UI(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_DEMANDTYPE4, &CTLiteView::OnUpdateShowallowedlinksfordemandtypeDemandtype4)
-	ON_COMMAND(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_SHOWALL, &CTLiteView::OnShowallowedlinksfordemandtypeShowall)
-	ON_UPDATE_COMMAND_UI(ID_SHOWALLOWEDLINKSFORDEMANDTYPE_SHOWALL, &CTLiteView::OnUpdateShowallowedlinksfordemandtypeShowall)
-	ON_COMMAND(ID_REFERENCELINE_SHOWREFERENCELINENO, &CTLiteView::OnReferencelineShowreferencelineno)
 	ON_BN_CLICKED(IDC_BUTTON_Search, &CTLiteView::OnBnClickedButtonSearch)
-	END_MESSAGE_MAP()
+	ON_COMMAND(ID_VIEW_HIGHLIGHTCENTROIDSANDACTIVITYLOCATIONS, &CTLiteView::OnNodeZoneDisplay)
+		ON_COMMAND(ID_TOOLS_SUBAREA, &CTLiteView::OnToolsSubarea)
+		ON_UPDATE_COMMAND_UI(ID_TOOLS_SUBAREA, &CTLiteView::OnUpdateToolsSubarea)
+		ON_COMMAND(ID_CREATESUBAREA_WRITESUBAREAFILE, &CTLiteView::OnCreatesubareaWritesubareafile)
+		END_MESSAGE_MAP()
 
 // CTLiteView construction/destruction
 // CTLiteView construction/destruction
@@ -316,6 +267,8 @@ CBrush  g_BrushGreen(RGB(0,255,0)); //green
 
 
 CPen g_PenDashBlue(PS_DASH,1,RGB(0,0,255));
+CPen g_PenCAVTrain(PS_SOLID, 5, RGB(0, 255, 255));
+CPen g_PenCAVTrain2(PS_SOLID, 2, RGB(255, 0, 255));
 CPen g_PenBlue(PS_SOLID,2,RGB(0,0,255));
 CPen g_PenReference(PS_SOLID, 2, RGB(255, 0, 255));
 CBrush g_BrushReference(RGB(184, 134, 11));
@@ -392,7 +345,7 @@ CPen g_SubareaPen(PS_DASH,2,RGB(255,0,0));
 
 CPen g_GridPen(PS_SOLID,1,RGB(190,190,190));
 
-CPen g_PenAgent(PS_SOLID,1,RGB(0,255,0));  // yellow
+CPen g_PenAgent(PS_SOLID,1,RGB(255,0,0));  // red
 CPen g_BrushAgent(PS_SOLID,1,RGB(0,100,0)); //magenta
 
 CPen g_PenSelectedAgent(PS_SOLID,2,RGB(255,0,0));  // red
@@ -522,18 +475,8 @@ void g_SelectSuperThickPenColor(CDC* pDC, int ColorCount)
 CTLiteView::CTLiteView()
 {
 	m_DislayedAgentType = 0;
-	m_bShowFixedDetectorLocation = true;
-	m_bShowSpeedSensorLocation = true;
 	m_DislayReferenceLineNo = false;
 
-	m_bShowWalkLinksOnly = false;
-	m_MoveLayerNo = 0;
-	m_bShowCompleteTrajectory = true;
-	m_bShowAllCompleteTrajectory = false;
-	m_bShowTransitLinksOnly = false;
-	m_bShowWalkLinksOnly = false;
-	m_bShowProhibitedMovements = false;
-	m_bShowTransitAccessibility  = false;
 	m_bShowTop10ODOnly = true;
 
 	m_bUpdateLinkAttributeBasedOnType  = false;
@@ -563,7 +506,7 @@ CTLiteView::CTLiteView()
 	m_Resolution = 1;
 
 	m_ShowLinkTextMode  = link_display_none;
-	m_ShowMovementTextMode  = movement_display_none;
+
 	m_MovmentTextSize = 1.0;
 	m_LinkTextSize = 1.0;
 
@@ -587,10 +530,9 @@ CTLiteView::CTLiteView()
 	m_ShowGPSTextMode = GPS_display_none;
 
 	m_ShowLinkTextMode = link_display_none;
-	m_ShowMovementTextMode  = movement_display_none;
 
-	m_bShowAgentNumber = false;
-	m_bShowSelectedAgentOnly = true;
+	m_bShowAgentID = false;
+	m_bShowSelectedAgentOnly = false;
 	m_bShowLinkType  = true;
 
 	m_Origin.x = 0;
@@ -941,41 +883,7 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 	}
 
-	if (pMainFrame->m_bShowLayerMap[layer_reference_line])
-	{
-
-		// draw generic link layer
-		std::list<DTALine*>::iterator iLine;
-
-		if (pDoc->m_DTALineSet.size() > 0)
-		{
-			pDC->SelectObject(&g_BlackBrush);
-			pDC->SetTextColor(RGB(255, 255, 0));
-			pDC->SelectObject(&g_PenReference);
-			pDC->SetBkColor(RGB(0, 0, 0));
-
-			for (iLine = pDoc->m_DTALineSet.begin(); iLine != pDoc->m_DTALineSet.end(); iLine++)
-			{
-
-				for (unsigned int i = 0; i < (*iLine)->m_ShapePoints.size(); i++)
-				{
-					CPoint point = NPtoSP((*iLine)->m_ShapePoints[i]);
-					if (i == 0)
-						pDC->MoveTo(point);
-					else
-						pDC->LineTo(point);
-
-				}
-
-				
-
-
-			}
-
-		}
-
-	}  // reference line layer
-
+	
 	// step 2: select font and color for node drawing, and compute the bandwidth for links
 	CFont node_font;  // local font for nodes. dynamically created. it is effective only inside this function. if you want to pass this font to the other function, we need to pass the corresponding font pointer (which has a lot of communication overheads)
 	int node_size = max(2,int(pDoc->m_NodeDisplaySize*pDoc->m_UnitDistance*m_Resolution));
@@ -1002,6 +910,9 @@ void CTLiteView::DrawObjects(CDC* pDC)
 	//test the display width of a lane, if greather than 1, then band display mode
 
 	int dispaly_link_flag = 0;
+
+	if (pDoc->m_LinkMOEMode == MOE_Agent)
+		dispaly_link_flag = 1;  
 	//	for (unsigned int l = 0; l < pDoc->m_LinkSet.size(); l++)
 	//{
 	//	DTALink* pLink = pDoc->FindLinkWithLinkNo (pDoc->m_LinkSet[l]);
@@ -1021,7 +932,7 @@ void CTLiteView::DrawObjects(CDC* pDC)
 		else if(pDoc->m_LinkMOEMode == MOE_none)
 		{
 
-			if(pDoc->m_LaneWidthInKM * pDoc->m_UnitDistance*m_Resolution * 5 > 0.1f) // 5 lanes
+			if(pDoc->m_LaneWidthInMeter * pDoc->m_UnitDistance*m_Resolution * 5 > 0.1f) // 5 lanes
 				m_link_display_mode = link_display_mode_line;
 			else
 				m_link_display_mode = link_display_mode_band;
@@ -1039,28 +950,28 @@ void CTLiteView::DrawObjects(CDC* pDC)
 		CPen pen_freeway, pen_ramp, pen_arterial, pen_connector, pen_transit, pen_walking, pen_pickup, pen_dropoff;
 		CBrush brush_freeway, brush_ramp, brush_arterial, brush_connector, brush_walking, brush_pickup, brush_dropoff;
 
-		pen_freeway.CreatePen (PS_SOLID, 1, theApp.m_FreewayColor);
-		brush_freeway.CreateSolidBrush (theApp.m_FreewayColor);
+		pen_freeway.CreatePen (PS_SOLID, 1, theApp.m_Link1Color);
+		brush_freeway.CreateSolidBrush (theApp.m_Link1Color);
 
-		pen_ramp.CreatePen (PS_SOLID, 1, theApp.m_RampColor);
-		brush_ramp.CreateSolidBrush (theApp.m_RampColor);
+		pen_ramp.CreatePen (PS_SOLID, 1, theApp.m_Link2Color);
+		brush_ramp.CreateSolidBrush (theApp.m_Link2Color);
 
-		pen_arterial.CreatePen (PS_SOLID, 1, theApp.m_ArterialColor);
-		brush_arterial.CreateSolidBrush (theApp.m_ArterialColor);
+		pen_arterial.CreatePen (PS_SOLID, 1, theApp.m_Link3Color);
+		brush_arterial.CreateSolidBrush (theApp.m_Link3Color);
 
-		pen_connector.CreatePen (PS_SOLID, 1, theApp.m_ConnectorColor);
-		brush_connector.CreateSolidBrush (theApp.m_ConnectorColor);
+		pen_connector.CreatePen (PS_SOLID, 1, theApp.m_Link4Color);
+		brush_connector.CreateSolidBrush (theApp.m_Link4Color);
 
-		pen_transit.CreatePen (PS_SOLID, 3, theApp.m_TransitColor);
+		pen_transit.CreatePen (PS_SOLID, 3, theApp.m_Link5Color);
 
-		pen_walking.CreatePen (PS_SOLID, 4, theApp.m_WalkingColor);
+		pen_walking.CreatePen (PS_SOLID, 4, theApp.m_Link6Color);
 		pen_pickup.CreatePen(PS_SOLID, 3, theApp.m_PickupColor);
 		pen_dropoff.CreatePen(PS_SOLID, 3, theApp.m_DropoffColor);
 
 		brush_pickup.CreateSolidBrush(theApp.m_PickupColor);
 		brush_dropoff.CreateSolidBrush(theApp.m_DropoffColor);
 
-		brush_walking.CreateSolidBrush (theApp.m_WalkingColor);
+		brush_walking.CreateSolidBrush (theApp.m_Link6Color);
 
 		// recongenerate the lind band width offset only when chaning display mode or on volume mode
 		if(	pDoc -> m_PrevLinkMOEMode != pDoc -> m_LinkMOEMode || 
@@ -1086,32 +997,6 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 		for (iLink = pDoc->m_LinkSet.begin(); iLink != pDoc->m_LinkSet.end(); iLink++)
 		{
-
-
-			if( pMainFrame->m_bShowLayerMap[layer_transit] == true && m_bShowTransitLinksOnly )
-			{
-				if (pDoc->m_LinkTypeMap[(*iLink)->m_link_type ].IsTransit  ()== false)  //show transit only
-					continue; 
-			}
-
-
-			if( pMainFrame->m_bShowLayerMap[layer_transit] == true && m_bShowWalkLinksOnly )
-			{
-				if (pDoc->m_LinkTypeMap[(*iLink)->m_link_type ].IsWalking  ()== false)  //show walking only
-					continue; 
-			}
-
-			if( !pMainFrame->m_bShowLayerMap[layer_connector] )
-			{
-				if (pDoc->m_LinkTypeMap[(*iLink)->m_link_type ].IsConnector ())  //hide connectors
-					continue; 
-			}
-
-			if( !pMainFrame->m_bShowLayerMap[layer_transit] )
-			{
-				if (pDoc->m_LinkTypeMap[(*iLink)->m_link_type ].IsTransit  () || pDoc->m_LinkTypeMap[(*iLink)->m_link_type ].IsWalking   ())  //hide transit
-					continue; 
-			}
 
 
 			// step 1: decide if a link is included in the screen region
@@ -1187,37 +1072,37 @@ void CTLiteView::DrawObjects(CDC* pDC)
 				//		LinkTypePen.CreatePen(PS_SOLID, 1, link_color);
 				//		pDC->SelectObject(&LinkTypePen);
 
-				if ( pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsFreeway ())
+				if ( (*iLink)->m_link_type%10==1)
 				{
 					pDC->SelectObject(&pen_freeway);
 					pDC->SelectObject(&brush_freeway);
-				}else if ( pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsArterial())
+				}else if ((*iLink)->m_link_type % 10 == 2)
 				{
 					pDC->SelectObject(&pen_arterial);
 					pDC->SelectObject(&brush_arterial);
-				}else if ( pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsRamp())
+				}else if ((*iLink)->m_link_type % 10 == 3)
 				{
 					pDC->SelectObject(&pen_ramp);
 					pDC->SelectObject(&brush_ramp);
-				}else if ( pDoc->m_LinkTypeMap[(*iLink)->m_link_type] .IsConnector())
+				}else if ((*iLink)->m_link_type % 10 == 4)
 				{
 					pDC->SelectObject(&pen_connector);
 					pDC->SelectObject(&brush_connector);
-				}else if ( pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsTransit())
+				}else if ((*iLink)->m_link_type % 10 == 5)
 				{
 					pDC->SelectObject(&pen_transit);
 					pDC->SelectObject(&g_TransitCrash);
-				}else if ( pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsWalking())
+				}else if ((*iLink)->m_link_type % 10 == 6)
 				{
 					pDC->SelectObject(&pen_walking);
 					pDC->SelectObject(&brush_walking);
 				}
-				else if (pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsPickup())
+				else if ((*iLink)->m_link_type % 10 == 7)
 				{
 					pDC->SelectObject(&pen_pickup);
 					pDC->SelectObject(&brush_pickup);
 				}
-				else if (pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsDropoff())
+				else if ((*iLink)->m_link_type % 10 == 8)
 				{
 					pDC->SelectObject(&pen_dropoff);
 					pDC->SelectObject(&brush_dropoff);
@@ -1273,63 +1158,53 @@ void CTLiteView::DrawObjects(CDC* pDC)
 				pDC->SetTextColor(RGB(255,228,181));
 
 
-			// special condition 4: when a link is a reference link
-			if (m_bShowReferenceNetwork)
+
+			if (pMainFrame->m_bShowLayerMap[layer_link] == true)
 			{
-				if((*iLink)->m_LayerNo == 1)
-				  pDC->SelectObject(&g_PenReference);
-				if ((*iLink)->m_LayerNo == 2)
-					pDC->SelectObject(&g_PenDashBlue);
+				//step 6: draw link as line or band/bar
+				if (m_link_display_mode == link_display_mode_line)
+				{
+					// calibration mode, do not show volume
+					DrawLinkAsLine((*iLink), pDC);
+				}
+				else
+				{
 
-			}
-
-
-			if (m_bShowReferenceNetwork == true && pMainFrame->m_bShowLayerMap[layer_link] == false && (*iLink)->m_LayerNo ==0)
-			{  //skip the baseline link layer under special conditions 
-				continue;
-			}
-
-
-			
-			if (pMainFrame->m_bShowLayerMap[layer_reference_line] == false)
-			{
-				if ((*iLink)->m_LayerNo == 1)  //skip reference nodes
-					return;
-			}
-
-
-			//step 6: draw link as line or band/bar
-			if(m_link_display_mode == link_display_mode_line )  
-			{
-				// calibration mode, do not show volume
-				DrawLinkAsLine((*iLink),pDC);
-			}
-			else 
-			{
-				
-				if(DrawLinkAsBand((*iLink),pDC,false)==false)
-					return;
+					if (DrawLinkAsBand((*iLink), pDC, false) == false)
+						return;
+				}
 			}
 
 			CPoint ScenarioPoint;
 
-			if (pMainFrame->m_bShowLayerMap[layer_workzone] == true &&
-				((*iLink)->GetImpactedFlag(g_Simulation_Time_Stamp, true) >= 0.01 || (g_Simulation_Time_Stamp <= 0.1 && (*iLink)->GetImpactedFlag(-1, true) >= 0.01)))
+			if ((*iLink)->TDStateMap.size() > 1)
 			{
-				ScenarioPoint = NPtoSP((*iLink)->GetRelativePosition(0.6));  // get relative position of a link 
-				DrawBitmap(pDC, ScenarioPoint, IDB_WORKZONE);
+				int global_sec = (int)(g_Simulation_Time_Stamp * 60 + 0.1);
+
+				if (global_sec >= 1 && (*iLink)->TDStateMap.find(global_sec) != (*iLink)->TDStateMap.end())
+				{
+					int state = (*iLink)->TDStateMap[global_sec];
+
+					if ((*iLink)->TDStateCodeMap[global_sec] == "r" || (*iLink)->TDStateCodeMap[global_sec] == "g" || (*iLink)->TDStateCodeMap[global_sec] == "y")
+					{
+						ScenarioPoint = NPtoSP((*iLink)->GetRelativePosition(0.99));  // get relative position of a link 
+						if (state == 0)
+							DrawBitmap(pDC, ScenarioPoint, IDB_RED_SIGNAL);
+						if (state == 1)
+							DrawBitmap(pDC, ScenarioPoint, IDB_SIGNAL2);
+
+					}
+					else
+					{
+						ScenarioPoint = NPtoSP((*iLink)->GetRelativePosition(0.4));  // get relative position of a link 
+						DrawBitmap(pDC, ScenarioPoint, IDB_LINK_CLOSURE);
+					}
+
+
+				}
+
 			}
 
-
-
-
-			if ((*iLink)->m_AdditionalCost >= 1 && pMainFrame->m_bShowLayerMap[layer_path] == true)
-			{
-				ScenarioPoint = NPtoSP((*iLink)->GetRelativePosition(0.6));  // get relative position of a link 
-				DrawBitmap(pDC, ScenarioPoint, IDB_LINK_CLOSURE);
-			}
-
-		
 
 			//step 7: show link labels
 			if( m_ShowLinkTextMode != link_display_none )
@@ -1436,36 +1311,59 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 
 				case link_display_total_link_volume:
-					str_text.Format("%.1f", (*iLink)->m_total_link_volume);
+
+					if((*iLink)->m_static_link_volume>=1)
+					{
+					str_text.Format("%.1f", (*iLink)->m_static_link_volume);
+					}
 
 					break;
 
 				case link_display_hourly_link_volume:
-					str_text.Format("%.1f", (*iLink)->m_hourly_link_volume);
+					if ((*iLink)->m_static_link_volume >= 1)
+					{
+					 str_text.Format("%.1f", (*iLink)->m_hourly_link_volume);
+					}
 					break;
 
 				case link_display_hourly_lane_volume:
-					str_text.Format("%.1f", (*iLink)->m_total_link_volume / max(1, (*iLink)->m_NumberOfLanes));
+					if ((*iLink)->m_static_link_volume >= 1)
+					{
+						str_text.Format("%.1f", (*iLink)->m_static_link_volume / max(1, (*iLink)->m_NumberOfLanes));
+					}
 					break;
 
 				case link_display_avg_speed:
-					str_text.Format("%.1f", (*iLink)->m_MeanSpeed);
+					if ((*iLink)->m_static_link_volume >= 1)
+					{
+						str_text.Format("%.1f", (*iLink)->m_MeanSpeed);
+					}
 
 					break;
 					
 				case link_display_avg_travel_time:  // min 
-					str_text.Format("%.1f", (*iLink)->m_Length / max( 0.0001, (*iLink)->m_MeanSpeed)*60);
+					if ((*iLink)->m_static_link_volume >= 1)
+					{
+						str_text.Format("%.1f", (*iLink)->m_Length / max(0.0001, (*iLink)->m_MeanSpeed) * 60);
+					}
 
 					break;
 
 				case link_display_VOC_ratio:
-					str_text.Format("%.2f", (*iLink)->m_VoCRatio);
+					if ((*iLink)->m_static_link_volume >= 1)
+					{
+						str_text.Format("%.2f", (*iLink)->m_StaticVoCRatio);
+					}
 
 					break;
 
 				case link_display_total_delay:
-					if((*iLink)->m_total_delay>=1 && pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsConnector () == false)
-						str_text.Format ("%.1f",(*iLink)->m_total_delay/60.0   );
+					if ((*iLink)->m_static_link_volume >= 1)
+					{
+
+						if ((*iLink)->m_total_delay >= 1 && pDoc->m_LinkTypeMap[(*iLink)->m_link_type].IsConnector() == false)
+							str_text.Format("%.1f", (*iLink)->m_total_delay / 60.0);
+					}
 
 					break;
 
@@ -1487,6 +1385,49 @@ void CTLiteView::DrawObjects(CDC* pDC)
 					str_text.Format ("%.0f",value/max(1,(*iLink)->m_NumberOfLanes) );
 					break;
 
+
+				case link_display_mvmt_text_id:
+					if((*iLink)->m_mvmt_txt_id.size()>0)
+						str_text.Format("%s", (*iLink)->m_mvmt_txt_id.c_str());
+
+					break;
+
+				case link_display_main_node_id:
+					str_text.Format("%s", (*iLink)->m_main_node_id.c_str());
+					break;
+
+				case link_display_macro_node_id:
+					str_text.Format("%s", (*iLink)->macro_node_id.c_str());
+					break;
+
+				case link_display_timing_cycle_length:
+					if ((*iLink)->m_cycle_length >= 1)
+					{
+						str_text.Format("%d", (*iLink)->m_cycle_length);
+					}
+					break;
+
+				case link_display_timing_green_time:
+					if ((*iLink)->m_end_green_time >= 1)
+					{
+						str_text.Format("%d-%d", (*iLink)->m_start_green_time,(*iLink)->m_end_green_time);
+					}
+					break;
+				case link_display_additional_field1:
+						str_text.Format("%s", (*iLink)->Additional_Field[1].c_str());
+					break;
+				case link_display_additional_field2:
+						str_text.Format("%s", (*iLink)->Additional_Field[2].c_str());
+					break;
+				case link_display_additional_field3:
+					str_text.Format("%s", (*iLink)->Additional_Field[3].c_str());
+					break;
+				case link_display_additional_field4:
+					str_text.Format("%s", (*iLink)->Additional_Field[4].c_str());
+					break;
+				case link_display_additional_field5:
+					str_text.Format("%s", (*iLink)->Additional_Field[5].c_str());
+					break;
 
 
 				case link_display_time_dependent_speed_mph:
@@ -1570,10 +1511,6 @@ void CTLiteView::DrawObjects(CDC* pDC)
 		}
 	}
 
-	if(pMainFrame->m_bShowLayerMap[layer_link_MOE] == true && (theApp.m_VisulizationTemplate == e_train_scheduling))
-	{	std::list<DTALink*>::iterator iLink;
-
-	}
 
 
 	pDC->SelectObject(&node_font);
@@ -1774,8 +1711,11 @@ void CTLiteView::DrawObjects(CDC* pDC)
 			{
 				pDC->SelectObject(&g_PenSelectColor);
 
-			}else if((*iNode)->m_ZoneID ==  pDoc->m_SelectedZoneID  && m_bHighlightActivityLocation)
+			}else if(m_bHighlightActivityLocation )
 			{
+				if ((*iNode)->m_ZoneID <= 0)
+					continue;
+
 				pDC->SelectObject(&g_PenCentroidColor);
 				pDC->SelectObject(&g_ActivityLocationBrush);
 
@@ -1891,17 +1831,6 @@ void CTLiteView::DrawObjects(CDC* pDC)
 				if(m_bShowNode)
 				{
 
-					if(m_ShowNodeTextMode == node_display_cycle_length_in_second_for_signal_only)
-					{
-						if( (*iNode)->m_ControlType != pDoc->m_ControlType_PretimedSignal &&  (*iNode)->m_ControlType != pDoc-> m_ControlType_ActuatedSignal)
-						{
-
-							continue;  // do not draw nodes;
-
-						}
-
-					}
-
 					feet_size = pDoc->m_UnitDistance*m_Resolution;
 
 					if((*iNode)->m_NodeNo == pDoc->m_SelectedNodeNo)
@@ -1946,10 +1875,6 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 					float avg_delay_ratio = avg_delay/max(1,size);
 
-					if(g_bShowRadarChart==true)
-						DrawNodeRadarChart(pDC, (*iNode),point, size, avg_delay_ratio, LOS);
-					else
-						DrawNodePieChart(pDC, (*iNode),point, size, LOS);
 
 					}
 					}
@@ -1966,113 +1891,9 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 	}
 
-	if(pMainFrame->m_bShowLayerMap[layer_movement] == true || m_bShowProhibitedMovements)
-	{
-		CRect PlotRect;
-		for (iNode = pDoc->m_NodeSet.begin(); iNode != pDoc->m_NodeSet.end(); iNode++)
-		{
-			CPoint point = NPtoSP((*iNode)->pt);
-
-			CRect node_rect;
-			node_rect.SetRect(point.x- m_NodeDisplayBoundarySize,point.y-m_NodeDisplayBoundarySize,point.x+ m_NodeDisplayBoundarySize,point.y+ m_NodeDisplayBoundarySize);
-
-			if(RectIsInsideScreen(node_rect,ScreenRect) == false)  // not inside the screen boundary
-				continue;
-
-
-
-			DrawNodeMovements(pDC, (*iNode), PlotRect);
-		}
-
-	}
-
 	//step 12: draw generic point layer , e.g. crashes
 
-	if(pMainFrame->m_bShowLayerMap[layer_Trajectory])
-	{
-		pDC->SelectObject(&g_BlackBrush);
-		pDC->SetTextColor(RGB(255,255,0));
-		pDC->SelectObject(&g_GPSTrajectoryColor);
-		pDC->SetBkColor(RGB(0,0,0));
-
-		CFont GPS_font;  // local font for nodes. dynamically created. it is effective only inside this function. if you want to pass this font to the other function, we need to pass the corresponding font pointer (which has a lot of communication overheads)
-		int node_size = min(200,max(2,int(pDoc->m_NodeDisplaySize*pDoc->m_UnitDistance*m_Resolution)));
-
-		int NodeTypeSize = pDoc->m_NodeTextDisplayRatio;
-		int nFontSize =  max(node_size * NodeTypeSize, 10);
-
-		GPS_font.CreatePointFont(nFontSize, m_NodeTypeFaceName);
-
-		CFont* pOldFont = pDC->SelectObject(&node_font);
-
-		
-		long timestamp_in_second = (long)(g_Simulation_Time_Stamp*60 + 0.5); // *60 convert min to second, +0.5, round to nearest integer
-
-			pDC->SelectObject(&g_WhiteBrush);
-
-
-				//with Agent location data at this time stamp
-
-				std::map<string,AgentLocationTimeIndexedMap>::iterator itr2;
-
-				for(itr2 = pDoc->m_AgentWithLocationVectorMap.begin();
-					itr2 != pDoc->m_AgentWithLocationVectorMap .end(); itr2++)
-				{		//scan all Agent records at this timestamp
-
-					string agent_id = (*itr2).first;
-
-					if (m_bShowSelectedAgentOnly && agent_id != pDoc->m_SelectedAgentID)
-						continue;
-
-						
-				for (int i = 0; i<(*itr2).second.AgentLocationRecordVector.size()-1; i++)
-				{
-					std::string agent_type = (*itr2).second.AgentLocationRecordVector[i].agent_type;
-
-
-					CPoint from_point, to_point;
-
-					GDPoint from_pt;
-					from_pt.x = (*itr2).second.AgentLocationRecordVector[i].x;
-					from_pt.y = (*itr2).second.AgentLocationRecordVector[i].y;
-
-					int current_second = (*itr2).second.AgentLocationRecordVector[i].time_stamp_in_second;
-
-
-
-					GDPoint to_pt;
-					to_pt.x = (*itr2).second.AgentLocationRecordVector[i+1].x;
-					to_pt.y = (*itr2).second.AgentLocationRecordVector[i+1].y;
-
-					from_point = NPtoSP(from_pt);
-					 to_point = NPtoSP(to_pt);
-
-				 /// starting drawing nodes in normal mode
-					 pDC->Ellipse(from_point.x - node_size, from_point.y + node_size,
-						 from_point.x + node_size, from_point.y - node_size);
-					pDC->MoveTo(from_point);
-					pDC->LineTo (to_point);
-
-				
-				}
-
-				}
 	
-		
-		
-	
-
-
-
-		pDC->SelectObject(&g_BlackBrush);
-		pDC->SelectObject(&g_GPSTrajectoryColor);
-
-
-
-		pDC->SelectObject(pOldFont);
-	}
-
-
 	// step 13: draw zone layer
 
 	CPen ZonePen;
@@ -2080,118 +1901,118 @@ void CTLiteView::DrawObjects(CDC* pDC)
 	// Create a solid red pen of width 2.
 	ZonePen.CreatePen(PS_DASH, 1, theApp.m_ZoneColor);
 
-	if(pMainFrame->m_bShowLayerMap[layer_zone])
-	{	
+	//if(pMainFrame->m_bShowLayerMap[layer_zone])
+	//{	
 
-		CFont zone_font;  // local font for nodes. dynamically created. it is effective only inside this function. if you want to pass this font to the other function, we need to pass the corresponding font pointer (which has a lot of communication overheads)
-		zone_font.CreatePointFont(nFontSize*5, m_NodeTypeFaceName);
+	//	CFont zone_font;  // local font for nodes. dynamically created. it is effective only inside this function. if you want to pass this font to the other function, we need to pass the corresponding font pointer (which has a lot of communication overheads)
+	//	zone_font.CreatePointFont(nFontSize*5, m_NodeTypeFaceName);
 
-		pDC->SelectObject(&zone_font);
+	//	pDC->SelectObject(&zone_font);
 
-		std::map<int, DTAZone>	:: const_iterator itr;
-
-
-		pDC->SetTextColor(pDoc->m_ZoneTextColor);
+	//	std::map<int, DTAZone>	:: const_iterator itr;
 
 
-		for(int draw_flag = 0; draw_flag<=1; draw_flag++)
-		{
-			for(itr = pDoc->m_ZoneMap.begin(); itr != pDoc->m_ZoneMap.end(); itr++)
-			{
-				if(draw_flag==1 && itr->first != pDoc->m_SelectedZoneID) 
-				{  // draw the selected zone only when draw_flag = 1
-					continue;
-				}
+	//	pDC->SetTextColor(pDoc->m_ZoneTextColor);
 
 
-
-				if(itr->first == pDoc->m_SelectedZoneID )
-				{
-					pDC->SelectObject(&g_PenSelectColor0);
-				}
-				else
-				{
-					pDC->SelectObject(&ZonePen);
-				}
-
-				int center_x = 0;
-				int center_y = 0;
-
-				if(itr->second.m_ShapePoints .size() > 0)
-				{
-
-					int min_x, max_x, min_y, max_y;
-
-					for (int i = 0; i < itr->second.m_ShapePoints.size(); i++)
-					{
-						CPoint point = NPtoSP(itr->second.m_ShapePoints[i]);
-
-						if (i == 0)
-						{
-							min_x = max_x = point.x;
-							min_y = max_y = point.y;
-
-						}
-
-						min_x = min(point.x, min_x);
-						max_x = max(point.x, max_x);
-
-						min_y = min(point.y, min_y);
-						max_y = max(point.y, max_y);
-
-
-					}
-
-					int size = 100;
-					CRect zone_rect;
-					zone_rect.SetRect(min_x - size, min_y - size, max_x + size, max_y + size);
-
-
-					if (RectIsInsideScreen(zone_rect, ScreenRect) == false)  // zone not inside the screen boundary: do not draw
-						continue;
-
-
-					for(int i = 0; i< itr->second.m_ShapePoints .size(); i++)
-					{
-
-						CPoint point =  NPtoSP(itr->second.m_ShapePoints[i]);
-
-						center_x += point.x;
-						center_y += point.y;
-
-						if(i == 0)
-							pDC->MoveTo(point);
-						else
-							pDC->LineTo(point);
-
-					}
+	//	for(int draw_flag = 0; draw_flag<=1; draw_flag++)
+	//	{
+	//		for(itr = pDoc->m_ZoneMap.begin(); itr != pDoc->m_ZoneMap.end(); itr++)
+	//		{
+	//			if(draw_flag==1 && itr->first != pDoc->m_SelectedZoneID) 
+	//			{  // draw the selected zone only when draw_flag = 1
+	//				continue;
+	//			}
 
 
 
-					CPoint point_0 =  NPtoSP(itr->second.m_ShapePoints[0]);  // back to the starting point
+	//			if(itr->first == pDoc->m_SelectedZoneID )
+	//			{
+	//				pDC->SelectObject(&g_PenSelectColor0);
+	//			}
+	//			else
+	//			{
+	//				pDC->SelectObject(&ZonePen);
+	//			}
 
-					pDC->LineTo(point_0);
+	//			int center_x = 0;
+	//			int center_y = 0;
 
-					center_x  = center_x/max(1,itr->second.m_ShapePoints .size());
-					center_y  = center_y/max(1,itr->second.m_ShapePoints .size()) - tm.tmHeight;
+	//			if(itr->second.m_ShapePoints .size() > 0)
+	//			{
 
-					if (zone_rect.Height() >= 10 || zone_rect.Width()>=10)
-					{
-						CString zone_id_str;
-						zone_id_str.Format("%s", itr->second.name.c_str());
+	//				int min_x, max_x, min_y, max_y;
 
-						pDC->TextOut(center_x, center_y, zone_id_str);
-					}
-				}
+	//				for (int i = 0; i < itr->second.m_ShapePoints.size(); i++)
+	//				{
+	//					CPoint point = NPtoSP(itr->second.m_ShapePoints[i]);
 
-			}
-		}
+	//					if (i == 0)
+	//					{
+	//						min_x = max_x = point.x;
+	//						min_y = max_y = point.y;
 
-	}	
+	//					}
+
+	//					min_x = min(point.x, min_x);
+	//					max_x = max(point.x, max_x);
+
+	//					min_y = min(point.y, min_y);
+	//					max_y = max(point.y, max_y);
+
+
+	//				}
+
+	//				int size = 100;
+	//				CRect zone_rect;
+	//				zone_rect.SetRect(min_x - size, min_y - size, max_x + size, max_y + size);
+
+
+	//				if (RectIsInsideScreen(zone_rect, ScreenRect) == false)  // zone not inside the screen boundary: do not draw
+	//					continue;
+
+
+	//				for(int i = 0; i< itr->second.m_ShapePoints .size(); i++)
+	//				{
+
+	//					CPoint point =  NPtoSP(itr->second.m_ShapePoints[i]);
+
+	//					center_x += point.x;
+	//					center_y += point.y;
+
+	//					if(i == 0)
+	//						pDC->MoveTo(point);
+	//					else
+	//						pDC->LineTo(point);
+
+	//				}
+
+
+
+	//				CPoint point_0 =  NPtoSP(itr->second.m_ShapePoints[0]);  // back to the starting point
+
+	//				pDC->LineTo(point_0);
+
+	//				center_x  = center_x/max(1,itr->second.m_ShapePoints .size());
+	//				center_y  = center_y/max(1,itr->second.m_ShapePoints .size()) - tm.tmHeight;
+
+	//				if (zone_rect.Height() >= 10 || zone_rect.Width()>=10)
+	//				{
+	//					CString zone_id_str;
+	//					zone_id_str.Format("%s", itr->second.name.c_str());
+
+	//					pDC->TextOut(center_x, center_y, zone_id_str);
+	//				}
+	//			}
+
+	//		}
+	//	}
+
+	//}	
 
 
 	// step 13: draw subarea layer
-	if(GetDocument()->m_SubareaShapePoints.size() > 0 && (pMainFrame->m_bShowLayerMap[layer_subarea]||pMainFrame->m_bShowLayerMap[layer_zone]))
+	if(GetDocument()->m_SubareaShapePoints.size() > 0)
 	{
 		CPoint point_0  = NPtoSP(GetDocument()->m_SubareaShapePoints[0]);
 
@@ -2216,16 +2037,18 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 	if( pDoc->m_LinkMOEMode == MOE_Agent)
 	{
-		CBrush brush_agent[5];
+		CBrush brush_agent[10];
 		brush_agent[1].CreateSolidBrush(theApp.m_AgentColor[1]);
 		brush_agent[2].CreateSolidBrush(theApp.m_AgentColor[2]);
 		brush_agent[3].CreateSolidBrush(theApp.m_AgentColor[3]);
 		brush_agent[4].CreateSolidBrush(theApp.m_AgentColor[4]);
+		brush_agent[5].CreateSolidBrush(theApp.m_AgentColor[5]);
+		brush_agent[6].CreateSolidBrush(theApp.m_AgentColor[6]);
 
 
 		CFont Agent_font;  // local font for nodes. dynamically created. it is effective only inside this function. if you want to pass this font to the other function, we need to pass the corresponding font pointer (which has a lot of communication overheads)
 
-		int Agent_size = min(30,max(5,int(pDoc->m_AgentDisplaySize *pDoc->m_UnitDistance*m_Resolution)));
+		int Agent_size = min(30,max(5,int(pDoc->m_AgentDisplaySize *m_Resolution)));
 
 		int NodeTypeSize = pDoc->m_NodeTextDisplayRatio;
 		int nFontSize =  max(Agent_size * NodeTypeSize*0.8, 10);
@@ -2243,9 +2066,10 @@ void CTLiteView::DrawObjects(CDC* pDC)
 		pDC->SelectObject(&brush_agent[1]); //green
 
 		
+		
 
 
-		int Agent_set_size  = pDoc->m_AgentSet.size();
+		int Agent_set_size  = pDoc->m_TrajectorySet.size();
 
 		bool bSamplingDisplay = false;
 		int sample_size  = 1;
@@ -2256,7 +2080,7 @@ void CTLiteView::DrawObjects(CDC* pDC)
 		}
 
 		std::list<DTAAgent*>::iterator iAgent;
-		for (iAgent = pDoc->m_AgentSet.begin(); iAgent != pDoc->m_AgentSet.end(); iAgent++)
+		for (iAgent = pDoc->m_TrajectorySet.begin(); iAgent != pDoc->m_TrajectorySet.end(); iAgent++)
 		{
 
 			if((*iAgent)->m_DepartureTime <=g_Simulation_Time_Stamp &&
@@ -2273,13 +2097,16 @@ void CTLiteView::DrawObjects(CDC* pDC)
 				float ratio = 0;
 
 					int link_sequence_no;
-					int LinkID = pDoc->GetVehilePosition((*iAgent), g_Simulation_Time_Stamp, link_sequence_no, ratio);
+					int LinkID = pDoc->GetVehiclePosition((*iAgent), g_Simulation_Time_Stamp, link_sequence_no, ratio);
+					if (LinkID == -1)
+						continue; 
 
 					DTALink* pLink = pDoc->m_LinkNoMap[LinkID];
 					if(pLink!=NULL)
 					{
 
 						CPoint VehPoint= NPtoSP(pLink->GetRelativePosition(ratio));
+
 						if((*iAgent)->m_AgentID == pDoc->m_SelectedAgentID)
 						{
 							pDC->SelectObject(&g_PenSelectedAgent); //red transit users
@@ -2292,8 +2119,66 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 							if (!m_bShowLinkArrow)
 							{
-								pDC->Ellipse(VehPoint.x - Agent_size, VehPoint.y - Agent_size,
-									VehPoint.x + Agent_size, VehPoint.y + Agent_size);
+								//pDC->Ellipse(VehPoint.x - Agent_size, VehPoint.y - Agent_size,
+								//	VehPoint.x + Agent_size, VehPoint.y + Agent_size);
+							
+
+								if (m_bShowAgentID)
+								{
+
+									CString str_number;
+									str_number.Format("%s", (*iAgent)->m_AgentID.c_str());
+
+									//VehPoint.y -= tm_Agent.tmHeight / 2;
+
+									pDC->TextOut(VehPoint.x, VehPoint.y, str_number);
+								}
+								else 
+								{
+									if ((*iAgent)->m_display_code == "vms")
+										DrawBitmap(pDC, VehPoint, IDB_VMSMOVING);  // head position
+									if ((*iAgent)->m_display_code == "bus")
+										DrawBitmap(pDC, VehPoint, IDB_BUSMOVING);  // head position
+									if ((*iAgent)->m_display_code == "info")
+										DrawBitmap(pDC, VehPoint, IDB_INFOCAR);  // head position
+									if ((*iAgent)->m_display_code == "traveler")
+										DrawBitmap(pDC, VehPoint, IDB_AGNETMOVING);  // head position
+									else
+										DrawBitmap(pDC, VehPoint, IDB_CARMOVING);  // head position
+
+									if (GetDocument()->bMicroMeshNetwork && (*iAgent)->m_PCE_unit >= 2 )
+									{
+										if ((*iAgent)->m_PCE_unit >= 4)
+											pDC->SelectObject(&g_PenCAVTrain);
+										if ((*iAgent)->m_PCE_unit == 2)
+											pDC->SelectObject(&g_PenCAVTrain2);
+
+										pDC->MoveTo(VehPoint);
+
+										for (int l_backtrace = 1; l_backtrace < (*iAgent)->m_PCE_unit; l_backtrace++)
+										{
+
+											int local_l_index = link_sequence_no - l_backtrace;
+											if (local_l_index >= 0)
+											{
+												int current_link_seq_no = (*iAgent)->m_NodeAry[local_l_index].LinkNo;
+
+												DTALink* pLink = pDoc->m_LinkNoMap[current_link_seq_no];
+
+												if (pLink != NULL)
+												{
+													//ratio is the relative ratio on the head link
+													CPoint VehPoint_follower = NPtoSP(pLink->GetRelativePosition(ratio));
+													pDC->LineTo(VehPoint_follower);
+//													DrawBitmap(pDC, VehPoint, IDB_CARMOVING);  // head position
+
+												}
+											}
+										}
+
+
+									} // end if PCE_Unit >=2
+								}
 							}
 							else
 							{
@@ -2321,16 +2206,7 @@ void CTLiteView::DrawObjects(CDC* pDC)
 								}
 							}
 						}
-						if(m_bShowAgentNumber)
-						{
 
-							CString str_number;
-							str_number.Format ("%s",(*iAgent)->m_AgentID.c_str()  );
-
-							VehPoint.y -= tm_Agent.tmHeight / 2;
-
-							pDC->TextOut(VehPoint.x , VehPoint.y,str_number);
-						}
 					}
 
 
@@ -2354,7 +2230,7 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 					//}
 
-					//if(m_bShowAgentNumber)
+					//if(m_bShowAgentID)
 					//{
 
 					//	CString str_number;
@@ -2642,55 +2518,6 @@ void CTLiteView::DrawObjects(CDC* pDC)
 
 	// step 17: draw Public Transit Layer
 
-	if(pMainFrame->m_bShowLayerMap[layer_transit])
-	{
-		CFont pt_font;
-		int nODNodeSize = max(node_size*0.8,8);
-		int nODFontSize =  max(nODNodeSize * NodeTypeSize, 8);
-
-		pt_font.CreatePointFont(nODFontSize, m_NodeTypeFaceName);
-
-		CFont* oldFont = pDC->SelectObject(&pt_font);
-
-		pDC->SetTextColor(RGB(255,0,0));
-		pDC->SetBkColor(RGB(0,0,0));
-
-		if(m_bShowTransitAccessibility)
-		{
-			pDC->SelectObject(&g_TransitLightBrush);
-			pDC->SelectObject(&g_TransitLightPen);
-
-		}
-		else
-		{
-			pDC->SelectObject(&g_TransitBrush);
-			pDC->SelectObject(&g_TransitPen);
-		}
-		DrawPublicTransitLayer(pDC);
-		pDC->SelectObject(oldFont);  // restore font
-
-	}
-
-	if(m_bShowTransitAccessibility)
-	{
-		CFont pt_font;
-		int nODNodeSize = max(node_size*0.8,8);
-		int nODFontSize =  max(nODNodeSize * NodeTypeSize, 8);
-
-		pt_font.CreatePointFont(nODFontSize, m_NodeTypeFaceName);
-
-		CFont* oldFont = pDC->SelectObject(&pt_font);
-
-		pDC->SetTextColor(RGB(255,0,0));
-		pDC->SetBkColor(RGB(0,0,0));
-
-		pDC->SelectObject(&g_TransitAccessibilityPen);
-		pDC->SelectObject(&g_TransitAccessibilityBrush);
-
-		DrawPublicTransitAccessibilityLayer(pDC);
-		pDC->SelectObject(oldFont);  // restore font
-
-	}
 
 
 }
@@ -2740,7 +2567,7 @@ BOOL CTLiteView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	// change image size
 	CTLiteDoc* pDoc = GetDocument();
 
-	if(m_ToolMode != backgroundimage_tool && m_ToolMode !=  network_coordinate_tool)  //select, move
+	if(m_ToolMode != backgroundimage_tool)  //select, move
 	{
 		if(zDelta > 0)
 		{
@@ -2756,49 +2583,7 @@ BOOL CTLiteView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	}else
 	{
 
-		if(m_ToolMode == network_coordinate_tool)
-		{
-
-			int LayerNo = 1;
-
-			// change image size
-			CTLiteDoc* pDoc = GetDocument();
-			float increase_ratio = 1.005f;
-			float decrease_ratio = 1.0f / increase_ratio;
-
-			if(zDelta > 0)
-			{
-
-				// control -> Y only
-				// shift -> X only
-
-
-
-				if(nFlags != MK_CONTROL)  // shift or nothing
-				{
-					pDoc->ChangeNetworkCoordinates(LayerNo,increase_ratio,1.0f,0.0f,0.0f);
-				}
-
-				if(nFlags != MK_SHIFT)  // control or nothing
-				{
-					pDoc->ChangeNetworkCoordinates(LayerNo,1.0f,increase_ratio,0.0f,0.0f);
-				}
-			}
-			else
-			{
-				if(nFlags != MK_CONTROL)  // shift or nothing
-				{
-					pDoc->ChangeNetworkCoordinates(LayerNo,decrease_ratio,1.0f,0.0f,0.0f);
-				}
-
-				if(nFlags != MK_SHIFT)  // control or nothing
-				{
-					pDoc->ChangeNetworkCoordinates(LayerNo,1.0f,decrease_ratio,0.0f,0.0f);
-				}
-			}
-		}
-
-
+	
 		if(m_ToolMode == backgroundimage_tool)
 		{
 
@@ -2972,20 +2757,6 @@ void CTLiteView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_bMoveImage = true;
 	}
 
-	if (m_ToolMode == sensor_location_move_tool)
-	{
-		m_last_cpoint = point;
-		g_SetCursor(_cursor_movement_network);
-		m_bMoveSensorMap = true;
-	}
-	if(m_ToolMode == network_coordinate_tool)
-	{
-		m_last_cpoint = point;
-		g_SetCursor(_cursor_movement_network);
-		m_bMoveNetwork = true;
-	}
-
-
 	if(m_ToolMode == create_1waylink_tool || m_ToolMode == create_2waylinks_tool)
 	{
 		m_TempLinkStartPoint = point;
@@ -3006,13 +2777,11 @@ void CTLiteView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 
 
-	if(m_ToolMode == subarea_tool || m_ToolMode == add_zone_tool)
+	if(m_ToolMode == subarea_tool )
 	{
 		if(m_ToolMode == subarea_tool)
 			g_SetCursor(_cursor_create_subarea);
 
-		if(m_ToolMode == add_zone_tool)
-			g_SetCursor(_cursor_create_zone);
 
 		m_TempZoneStartPoint = point;
 		m_TempZoneEndPoint = point;
@@ -3038,11 +2807,6 @@ void CTLiteView::OnLButtonDown(UINT nFlags, CPoint point)
 			 isCreatingSubarea = false;
 			 CopyLinkSetInSubarea();
 			 isFinishSubarea = true;
-			 if(m_ToolMode == add_zone_tool)
-			 {
-				 GetDocument()-> OnSubareaCreatezonefromsubarea();
-
-			 }else
 			 {
 
 				 GetDocument()->PushBackNetworkState ();
@@ -3202,6 +2966,18 @@ void CTLiteView::OnLButtonUp(UINT nFlags, CPoint point)
 					}
 
 
+					// optional additional fields
+					for (int k = 1; k <= 5; k++)
+					{
+						if (theApp.m_Node_Additional_Field[k].GetLength() > 0)
+						{
+							element.Attribute = theApp.m_Node_Additional_Field[k];
+							element.Data.Format("%s", pNode->Additional_Field[k].c_str());
+							pMainFrame->m_FeatureInfoVector.push_back(element);
+
+						}
+					}
+
 					pMainFrame->FillFeatureInfo ();
 
 				}else
@@ -3213,36 +2989,9 @@ void CTLiteView::OnLButtonUp(UINT nFlags, CPoint point)
 
 				break;
 
-			case layer_zone:
-
-				pDoc->m_SelectedZoneID = FindClosestZone(point,0);
-
-				pMainFrame->m_FeatureInfoVector.clear();
-
-				if(pDoc->m_SelectedZoneID>=0)
-				{
-					CFeatureInfo element;
-					element.Attribute = "Zone ID";
-					element.Data.Format ("%d", pDoc->m_SelectedZoneID );
-					pMainFrame->m_FeatureInfoVector.push_back (element);
-
-					pDoc->m_SelectedLinkNo = -1;
-					for (std::list<DTALink*>::iterator iLink = pDoc->m_LinkSet.begin(); iLink != pDoc->m_LinkSet.end(); iLink++)
-					{
-						(*iLink)->m_DisplayLinkID = -1;
-					}
-
-					pDoc->m_SelectedNodeNo = -1;
-
-
-					pMainFrame->FillFeatureInfo ();
-				}
-
-				break;
+		
 			case layer_link:
-			case layer_connector:
 			case layer_link_MOE:
-			case layer_workzone:
 				case layer_path:
 
 
@@ -3272,12 +3021,9 @@ void CTLiteView::OnLButtonUp(UINT nFlags, CPoint point)
 					element.Data.Format ("%d",pLink->m_ToNodeID   );
 					pMainFrame->m_FeatureInfoVector.push_back (element);
 
-					if(pDoc->m_LinkTypeMap.find(pLink->m_link_type) != pDoc->m_LinkTypeMap.end())
-					{
-						element.Attribute = "Type";
-						element.Data.Format ("%s",pDoc->m_LinkTypeMap  [ pLink->m_link_type ].link_type_name.c_str () );
-						pMainFrame->m_FeatureInfoVector.push_back (element);
-					}
+					element.Attribute = "Type";
+					element.Data.Format ("%d (%s)", pLink->m_link_type, pLink->m_link_type_str.c_str());
+					pMainFrame->m_FeatureInfoVector.push_back (element);
 
 					element.Attribute = "Free Speed";
 
@@ -3286,11 +3032,11 @@ void CTLiteView::OnLButtonUp(UINT nFlags, CPoint point)
 
 						element.Attribute = "Length ";
 
-					element.Data.Format ("%4.3f",pLink->m_Length   );
+					element.Data.Format ("%10.5f",pLink->m_Length   );
 					pMainFrame->m_FeatureInfoVector.push_back (element);
 
 					element.Attribute = "FFTT";
-					element.Data.Format ("%4.3f",pLink->m_FreeFlowTravelTime    );
+					element.Data.Format ("%10.5f",pLink->m_FreeFlowTravelTime    );
 					pMainFrame->m_FeatureInfoVector.push_back (element);
 
 					element.Attribute = "# of Lanes";
@@ -3305,7 +3051,17 @@ void CTLiteView::OnLButtonUp(UINT nFlags, CPoint point)
 					element.Data.Format ("%4.0f",pLink->m_MaximumServiceFlowRatePHPL*pLink->m_NumberOfLanes   );
 					pMainFrame->m_FeatureInfoVector.push_back (element);
 
-					//element.Attribute = "Mode Code";
+					// optional additional fields
+					for (int k = 1; k <= 5; k++)
+					{
+						if (theApp.m_Link_Additional_Field[k].GetLength() > 0)
+						{
+							element.Attribute = theApp.m_Link_Additional_Field[k];
+							element.Data.Format("%s", pLink->Additional_Field[k].c_str());
+							pMainFrame->m_FeatureInfoVector.push_back(element);
+
+						}
+					}					//element.Attribute = "Mode Code";
 					//element.Data.Format ("%s",pLink->m_Mode_code   );
 					//pMainFrame->m_FeatureInfoVector.push_back (element);
 
@@ -3345,24 +3101,6 @@ void CTLiteView::OnLButtonUp(UINT nFlags, CPoint point)
 		g_SetCursor(_cursor_standard_arrow);
 
 		m_bMoveImage = false;
-	}
-
-	if (m_ToolMode == sensor_location_move_tool)
-	{
-
-		CSize OffSet = point - m_last_cpoint;
-		CTLiteDoc* pDoc = GetDocument();
-		pDoc->m_SensorMapX += OffSet.cx*m_Resolution;
-		pDoc->m_SensorMapY += OffSet.cy*m_OriginOnBottomFlag*m_Resolution;
-
-		g_SetCursor(_cursor_standard_arrow);
-
-		m_bMoveSensorMap = false;
-	}
-	if(m_ToolMode == network_coordinate_tool)
-	{
-		g_SetCursor(_cursor_standard_arrow);
-		m_bMoveNetwork = false;
 	}
 
 
@@ -3514,44 +3252,6 @@ void CTLiteView::OnMouseMove(UINT nFlags, CPoint point)
 
 	}
 
-	if (m_ToolMode == sensor_location_move_tool && m_bMoveSensorMap)
-	{
-		CSize OffSet = point - m_last_cpoint;
-		//		if(!(OffSet.cx !=0 && OffSet.cy !=0))
-		{
-			pDoc->m_SensorMapX += OffSet.cx*pDoc->m_SensorMapMoveSize;
-			pDoc->m_SensorMapY += OffSet.cy*m_OriginOnBottomFlag*pDoc->m_SensorMapMoveSize;
-
-			m_last_cpoint = point;
-
-		}
-		if (m_bMoveSensorMap)
-			g_SetCursor(_cursor_movement_network);
-
-		Invalidate();
-
-	}
-
-
-	if(m_ToolMode == network_coordinate_tool && m_bMoveNetwork)
-	{
-		CSize OffSet = point - m_last_cpoint;
-		//		if(!(OffSet.cx !=0 && OffSet.cy !=0))
-		{
-			CTLiteDoc* pDoc = GetDocument();
-			float delta_x = OffSet.cx/m_Resolution;
-			float delta_y = OffSet.cy*m_OriginOnBottomFlag/m_Resolution;
-
-			int LayerNo = m_MoveLayerNo; // for imported network
-			pDoc->ChangeNetworkCoordinates(LayerNo,1.0f,1.0f,delta_x,delta_y);
-
-			m_last_cpoint = point;
-
-		}
-		Invalidate();
-
-	}
-
 	if(m_ToolMode == create_node_tool )
 	{
 		g_SetCursor(_cursor_create_node);
@@ -3577,13 +3277,10 @@ void CTLiteView::OnMouseMove(UINT nFlags, CPoint point)
 
 
 	}
-	if(m_ToolMode == subarea_tool  || m_ToolMode == add_zone_tool)
+	if(m_ToolMode == subarea_tool )
 	{
 		if(m_ToolMode == subarea_tool )
 			g_SetCursor(_cursor_create_subarea);
-
-		if(m_ToolMode == add_zone_tool )
-			g_SetCursor(_cursor_create_zone);
 
 		if(isCreatingSubarea)
 		{
@@ -3646,7 +3343,7 @@ void CTLiteView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnRButtonDown(nFlags, point);
 
-	if((m_ToolMode == subarea_tool || m_ToolMode == add_zone_tool)&& GetDocument()->m_SubareaShapePoints.size()>= 3)
+	if((m_ToolMode == subarea_tool)&& GetDocument()->m_SubareaShapePoints.size()>= 3)
 	{
 		CWaitCursor wait;
 		GetDocument()->m_SubareaShapePoints.push_back(SPtoNP(point));
@@ -3880,7 +3577,7 @@ void CTLiteView::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 	*/
 
-	if((m_ToolMode == subarea_tool || m_ToolMode == add_zone_tool) && GetDocument()->m_SubareaShapePoints.size()>= 3)
+	if((m_ToolMode == subarea_tool) && GetDocument()->m_SubareaShapePoints.size()>= 3)
 	{
 		CWaitCursor wait;
 		GetDocument()->m_SubareaShapePoints.push_back(SPtoNP(point));
@@ -3891,11 +3588,7 @@ void CTLiteView::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 
 		//add a zone
-		if(m_ToolMode == add_zone_tool)
-		{
-			GetDocument()-> OnSubareaCreatezonefromsubarea();
 
-		}
 		m_ToolMode = select_link_tool;
 		ReleaseCapture();
 		m_last_left_down_point = point;
@@ -4091,20 +3784,6 @@ void CTLiteView::OnSearchFindlink()
 	Invalidate();
 }
 
-void CTLiteView::OnEditChangebackgroupimagethroughmouse()
-{
-	if(m_ToolMode!= backgroundimage_tool)
-		m_ToolMode = backgroundimage_tool;
-	else
-		m_ToolMode = move_tool;
-
-}
-
-void CTLiteView::OnUpdateEditChangebackgroupimagethroughmouse(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_ToolMode == backgroundimage_tool ? 1 : 0);
-}
-
 void CTLiteView::OnViewBackgroundimage()
 {
 	m_bShowImage = !m_bShowImage;
@@ -4276,10 +3955,6 @@ void CTLiteView::OnUpdateShowLinkarrow(CCmdUI *pCmdUI)
 }
 
 
-void CTLiteView::OnImageLockbackgroundimageposition()
-{
-	m_ToolMode = move_tool;  // swtich m_ToolMode from backgroundimage_tool to other tool
-}
 
 void CTLiteView::OnViewTextlabel()
 {
@@ -4338,6 +4013,13 @@ void CTLiteView::OnLinkEditlink()
 
 		dlg.m_LinkID = pLink->m_LinkID.c_str() ;
 		dlg.StreetName  = pLink->m_Name.c_str () ;
+
+		dlg.main_node_id = pLink->m_main_node_id.c_str();
+		dlg.mvmt_txt_id = pLink->m_mvmt_txt_id.c_str();
+		dlg.m_cycle_length = pLink->m_cycle_length;
+		dlg.m_start_green = pLink->m_start_green_time;
+		dlg.m_end_of_green = pLink->m_end_green_time;
+
 		dlg.FromNode = pLink->m_FromNodeID ;
 		dlg.ToNode = pLink->m_ToNodeID ;
 		dlg.m_NumLeftTurnLanes  = pLink-> m_NumberOfLeftTurnLanes;
@@ -4349,6 +4031,11 @@ void CTLiteView::OnLinkEditlink()
 		dlg.LaneCapacity  = pLink->m_LaneCapacity ;
 		dlg.nLane = pLink->m_NumberOfLanes ;
 		dlg.LinkType = pLink->m_link_type;
+		dlg.m_AddFieldValue1 = pLink->Additional_Field[1].c_str();
+		dlg.m_AddFieldValue2 = pLink->Additional_Field[2].c_str();
+		dlg.m_AddFieldValue3 = pLink->Additional_Field[3].c_str();
+		dlg.m_AddFieldValue4 = pLink->Additional_Field[4].c_str();
+		dlg.m_AddFieldValue5 = pLink->Additional_Field[5].c_str();
 
 		if(dlg.DoModal() == IDOK)
 		{
@@ -4358,6 +4045,24 @@ void CTLiteView::OnLinkEditlink()
 
 
 			pLink->m_Name  = pDoc->CString2StdString(dlg.StreetName);
+			pLink->m_main_node_id = pDoc->CString2StdString(dlg.main_node_id);
+			pLink->m_mvmt_txt_id = pDoc->CString2StdString(dlg.mvmt_txt_id);
+			pLink->m_nema_phase = pDoc->CString2StdString(dlg.nema_phase);
+
+			pLink->Additional_Field[1] = pDoc->CString2StdString(dlg.m_AddFieldValue1);
+			pLink->Additional_Field[2] = pDoc->CString2StdString(dlg.m_AddFieldValue2);
+			pLink->Additional_Field[3] = pDoc->CString2StdString(dlg.m_AddFieldValue3);
+			pLink->Additional_Field[4] = pDoc->CString2StdString(dlg.m_AddFieldValue4);
+			pLink->Additional_Field[5] = pDoc->CString2StdString(dlg.m_AddFieldValue5);
+
+
+			if(pLink->m_mvmt_txt_id.size () > 0)
+			{
+				pLink->m_cycle_length = dlg.m_cycle_length;
+				pLink->m_start_green_time = dlg.m_start_green;
+				pLink->m_end_green_time = dlg.m_end_of_green;
+			}
+
 			pLink->m_LinkID = pDoc->CString2StdString(dlg.m_LinkID);
 			pLink->m_LaneCapacity  = dlg.LaneCapacity;
 
@@ -4459,24 +4164,24 @@ void CTLiteView::OnUpdateViewSelectNode(CCmdUI *pCmdUI)
 
 
 
-void CTLiteView::OnEditCreatesubarea()
-{
-	m_ToolMode = subarea_tool;
-	CMainFrame* pMainFrame = (CMainFrame*) AfxGetMainWnd();
+//void CTLiteView::OnEditCreatesubarea()
+//{
+//	m_ToolMode = subarea_tool;
+//	CMainFrame* pMainFrame = (CMainFrame*) AfxGetMainWnd();
+//
+//	pMainFrame->m_bShowLayerMap[layer_subarea] = true;
+//	pMainFrame-> m_iSelectedLayer = layer_subarea;
+//	GetDocument()->m_SubareaShapePoints.clear();
+//
+//	CListCtrl * pGISLayerList = (CListCtrl *)(pMainFrame->m_GISLayerBar).GetDlgItem(IDC_LIST_GISLAYER);
+//	pGISLayerList->Invalidate(1);  // update display of selected layer
+//
+//}
 
-	pMainFrame->m_bShowLayerMap[layer_subarea] = true;
-	pMainFrame-> m_iSelectedLayer = layer_subarea;
-	GetDocument()->m_SubareaShapePoints.clear();
-
-	CListCtrl * pGISLayerList = (CListCtrl *)(pMainFrame->m_GISLayerBar).GetDlgItem(IDC_LIST_GISLAYER);
-	pGISLayerList->Invalidate(1);  // update display of selected layer
-
-}
-
-void CTLiteView::OnUpdateEditCreatesubarea(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_ToolMode == subarea_tool ? 1 : 0);
-}
+//void CTLiteView::OnUpdateEditCreatesubarea(CCmdUI *pCmdUI)
+//{
+//	pCmdUI->SetCheck(m_ToolMode == subarea_tool ? 1 : 0);
+//}
 
 
 void CTLiteView::CopyLinkSetInSubarea()
@@ -4508,7 +4213,7 @@ void CTLiteView::CopyLinkSetInSubarea()
 		if(PtInRegion(m_polygonal_region, point.x, point.y))  //outside subarea
 		{
 			pDoc->m_SubareaNodeSet .push_back ((*iNode));
-			pDoc->m_SubareaNodeNoMap[(*iNode)->m_NodeID ]=  (*iNode);
+			pDoc->m_SubareaNodeNoMap[(*iNode)->m_NodeNo ]=  (*iNode);
 			//inside subarea
 		}
 		iNode++;
@@ -4527,6 +4232,9 @@ void CTLiteView::CopyLinkSetInSubarea()
 
 			(*iLink)->m_bIncludedinSubarea = true;
 
+			pDoc->m_SubareaRelatedNodeNoMap[ (*iLink)->m_FromNodeNo ] = true;
+			pDoc->m_SubareaRelatedNodeNoMap[ (*iLink)->m_ToNodeNo ] = true;
+
 
 		}
 
@@ -4535,6 +4243,9 @@ void CTLiteView::CopyLinkSetInSubarea()
 			|| (pDoc->m_SubareaNodeNoMap.find((*iLink)->m_ToNodeNo ) != pDoc->m_SubareaNodeNoMap.end() && pDoc->m_SubareaNodeNoMap.find((*iLink)->m_FromNodeNo ) == pDoc->m_SubareaNodeNoMap.end()))
 		{
 			(*iLink)->m_bIncludedinBoundaryOfSubarea = true;
+			pDoc->m_SubareaRelatedNodeNoMap[(*iLink)->m_FromNodeNo] = true;
+			pDoc->m_SubareaRelatedNodeNoMap[(*iLink)->m_ToNodeNo] = true;
+
 		}
 
 		iLink++;
@@ -4546,456 +4257,9 @@ void CTLiteView::CopyLinkSetInSubarea()
 
 }
 
-void CTLiteView::OnToolsRemovenodesandlinksoutsidesubarea()
-{
-	CWaitCursor wait;
 
-	CTLiteDoc* pDoc = GetDocument();
 
-	pDoc->Modify ();
-	pDoc->PushBackNetworkState();
 
-
-	LPPOINT m_subarea_points = new POINT[pDoc->m_SubareaShapePoints.size()];
-	for (unsigned int sub_i= 0; sub_i < pDoc->m_SubareaShapePoints.size(); sub_i++)
-	{
-		CPoint point =  NPtoSP(pDoc->m_SubareaShapePoints[sub_i]);
-		m_subarea_points[sub_i].x = point.x;
-		m_subarea_points[sub_i].y = point.y;
-	}
-
-	// Create a polygonal region
-	m_polygonal_region = CreatePolygonRgn(m_subarea_points, pDoc->m_SubareaShapePoints.size(), WINDING);
-
-	// step 01
-	std::list<DTANode*>::iterator iNode;
-	iNode = pDoc->m_NodeSet.begin ();
-
-
-	while (iNode != pDoc->m_NodeSet.end())
-	{
-		CPoint point = NPtoSP((*iNode)->pt);
-		if(PtInRegion(m_polygonal_region, point.x, point.y) == false)  //outside subarea
-		{
-			(*iNode)->m_bSubareaFlag = 0;
-		}
-		else
-		{
-			(*iNode)->m_bSubareaFlag = 1;	//inside subarea
-		}
-
-		(*iNode)->m_tobeRemoved = true;  // mark all to be removed first
-
-		++iNode;
-	}
-
-
-
-	//step 02
-	//remove links
-	pDoc->m_LinkNoMap.clear();
-
-	std::list<DTALink*>::iterator iLink;
-
-	iLink = pDoc->m_LinkSet.begin(); 
-
-	while (iLink != pDoc->m_LinkSet.end())
-	{
-		DTANode* pFromNode = pDoc->m_NodeNoMap[(*iLink)->m_FromNodeNo];
-		DTANode* pToNode = pDoc->m_NodeNoMap[(*iLink)->m_ToNodeNo];
-
-		if(pFromNode->m_bSubareaFlag == 0 &&  pToNode ->m_bSubareaFlag == 0 ) 
-		{
-			iLink = pDoc->m_LinkSet.erase(iLink);  // remove when one of end points are covered by the subarea
-
-		}else
-		{
-			pDoc->m_LinkNoMap[(*iLink)->m_LinkNo] = (*iLink);
-
-			pFromNode->m_tobeRemoved = false;  // no need to remove as long as one adjacent link is kept
-			pToNode->m_tobeRemoved = false; 
-
-			++iLink;
-		}
-	}
-
-
-	// step 03: remove nodes
-	pDoc->m_NodeNoMap.clear();
-	pDoc->m_NodeNoMap.clear();
-
-	iNode = pDoc->m_NodeSet.begin ();
-	while (iNode != pDoc->m_NodeSet.end())
-	{
-		if((*iNode)->m_NodeID ==511)
-		{
-			TRACE("..");
-		}
-
-		if((*iNode)->m_tobeRemoved == true )  //outside subarea
-		{
-			iNode = pDoc->m_NodeSet.erase (iNode);
-		}
-		else
-		{
-			pDoc->m_NodeIDMap[(*iNode)->m_NodeID  ] = (*iNode);
-			pDoc->m_NodeIDMap[(*iNode)->m_NodeID  ] = (*iNode);
-
-			++iNode;
-			//inside subarea
-		}
-	}
-
-
-
-
-	// step 05: add new zones if the boundary has zone --
-
-	iNode = pDoc->m_NodeSet.begin ();
-	int TAZ = 1000;  // mark for subarea
-
-	int boundary_zone_count = 0;
-	while (iNode != pDoc->m_NodeSet.end())
-	{
-
-		if((*iNode)->m_bSubareaFlag ==0 && (*iNode)->m_ZoneID == 0)  // remaining boundary-and-not-activity-location nodes after out of subarea links are removed. 
-		{
-			// create new zone number and add this node as activity center
-			// try to get TAZ as the node number
-
-			TAZ = (*iNode)->m_NodeID ;
-
-			while(pDoc->m_ZoneMap.find (TAZ) != pDoc->m_ZoneMap.end ())  // find unused TAZ as new TAZ
-			{
-				TAZ ++;
-			}
-
-			pDoc->m_ZoneMap [TAZ].m_ZoneID = TAZ;
-			(*iNode)->m_ZoneID = TAZ;
-
-
-
-		}
-		++iNode;
-	}
-
-	// to do: generate input_subarea_agent.csv file 
-	// with updated departure time, path_node sequence, new origin zone id, new destination zone id
-	// keep demand type, Agent type, 
-
-	// step 06: generate route file
-	std::list<DTAAgent*>::iterator iAgent;
-	pDoc->m_PathMap.clear();
-	pDoc->m_ODMatrixMap.clear();
-
-
-	for (iAgent = pDoc->m_AgentSet.begin(); iAgent != pDoc->m_AgentSet.end(); iAgent++)
-	{
-		DTAAgent* pAgent = (*iAgent);
-
-		if(pAgent->m_NodeSize >= 2 && pAgent->m_bComplete)  // with physical path in the network
-		{
-
-			// update node sequence
-			std::vector<int> LinkVector;
-			std::vector<int> NodeVector;
-
-			int StartFlag = 0; // 0: not start yet, 1: start node chain, 2: end node chain
-			for(int link= 1; link<pAgent->m_NodeSize; link++)
-			{
-				int OrgLinkNO = pAgent->m_NodeAry[link].LinkNo;
-
-
-				if( pDoc->m_LinkNoMap.find(OrgLinkNO)!= pDoc->m_LinkNoMap.end()) // the link exists in subarea 
-				{
-
-					if(StartFlag <=1)
-						LinkVector.push_back(OrgLinkNO);
-
-					if(StartFlag ==0)
-						StartFlag = 1; // start node chain
-				}else  // link has been removed
-				{
-					if(StartFlag==1) // node chain has been started 
-					{
-						StartFlag = 2;  // terminate
-						break;
-					} else 
-					{
-						//continue // StartFlag ==0
-					}
-				}
-
-			}
-			// LinkVector for remaining links in subarea 
-
-			if(LinkVector.size() >=2)
-			{
-
-				DTALink* pLinkOrg = pDoc->m_LinkNoMap[LinkVector[0]];
-				DTALink* pLinkDes = pDoc->m_LinkNoMap[LinkVector[LinkVector.size()-1]];
-
-				int NewOriginZoneID = pDoc->m_NodeNoMap[pLinkOrg->m_FromNodeNo ]->m_ZoneID  ;
-				int NewDestinationZoneID = pDoc->m_NodeNoMap[pLinkDes->m_ToNodeNo ]->m_ZoneID  ;;
-				int NewNodeIDSum = 0;
-
-				for(unsigned li = 0; li < LinkVector.size(); li++)
-				{
-					DTALink* pLink = pDoc->m_LinkNoMap[LinkVector[li]];
-					if(li==0) // first link
-					{
-						NewNodeIDSum += pLink->m_FromNodeID;
-					}
-
-					NewNodeIDSum += pLink->m_ToNodeID;
-				}
-
-				int Newm_NodeSize = LinkVector.size() +1;
-				CString label;
-				label.Format("%d,%d,%d,%d", NewOriginZoneID  , NewDestinationZoneID , NewNodeIDSum , Newm_NodeSize );
-
-				//existing path
-				pDoc->m_PathMap[label].Origin = NewOriginZoneID;
-				pDoc->m_PathMap[label].Destination  = NewDestinationZoneID;
-				pDoc->m_PathMap[label].TotalAgentSize+=1;
-
-				if(pDoc->m_PathMap[label].TotalAgentSize == 1)  // new path
-				{
-
-					for(unsigned li = 0; li < LinkVector.size(); li++)
-					{
-						DTALink* pLink = pDoc->m_LinkNoMap[LinkVector[li]];
-						if(li==0) // first link
-						{
-							pDoc->m_PathMap[label].m_NodeVector.push_back(pLink->m_FromNodeID );
-						}
-
-						pDoc->m_PathMap[label].m_NodeVector.push_back(pLink->m_ToNodeID);
-
-					}
-				}
-
-				//
-				// reuse label as OD label
-				label.Format("%d,%d", pAgent->m_o_ZoneID  , pAgent->m_d_ZoneID);
-				pDoc->m_ODMatrixMap[label].Origin = NewOriginZoneID;
-				pDoc->m_ODMatrixMap[label].Destination  = NewDestinationZoneID;
-				pDoc->m_ODMatrixMap[label].TotalAgentSize+=1;
-
-
-			}
-
-		}
-	}
-
-
-	// beginning of outputting subarea_agent file
-	std::string fname_agent =  "subarea_agent.csv";
-	
-		FILE* st_agent = NULL;
-
-		int number_of_subarea_Agents = 0;
-
-		fopen_s(&st_agent, pDoc->m_ProjectDirectory + fname_agent.c_str(), "w");
-
-		if (st_agent != NULL)
-		{
-			float first_entrance_time = 99999;
-			float last_entrance_time = -99999;
-
-			std::list<DTAAgent*>::iterator iAgent;
-
-			fprintf(st_agent, "agent_id,o_zone_id,d_zone_id,o_node_id,d_node_id,time_period,agent_type,node_sequence\n");
-
-			for (iAgent = pDoc->m_AgentSet.begin(); iAgent != pDoc->m_AgentSet.end(); iAgent++)
-			{
-				DTAAgent* pAgent = (*iAgent);
-				float entrance_time = 0;
-				if (pAgent->m_NodeSize >= 2 && pAgent->m_bComplete)  // with physical path in the network
-				{
-					number_of_subarea_Agents++;
-					// update node sequence
-					std::vector<int> LinkVector;
-					std::vector<int> NodeVector;
-
-					int StartFlag = 0; // 0: not start yet, 1: start node chain, 2: end node chain
-					for (int link = 1; link < pAgent->m_NodeSize; link++)
-					{
-						int OrgLinkNO = pAgent->m_NodeAry[link].LinkNo;
-
-
-						if (pDoc->m_LinkNoMap.find(OrgLinkNO) != pDoc->m_LinkNoMap.end()) // the link exists in subarea 
-						{
-
-							if (StartFlag <= 1)
-								LinkVector.push_back(OrgLinkNO);
-
-							if (StartFlag == 0)
-							{ 
-								StartFlag = 1; // start node chain
-								entrance_time = pAgent->m_NodeAry[link].ArrivalTimeOnDSN;
-								if (entrance_time < first_entrance_time)
-									first_entrance_time = entrance_time;
-								if (entrance_time > last_entrance_time)
-									last_entrance_time = entrance_time;
-
-							}
-						}
-						else  // link has been removed
-						{
-							if (StartFlag == 1) // node chain has been started 
-							{
-								StartFlag = 2;  // terminate
-								break;
-							}
-							else
-							{
-								//continue // StartFlag ==0
-							}
-						}
-
-					}
-					// LinkVector for remaining links in subarea 
-
-					if (LinkVector.size() >= 2)
-					{
-
-						DTALink* pLinkOrg = pDoc->m_LinkNoMap[LinkVector[0]];
-						DTALink* pLinkDes = pDoc->m_LinkNoMap[LinkVector[LinkVector.size() - 1]];
-
-						int NewOriginZoneID = pDoc->m_NodeNoMap[pLinkOrg->m_FromNodeNo]->m_ZoneID;
-						int NewDestinationZoneID = pDoc->m_NodeNoMap[pLinkDes->m_ToNodeNo]->m_ZoneID;;
-						int NewNodeIDSum = 0;
-
-						for (unsigned li = 0; li < LinkVector.size(); li++)
-						{
-							DTALink* pLink = pDoc->m_LinkNoMap[LinkVector[li]];
-							if (li == 0) // first link
-							{
-								NewNodeIDSum += pLink->m_FromNodeID;
-							}
-
-							NewNodeIDSum += pLink->m_ToNodeID;
-						}
-
-						int Newm_NodeSize = LinkVector.size() + 1;
-
-						std::vector<int > NodeVector;
-						for (unsigned li = 0; li < LinkVector.size(); li++)
-						{
-							DTALink* pLink = pDoc->m_LinkNoMap[LinkVector[li]];
-							if (li == 0) // first link
-							{
-								NodeVector.push_back(pLink->m_FromNodeID);
-							}
-
-							NodeVector.push_back(pLink->m_ToNodeID);
-
-						}
-
-
-						fprintf(st_agent, "%d,%d,%d,%d,%d,%4.3f,%d,%d,",
-							pAgent->m_AgentID,
-							NewOriginZoneID,
-							NewDestinationZoneID,
-							NodeVector[0],
-							NodeVector[NodeVector.size() - 1],
-							entrance_time,
-							pAgent->m_AgentType,
-							
-							Newm_NodeSize);
-
-
-
-
-						for (int j = 0; j < NodeVector.size(); j++)  // for all nodes
-						{
-							fprintf(st_agent, "%d;", NodeVector[j]);
-						}
-						fprintf(st_agent, ",");
-
-						fprintf(st_agent, "\n");
-
-					}
-				}
-			}
-			fclose(st_agent);
-
-			pDoc->m_DemandLoadingEndTimeInMin = first_entrance_time;
-			pDoc->m_DemandLoadingStartTimeInMin = last_entrance_time;
-		}
-		else
-		{
-			AfxMessageBox("File subarea_output.csv cannot be opened.");
-		}
-
-				
-			  // not loaded in simulation
-
-
-// end of generating agent csv file
-	DeleteObject(m_polygonal_region);
-	delete [] m_subarea_points;
-
-	int zone_count = 0;
-
-	std::map<int, DTAZone>	:: const_iterator itr_zone;
-
-	
-
-	pDoc->m_bSaveProjectFromSubareaCut =true;  // mark subarea cut
-
-	CString SubareaCutMessage;
-	SubareaCutMessage.Format ("The subarea includes %d nodes, %d links;\n%d zones, %d newly generated boundary zones;\n%d subarea OD pairs, %d subarea path records, %d subarea Agents.",
-		pDoc->m_NodeSet.size(), pDoc->m_LinkSet.size(), zone_count,boundary_zone_count,pDoc->m_ODMatrixMap.size(),
-		pDoc->m_PathMap.size(), number_of_subarea_Agents);
-
-	AfxMessageBox(SubareaCutMessage, MB_ICONINFORMATION);
-
-	Invalidate();
-}
-
-void CTLiteView::OnViewShowAVISensor()
-{
-	m_bShowAVISensor = !m_bShowAVISensor;
-	Invalidate();
-}
-
-void CTLiteView::OnUpdateViewShowAVISensor(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowAVISensor ? 1 : 0);
-}
-
-void CTLiteView::OnFileDataexchangewithgooglefusiontables()
-{
-}
-
-
-void CTLiteView::OnEditDeletelinksoutsidesubarea()
-{
-
-	OnToolsRemovenodesandlinksoutsidesubarea();
-}
-
-void CTLiteView::OnEditMovenetworkcoordinates()
-{
-	m_MoveLayerNo = 0; //baseline layer
-	m_ToolMode = network_coordinate_tool;
-	m_bShowGrid = true;
-	if(m_bNetworkCooridinateHints==false)
-	{
-		AfxMessageBox("Hints:\n1. Please use mouse to move the reference network and shift its coordinates;\n2. Use mouse wheel to adjust the size of the reference network (zoom);\n3. Click shift or control key together to change the horizonal or vertical size, respectively;\n4. Click on the other toolbar button to turn on disable this moving-reference-network mode.", MB_ICONINFORMATION);
-		m_bNetworkCooridinateHints = true;
-	}
-
-	Invalidate();
-
-}
-
-void CTLiteView::OnUpdateEditMovenetworkcoordinates(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_ToolMode == network_coordinate_tool ? 1 : 0);
-}
 
 
 void CTLiteView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -5693,321 +4957,11 @@ void CTLiteView::OnLinkSwichtolineBandwidthMode()
 	Invalidate();
 }
 
-void CTLiteView::OnViewTransitlayer()
-{
-	m_bShowTransit = !m_bShowTransit;
-	Invalidate();
-}
-
-void CTLiteView::OnUpdateViewTransitlayer(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowTransit);
-}
-
-void CTLiteView::DrawPublicTransitLayer(CDC *pDC)
-{
-
-	CTLiteDoc* pDoc = GetDocument();
-	std::map<long, long> RouteMap;
-
-	int stop_size = min(20,max(2,int(pDoc->m_NodeDisplaySize*pDoc->m_UnitDistance*m_Resolution)));
-
-	TEXTMETRIC tmOD;
-	memset(&tmOD, 0, sizeof TEXTMETRIC);
-	pDC->GetOutputTextMetrics(&tmOD);
-
-	CRect ScreenRect;
-	GetClientRect(ScreenRect);
-
-
-}
-
-void CTLiteView::DrawPublicTransitAccessibilityLayer(CDC *pDC)
-{
-
-	//CWaitCursor wait;
-	CTLiteDoc* pDoc = GetDocument();
-	std::map<long, long> RouteMap;
-
-	int stop_size = min(20,max(2,int(pDoc->m_NodeDisplaySize*pDoc->m_UnitDistance*m_Resolution)));
-
-	TEXTMETRIC tmOD;
-	memset(&tmOD, 0, sizeof TEXTMETRIC);
-	pDC->GetOutputTextMetrics(&tmOD);
-
-	CRect ScreenRect;
-	GetClientRect(ScreenRect);
-
-
-}
-
-
-
-void CTLiteView::DrawNodeRadarChart(CDC *pDC, DTANode* pNode, CPoint point, int chart_size, float delay_ratio, int LOS)
-{
-
-	CTLiteDoc* pDoc = GetDocument();
-
- 	CRect ChartRect(point.x - chart_size, point.y + chart_size,
-			point.x + chart_size, point.y - chart_size);
-
-
-	int theSliceCount = 0;
-
-    CPen pen(PS_SOLID, 1, RGB(0,0,255));
-    pDC->SelectObject(&pen);
-
-	if(pNode->m_IncomingLinkVector.size()==1)
-	{
-    pDC->Ellipse(ChartRect);
-	
-		return;
-	}
-
-
-   
-	
-	 std::vector<IncomingLinkAngle> IncomingLinkVector;
-
-
-		for(unsigned int i = 0; i< pNode->m_IncomingLinkVector.size(); i++)
-		{
-	
-			DTALink* pLink = pDoc->m_LinkNoMap[pNode->m_IncomingLinkVector[i]];
-			int Angle = pDoc->Find_P2P_Angle(  pDoc->m_NodeNoMap[pLink->m_FromNodeNo]->pt, pDoc->m_NodeNoMap[pLink->m_ToNodeNo]->pt);
-		
-		
-			IncomingLinkAngle element;
-			element.pLink = pLink;
-			element.Angle = Angle;
-
-		
-			IncomingLinkVector.push_back(element);
-		}
-
-
-		std::sort(IncomingLinkVector.begin(), IncomingLinkVector.end(), compare_IncomingLinkAngleData);
-
-
-		CPoint PtVector[10];
-		int vector_size = min(10, IncomingLinkVector.size());
-		for(unsigned int i = 0; i< vector_size ; i++)
-		{
-			
-			DTALink* pLink = IncomingLinkVector[i].pLink ;
-
-			float link_delay = pLink->GetDynamicNodeDelay(g_Simulation_Time_Stamp );
-			float radius_onscreen = link_delay *pDoc->m_BottleneckDisplaySize;
-
-			radius_onscreen = max(2,radius_onscreen);
-			
-
-			int point_size = pLink->m_ShapePoints.size();
-
-
-			CPoint pt0 =  NPtoSP(pLink->m_ShapePoints[0]); 
-			CPoint pt1 =  NPtoSP(pLink->m_ShapePoints[point_size - 1]); 
-
-			double delta_x = pt0.x- pt1.x;
-			double delta_y = pt0.y- pt1.y;
-
-			double link_screen_size = sqrt(pow(delta_x,2) +  pow(delta_y,2) );
-
-			double ratio = 1.0f - radius_onscreen/max(1,link_screen_size);
-			CPoint pt;
-
-			pt.x =  (1-ratio)*pt0.x + ratio * pt1.x;
-			pt.y =  (1-ratio)*pt0.y + ratio * pt1.y;
-
-				PtVector[i]= pt;
-			
-		}
-
-		   pDC->Polygon(PtVector, vector_size);
-
-
-//		for(unsigned int i = 0; i< theSliceCount; i++)
-//		{
-//			
-//			DTALink* pLink = pDoc->m_LinkNoMap[pNode->m_IncomingLinkVector[i]];
-//			
-//			SlicePercentage[i] = link_delay[i]/ max(1,total_delay)*100;
-//
-//				// method 1: identify movement approach from scratch 
-//			DTA_Direction direction =  pDoc->Find_Closest_Angle_to_Approach( pDoc->Find_P2P_Angle(pLink->m_FromPoint,pLink->m_ToPoint));
-//
-//			color_vector[i] = pDoc->m_ColorDirectionVector[direction];
-//
-//		}
-///*
-//		for(unsigned int i = 0; i< theSliceCount; i++)
-//		{
-//			
-//			DTALink* pLink = pDoc->m_LinkNoMap[pNode->m_IncomingLinkVector[i]];
-//			SlicePercentage[i] = link_delay[i]/ max(1,total_delay)*100;
-//
-//			thePieInfo[i].color = 
-//			thePieInfo[i].desc.Format("  ");
-//			thePieInfo[i].percentage = SlicePercentage[i];
-//
-//		}
-//		*/
-//	thePieInfo[0] = PieInfo("Stocks", SlicePercentage[0], color_vector[0]);
-//    thePieInfo[1] = PieInfo("Bonds", SlicePercentage[1], color_vector[1]);
-//    thePieInfo[2] = PieInfo("Bonds", SlicePercentage[2], color_vector[2]);
-//    thePieInfo[3] = PieInfo("Bonds", SlicePercentage[3], color_vector[3]);
-//    thePieInfo[4] = PieInfo("Bonds", SlicePercentage[4], color_vector[4]);
-// 
-//
-//
-//    double percent = 0;
-//
-//    for(int i = 0; i < theSliceCount; i++)
-//    {
-//        percent += thePieInfo[i].percentage;
-//        if(percent > 100)
-//            percent = 100;
-//        double angle = percent / 100 * 360;
-//        double x = radius * cos(angle * PI / 180);
-//        double y = radius * sin(angle * PI / 180);
-//
-//		SlicePt[i].x = (int)(xCenter + x + 0.5);
-//		SlicePt[i].y = (int) (yCenter + y + 0.5);
-//    }
-// 
-//
-//    for(int i = 0; i < theSliceCount; i++)
-//    {
-//        CBrush br;
-//        br.CreateSolidBrush(thePieInfo[i].color);
-//        pDC->SelectObject(&br);
-//
-//		int index = i+1;
-//
-//		if(index == theSliceCount)
-//			index =0;
-//
-//		pDC->Pie(rect,SlicePt[i], SlicePt[index]);
-//		
-//	}
-
-}
-void CTLiteView::DrawNodePieChart(CDC *pDC, DTANode* pNode, CPoint point, int chart_size, int LOS)
-{
-	PieInfo thePieInfo[32];
-	CPoint SlicePt[32];
-	float SlicePercentage[32];
-	float link_delay[32];
-	COLORREF color_vector[32];
-
-	CTLiteDoc* pDoc = GetDocument();
-	CRect ChartRect(point.x - chart_size, point.y + chart_size,
-			point.x + chart_size, point.y - chart_size);
-
-
-	int theSliceCount = 0;
-
-	CRect rect = ChartRect;
-  
-    CPen pen(PS_SOLID, 1, RGB(0,0,255));
-    pDC->SelectObject(&pen);
-    pDC->Ellipse(rect);
- 
-  //  double xCenter = (rect.left + rect.right) / 2;
-  //  double yCenter = (rect.top + rect.bottom) / 2;
- 
-  //  double radius = rect.Height() / 2;
-
-		//theSliceCount = min(2,pNode->m_IncomingLinkVector.size());
- 
-		//float total_delay = 0;
-		//
-		//for(unsigned int i = 0; i< theSliceCount; i++)
-		//{
-		//	
-		//	DTALink* pLink = pDoc->m_LinkNoMap[pNode->m_IncomingLinkVector[i]];
-
-		//	link_delay[i]= pLink->GetSimulatedNodeDelay(g_Simulation_Time_Stamp);
-		//	total_delay+= link_delay[i];
-		//}
-
-
-//		for(unsigned int i = 0; i< theSliceCount; i++)
-//		{
-//			
-//			DTALink* pLink = pDoc->m_LinkNoMap[pNode->m_IncomingLinkVector[i]];
-//			
-//			SlicePercentage[i] = link_delay[i]/ max(1,total_delay)*100;
-//
-//				// method 1: identify movement approach from scratch 
-//			DTA_Direction direction =  pDoc->Find_Closest_Angle_to_Approach( pDoc->Find_P2P_Angle(pLink->m_FromPoint,pLink->m_ToPoint));
-//
-//			color_vector[i] = pDoc->m_ColorDirectionVector[direction];
-//
-//		}
-///*
-//		for(unsigned int i = 0; i< theSliceCount; i++)
-//		{
-//			
-//			DTALink* pLink = pDoc->m_LinkNoMap[pNode->m_IncomingLinkVector[i]];
-//			SlicePercentage[i] = link_delay[i]/ max(1,total_delay)*100;
-//
-//			thePieInfo[i].color = 
-//			thePieInfo[i].desc.Format("  ");
-//			thePieInfo[i].percentage = SlicePercentage[i];
-//
-//		}
-//		*/
-//	thePieInfo[0] = PieInfo("Stocks", SlicePercentage[0], color_vector[0]);
-//    thePieInfo[1] = PieInfo("Bonds", SlicePercentage[1], color_vector[1]);
-//    thePieInfo[2] = PieInfo("Bonds", SlicePercentage[2], color_vector[2]);
-//    thePieInfo[3] = PieInfo("Bonds", SlicePercentage[3], color_vector[3]);
-//    thePieInfo[4] = PieInfo("Bonds", SlicePercentage[4], color_vector[4]);
-// 
-//
-//
-//    double percent = 0;
-//
-//    for(int i = 0; i < theSliceCount; i++)
-//    {
-//        percent += thePieInfo[i].percentage;
-//        if(percent > 100)
-//            percent = 100;
-//        double angle = percent / 100 * 360;
-//        double x = radius * cos(angle * PI / 180);
-//        double y = radius * sin(angle * PI / 180);
-//
-//		SlicePt[i].x = (int)(xCenter + x + 0.5);
-//		SlicePt[i].y = (int) (yCenter + y + 0.5);
-//    }
-// 
-//
-//    for(int i = 0; i < theSliceCount; i++)
-//    {
-//        CBrush br;
-//        br.CreateSolidBrush(thePieInfo[i].color);
-//        pDC->SelectObject(&br);
-//
-//		int index = i+1;
-//
-//		if(index == theSliceCount)
-//			index =0;
-//
-//		pDC->Pie(rect,SlicePt[i], SlicePt[index]);
-//		
-//	}
-
-}
 
 void CTLiteView::DrawNode(CDC *pDC, DTANode* pNode, CPoint point, int node_size,TEXTMETRIC tm)
 {
 	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd();
 
-	if (pMainFrame->m_bShowLayerMap[layer_reference_line]==false)
-	{
-		if (pNode->m_LayerNo == 1)  //skip reference nodes
-			return; 
-	}
 
 	//if(pNode->m_ZoneID >0)  // if destination node associated with zones
 	//{
@@ -6069,13 +5023,6 @@ void CTLiteView::DrawNode(CDC *pDC, DTANode* pNode, CPoint point, int node_size,
 		CString str_node_label;
 		str_node_label.Format ("%d",pNode->m_NodeID );
 
-		if(m_ShowNodeTextMode == node_display_sequential_node_number)
-		{
-			str_node_label.Format ("%d",pNode->m_NodeID +1 );
-
-		}
-
-
 
 		if(m_ShowNodeTextMode == node_display_zone_number)
 		{
@@ -6085,11 +5032,6 @@ void CTLiteView::DrawNode(CDC *pDC, DTANode* pNode, CPoint point, int node_size,
 			else
 				str_node_label.Format ("");
 		}
-
-	
-
-
-
 
 		if(m_ShowNodeTextMode == node_display_intersection_name)
 		{
@@ -6103,18 +5045,34 @@ void CTLiteView::DrawNode(CDC *pDC, DTANode* pNode, CPoint point, int node_size,
 		if(m_ShowNodeTextMode == node_display_control_type)
 		{
 
-			if( pDoc->m_NodeTypeMap.find(pNode->m_ControlType)!= pDoc->m_NodeTypeMap.end())
-			{
-				str_node_label = pDoc->m_NodeTypeMap[pNode->m_ControlType].c_str() ;
-			}
-
+		str_node_label = pNode->m_node_type.c_str();
+	
 		}
 
 
+		if (m_ShowNodeTextMode == node_display_additional_field1)
+		{
+			str_node_label = pNode->Additional_Field[1].c_str();
+		}
+		if (m_ShowNodeTextMode == node_display_additional_field2)
+		{
+			str_node_label = pNode->Additional_Field[2].c_str();
+		}
+		if (m_ShowNodeTextMode == node_display_additional_field3)
+		{
+			str_node_label = pNode->Additional_Field[3].c_str();
+		}
+		if (m_ShowNodeTextMode == node_display_additional_field4)
+		{
+			str_node_label = pNode->Additional_Field[4].c_str();
+		}
+		if (m_ShowNodeTextMode == node_display_additional_field5)
+		{
+			str_node_label = pNode->Additional_Field[5].c_str();
+		}
 
-
-		if(m_ShowNodeTextMode == node_display_travel_time_from_origin && pNode->m_DistanceToRoot > 0.00001 && pNode->m_DistanceToRoot < MAX_SPLABEL-1)  // check connectivity, overwrite with distance to the root
-			str_node_label.Format ("%4.1f",pNode->m_DistanceToRoot );
+		//if(m_ShowNodeTextMode == node_display_travel_time_from_origin && pNode->m_DistanceToRoot > 0.00001 && pNode->m_DistanceToRoot < MAX_SPLABEL-1)  // check connectivity, overwrite with distance to the root
+		//	str_node_label.Format ("%4.1f",pNode->m_DistanceToRoot );
 
 
 		point.y -= tm.tmHeight / 2;
@@ -6149,20 +5107,7 @@ void CTLiteView::OnNodeMovementproperties()
 
 	pDoc->m_SelectedNodeNo = FindClosestNode(m_CurrentMousePoint, 300);  // 300 is screen unit
 
-	if(pDoc->m_SelectedNodeNo >=0)
-	{
-		DTANode* pNode = pDoc->m_NodeNoMap [pDoc->m_SelectedNodeNo ];
 
-		if(pNode==NULL)
-			return;
-
-		CPage_Node_Movement pMovementPage;
-
-		pMovementPage.m_pDoc = pDoc;
-		pMovementPage.m_CurrentNodeNo = pNode->m_NodeNo;
-		pMovementPage.DoModal();
-
-	}
 }
 
 
@@ -6268,33 +5213,16 @@ void CTLiteView::CreateDefaultJunction()
 }
 
 
-void CTLiteView::OnExportCreatevissimfiles()
-{
-
-}
-
-
-void CTLiteView::OnDebugShowAgentswithincompletetripsonly()
-{
-	bShowAgentsWithIncompleteTrips = !bShowAgentsWithIncompleteTrips;
-	Invalidate();
-}
-
-void CTLiteView::OnUpdateDebugShowAgentswithincompletetripsonly(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(bShowAgentsWithIncompleteTrips);
-}
-
 void CTLiteView::OnAgentAgentnumber()
 {
-	m_bShowAgentNumber = !m_bShowAgentNumber;
+	m_bShowAgentID = !m_bShowAgentID;
 	Invalidate();
 
 }
 
 void CTLiteView::OnUpdateAgentAgentnumber(CCmdUI *pCmdUI)
 {
-	pCmdUI->SetCheck(m_bShowAgentNumber);
+	pCmdUI->SetCheck(m_bShowAgentID);
 }
 
 void CTLiteView::OnAgentShowselectedAgentonly()
@@ -6426,6 +5354,12 @@ void CTLiteView::OnNodeNodeproperties()
 		dlg.m_ControlType = pNode->m_ctrl_type.c_str();
 		dlg.m_NodeType = pNode->m_node_type.c_str();
 
+		dlg.AddFieldValue1 = pNode->Additional_Field[1].c_str();
+		dlg.AddFieldValue2 = pNode->Additional_Field[2].c_str();
+		dlg.AddFieldValue3 = pNode->Additional_Field[3].c_str();
+		dlg.AddFieldValue4 = pNode->Additional_Field[4].c_str();
+		dlg.AddFieldValue5 = pNode->Additional_Field[5].c_str();
+
 		if (dlg.DoModal() == IDOK)
 		{
 
@@ -6433,10 +5367,15 @@ void CTLiteView::OnNodeNodeproperties()
 			// construct a std::string using the LPCSTR input
 			std::string strStd(pszConvertedAnsiString);
 
-			if (pNode->m_ctrl_type .compare (dlg.m_ControlType)!=0
-				|| pNode->m_node_type.compare(dlg.m_NodeType)!=0
-				|| pNode->m_Name.compare (strStd)!=0
+			if (pNode->m_ctrl_type.compare(dlg.m_ControlType) != 0
+				|| pNode->m_node_type.compare(dlg.m_NodeType) != 0
+				|| pNode->m_Name.compare(strStd) != 0
 				|| pNode->m_ZoneID != dlg.ZoneID
+				|| pNode->Additional_Field[1].compare(dlg.AddFieldValue1)!=0
+				|| pNode->Additional_Field[2].compare(dlg.AddFieldValue2) != 0
+				|| pNode->Additional_Field[3].compare(dlg.AddFieldValue3) != 0
+				|| pNode->Additional_Field[4].compare(dlg.AddFieldValue4) != 0
+				|| pNode->Additional_Field[5].compare(dlg.AddFieldValue5) != 0
 				)
 			{
 				pDoc->Modify();
@@ -6445,6 +5384,12 @@ void CTLiteView::OnNodeNodeproperties()
 				pNode->m_ZoneID = dlg.ZoneID;
 				pNode->m_ctrl_type = dlg.m_ControlType;
 				pNode->m_node_type = dlg.m_NodeType;
+
+				pNode->Additional_Field[1] = dlg.AddFieldValue1;
+				pNode->Additional_Field[2] = dlg.AddFieldValue2;
+				pNode->Additional_Field[3] = dlg.AddFieldValue3;
+				pNode->Additional_Field[4] = dlg.AddFieldValue4;
+				pNode->Additional_Field[5] = dlg.AddFieldValue5;
 
 			}
 
@@ -6507,329 +5452,6 @@ void CTLiteView::DrawMovementLink(CDC* pDC,GDPoint pt_from, GDPoint pt_to,int Nu
 
 void CTLiteView::DrawNodeMovements(CDC* pDC, DTANode* pNode, CRect PlotRect)
 {
-	CPen NormalPen(PS_SOLID,2,RGB(0,0,0));
-	CPen TimePen(PS_DOT,1,RGB(0,0,0));
-	CPen DataPen(PS_SOLID,0,RGB(0,0,0));
-	CPen SelectedPen(PS_SOLID,4,RGB(255,0,0));
-	CPen SelectedPhasePen(PS_SOLID,4,RGB(0,0,255));
-
-	CBrush  WhiteBrush(RGB(255,255,255)); 
-
-	pDC->SetBkMode(TRANSPARENT);
-
-	pDC->SelectObject(&DataPen);
-	pDC->SelectObject(&WhiteBrush);
-
-	CBrush  BrushLinkBand(RGB(152,245,255)); 
-	pDC->SelectObject(&BrushLinkBand);
-
-	CTLiteDoc*  pDoc = GetDocument();
-
-	//pDoc->m_MovementTextBoxSizeInDistance 
-	double size_ratio= 0.001;
-
-	double node_set_back = 0.001 * pDoc->m_UnitDistance;
-
-	double link_length = size_ratio* pDoc->m_UnitDistance;
-	double movement_length = size_ratio* pDoc->m_UnitDistance;
-	double lane_width = size_ratio* pDoc->m_UnitDistance;
-
-
-	double text_length =  pDoc->m_MovementTextBoxSizeInDistance * 0.15 *  pDoc->m_UnitDistance ;
-
-	std::map<CString, double> Turn_Degree_map;
-
-		for (unsigned int i = 0; i< pNode->m_MovementVector.size(); i++)
-	{	
-		DTANodeMovement movement = pNode->m_MovementVector[i];
-
-		if( pDoc->m_hide_non_specified_movement_on_freeway_and_ramp && movement.bNonspecifiedTurnDirectionOnFreewayAndRamps )
-			continue;
-
-
-		if(pDoc->m_LinkNoMap.find(movement.IncomingLinkNo) ==  pDoc->m_LinkNoMap.end())
-			return;
-
-		if(pDoc->m_LinkNoMap.find(movement.OutgoingLinkNo) ==  pDoc->m_LinkNoMap.end())
-			return;
-
-		DTALink* pInLink  = pDoc->m_LinkNoMap [movement.IncomingLinkNo];
-		DTALink* pOutLink  = pDoc->m_LinkNoMap [movement.OutgoingLinkNo ];
-
-		int destination_node  = pOutLink->m_ToNodeID; 
-
-		if(movement.turning_prohibition_flag ==1 && m_bShowProhibitedMovements)
-		{
-			// select thick red pen: 
-			pDC->SelectObject(&g_PenProhibitedMovement);
-
-		}
-
-		if(m_bShowProhibitedMovements && movement.turning_prohibition_flag == 0)
-		{
-			continue;// no drawing
-
-		}
-
-
-		CMainFrame* pMainFrame = (CMainFrame*) AfxGetMainWnd();
-
-		if( !pMainFrame->m_bShowLayerMap[layer_connector] &&  pDoc->m_LinkTypeMap[pInLink->m_link_type  ].IsConnector ())
-			continue;
-
-		//if( pDoc->m_LinkTypeMap[pInLink->m_link_type  ].IsRamp  ())  //always one way
-		//	continue;
-
-		GDPoint p1, p2, p3, p_text;
-		// 1: fetch all data
-		p1  = pDoc->m_NodeIDMap[movement.in_link_from_node_id ]->pt;
-		p2  = pDoc->m_NodeIDMap[movement.in_link_to_node_id ]->pt;
-		p3  = pDoc->m_NodeIDMap[movement.out_link_to_node_id]->pt;
-
-		// reserved direction
-		double DeltaX = p2.x - p1.x ;
-		double DeltaY = p2.y - p1.y ;
-		double theta = atan2(DeltaY, DeltaX);
-
-		double movement_approach_turnection_theta = atan2(p3.y - p1.y, p3.x - p1.x);
-
-
-		GDPoint p1_new, p2_new, p3_new;
-		GDPoint p1_text, p3_text;
-		GDPoint pt_movement[3];
-
-
-		// 2. set new origin
-		p2_new.x = pNode->pt.x +(-1)*node_set_back*cos(theta);  
-		p2_new.y = pNode->pt.y + (-1)*node_set_back*sin(theta);
-
-		p1_new.x = p1.x + DeltaX/2;
-		p1_new.y = p1.y + DeltaY / 2;
-
-		p_text.x = p1_new.x - text_length*cos(theta);
-		p_text.y = p1_new.y - text_length*sin(theta);
-
-
-		// 3 determine the control point for  PolyBezier
-		double lane_width =  size_ratio*3*pDoc->m_LaneWidthInKM * pDoc->m_UnitDistance;
-		double movement_offset = 0;
-		double text_offset = 0.7*lane_width;
-		int mid_lane_number = 4+ pInLink->m_NumberOfLanes / 2;
-		float control_point_ratio = 0;
-
-		float MovementTextFontSize = 8;
-
-		CString movement_approach_turnection_label;
-		movement_approach_turnection_label.Format ("%d,%s", movement.in_link_from_node_id , pDoc->GetTurnString(movement.movement_turn));
-
-		if(movement.movement_turn == DTA_Through ) 
-		{
-
-			if(Turn_Degree_map.find (movement_approach_turnection_label ) != Turn_Degree_map.end())
-			{  // this direction has been used/defined.
-
-				if( Turn_Degree_map[movement_approach_turnection_label ] <  movement_approach_turnection_theta)
-					movement_offset = lane_width * (mid_lane_number - 0.7);
-				else
-					movement_offset = lane_width * (mid_lane_number + 0.7);
-
-			}else
-			{
-				movement_offset = lane_width * mid_lane_number;
-
-			}
-
-		}else if(movement.movement_turn == DTA_LeftTurn || movement.movement_turn == DTA_LeftTurn2 ) 
-		{
-			movement_offset = lane_width * (mid_lane_number-1);
-		}else
-		{
-			movement_offset = lane_width * (mid_lane_number+1);
-		}
-
-		// keep a record
-		Turn_Degree_map[movement_approach_turnection_label] = movement_approach_turnection_theta;
-
-		int movement_size = max(2,int(text_length*m_Resolution));
-
-		movement_size = min(50,movement_size);
-
-		int PointSize =  max(movement_size, 10)*m_MovmentTextSize;
-
-		GDPoint pt_from, pt_to, pt_text;
-		pt_from.x = p1_new.x + movement_offset* cos(theta-PI/2.0f);
-		pt_from.y = p1_new.y + movement_offset* sin(theta-PI/2.0f);
-
-
-		double alpha  = 0.3;
-
-		pt_to.x  = p2_new.x + movement_offset* cos(theta-PI/2.0f);
-		pt_to.y  =  p2_new.y + movement_offset* sin(theta-PI/2.0f);
-
-		// direction
-
-		DeltaX = p2.x - p3.x ;
-		DeltaY = p2.y - p3.y ;
-		theta = atan2(DeltaY, DeltaX);
-
-
-		if(movement.movement_turn == DTA_Through ) 
-		{
-			p3_new.x = pt_to.x - movement_length * cos(theta);
-			p3_new.y = pt_to.y - movement_length * sin(theta);
-
-		}else if(movement.movement_turn == DTA_LeftTurn ) 
-		{
-			p3_new.x = pt_to.x - movement_length * cos(theta -PI/4.0f);
-			p3_new.y = pt_to.y - movement_length * sin(theta -PI/4.0f);
-		}else
-		{
-			p3_new.x = pt_to.x - movement_length * cos(theta +PI/4.0f);
-			p3_new.y = pt_to.y - movement_length * sin(theta +PI/4.0f);
-		}
-
-		CPoint DrawPoint[3];
-		DrawPoint[0] = NPtoSP(pt_from);
-		DrawPoint[1] = NPtoSP(pt_to);
-
-		pDC->MoveTo(DrawPoint[0]);
-		pDC->LineTo(DrawPoint[1]);
-		DrawPoint[2] = NPtoSP(p3_new);
-
-
-		pDC->LineTo(DrawPoint[2]);
-
-		//restore pen
-		pDC->SelectObject(&DataPen);
-
-
-		//text 
-
-		// create rotation font
-		CFont movement_text_font;
-
-
-
-		LOGFONT lf;
-		memset(&lf, 0, sizeof(LOGFONT));       // zero out structure
-		lf.lfHeight = PointSize;
-
-		DeltaX = p2.x - p1.x ;
-		DeltaY = p2.y - p1.y ;
-		theta = atan2(DeltaY, DeltaX);
-
-		float theta_deg = fmod(theta/PI*180,360);
-
-		if(theta_deg < -90)
-			theta_deg += 180;
-
-		if(theta_deg > 90)
-			theta_deg -= 180;
-
-		lf.lfEscapement = theta_deg*10;
-
-
-		strcpy(lf.lfFaceName, "Arial");       
-
-		movement_text_font.CreateFontIndirect(&lf);
-
-		CFont* oldFont = pDC->SelectObject(&movement_text_font);
-
-		pDC->SelectObject(&movement_text_font);
-
-		// select text string to be displayed
-
-		CString str_text;
-
-
-		float number_of_hours = max(0.01, (pDoc->m_DemandLoadingEndTimeInMin - pDoc->m_DemandLoadingStartTimeInMin) / 60.0);
-		float sim_turn_hourly_count = movement.sim_turn_count / number_of_hours;
-
-		//empty label
-		str_text.Format("");
-
-		switch (m_ShowMovementTextMode)
-		{
-		case movement_display_turn_up_node_number: str_text.Format("%d", pInLink->m_FromNodeID); break;
-		case movement_display_turn_dest_node_number: str_text.Format("%d", pOutLink->m_ToNodeID); break;
-		case movement_display_turn_three_node_numbers: str_text.Format("%d,%d,%d", pInLink->m_FromNodeID,pInLink->m_ToNodeID,pOutLink->m_ToNodeID); break;
-
-		case movement_display_turn_type: str_text.Format("%s", pDoc->GetTurnString(movement.movement_turn)); break;
-		case movement_display_turn_direction: str_text.Format("%s", pDoc->GetTurnDirectionString(movement.movement_approach_turn)); break;
-		case movement_display_turn_prohibited: str_text.Format("%d", movement.turning_prohibition_flag); break;
-
-
-		case movement_display_sim_turn_count: 
-			//					if(movement.sim_turn_count>=1)
-			str_text.Format("%.0f", movement.sim_turn_count );
-
-			break;
-
-
-		case movement_display_sim_turn_percentage: 
-
-			//					if(movement.sim_turn_count>=1)
-			str_text.Format("%.1f%%", movement.turning_percentage  ); 
-
-			break;
-
-		case movement_display_sim_turn_delay: 
-
-			//					if(movement.sim_turn_count>=1)
-			str_text.Format("%.1f", movement.sim_turn_delay*60  ); // min to second
-
-			break;
-
-
-		case movement_display_sim_turn_delay_in_min: 
-
-			str_text.Format("%.1f", movement.sim_turn_delay  ); 
-
-			break;
-
-
-
-		case movement_display_obs_turn_hourly_count: 
-			//					if(movement.sim_turn_count>=1)
-			str_text.Format("%d", movement.obs_turn_hourly_count); 
-
-			break;
-
-
-
-		case movement_display_obs_turn_delay: 
-
-			//					if(movement.sim_turn_count>=1)
-			str_text.Format("%d", movement.obs_turn_delay  ); 
-
-			break;
-
-
-		default: str_text.Format("");
-		}
-
-		CPoint TextPoint;
-
-		double alpah = 1.5;
-
-
-		TextPoint.x = alpah * DrawPoint[0].x + (1-alpah)* DrawPoint[1].x  ;
-		TextPoint.y =  alpah * DrawPoint[0].y + (1-alpah)* DrawPoint[1].y ;
-		CRect rt(TextPoint.x -1,TextPoint.y -1, TextPoint.x +1, TextPoint.y+1);
-
-		pDC->SetBkColor(RGB(0,0, 0));
-
-		pDC->SetTextColor(RGB(0,1,0));
-		pDC->TextOut(TextPoint.x,TextPoint.y - PointSize*0.5, str_text);	
-
-
-		pDC->SelectObject(oldFont);
-
-
-
-	}
-
-
 }
 
 void CTLiteView::OnNodeAvoidthisnode()
@@ -6895,40 +5517,6 @@ void CTLiteView::OnUpdateEditMovenode(CCmdUI *pCmdUI)
 
 
 
-void CTLiteView::OnBackgroundimageMarklongA()
-{
-	CTLiteDoc* pDoc = GetDocument();
-
-	GDPoint pt = SPtoNP(m_CurrentMousePoint);
-
-	pDoc->m_PointA_x = pt.x;
-	pDoc->m_PointA_y = pt.y;
-
-
-	pDoc->m_bPointA_Initialized = true;
-
-	Invalidate();
-}
-
-void CTLiteView::OnBackgroundimageMarklongB()
-{
-
-	CTLiteDoc* pDoc = GetDocument();
-	GDPoint pt = SPtoNP(m_CurrentMousePoint);
-
-	pDoc->m_PointB_x = pt.x;
-	pDoc->m_PointB_y = pt.y;
-
-	pDoc->m_bPointB_Initialized = true;
-
-	Invalidate();
-
-}
-
-void CTLiteView::OnBackgroundimageAddlat()
-{
-}
-
 void CTLiteView::OnZoneHighlightassociatedacititylocations()
 {
 	m_bHighlightActivityLocation = !m_bHighlightActivityLocation;
@@ -6943,27 +5531,7 @@ void CTLiteView::OnUpdateZoneHighlightassociatedacititylocations(CCmdUI *pCmdUI)
 
 void CTLiteView::OnZoneCreatezone()
 {
-	OnEditCreatesubarea();
-	Invalidate();
-
-}
-
-void CTLiteView::OnEditCreatezone()
-{
-	m_ToolMode = add_zone_tool;
-	CMainFrame* pMainFrame = (CMainFrame*) AfxGetMainWnd();
-
-	pMainFrame->m_bShowLayerMap[layer_zone] = true;
-	pMainFrame-> m_iSelectedLayer = layer_zone;
-	GetDocument()->m_SubareaShapePoints.clear();
-
-	CListCtrl * pGISLayerList = (CListCtrl *)(pMainFrame->m_GISLayerBar).GetDlgItem(IDC_LIST_GISLAYER);
-	pGISLayerList->Invalidate(1);  // update display of selected layer
-}
-
-void CTLiteView::OnUpdateEditCreatezone(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_ToolMode == add_zone_tool ? 1 : 0);
+	//OnEditCreatesubarea();
 	Invalidate();
 
 }
@@ -7011,35 +5579,6 @@ void CTLiteView::OnUpdateOdmatrixViewtop50odpairsonly(CCmdUI *pCmdUI)
 }
 
 
-void CTLiteView::OnUpdateTransitShowtransitaccessibility(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowTransitAccessibility);
-}
-
-
-void CTLiteView::OnMovementHighlightprohibitedmovements(){
-	m_bShowProhibitedMovements = !m_bShowProhibitedMovements;
-	Invalidate();
-}
-
-void CTLiteView::OnUpdateMovementHighlightprohibitedmovements(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowProhibitedMovements);
-}
-
-
-
-
-
-void CTLiteView::OnUpdateTransitShowtransitlinksonly(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowTransitLinksOnly);
-}
-
-void CTLiteView::OnUpdateTransitShowwalklinksonly(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowWalkLinksOnly);
-}
 
 void CTLiteView::OnFilePrint()
 {
@@ -7056,242 +5595,42 @@ void CTLiteView::OnFilePrintSetup()
 	// TODO: Add your command handler code here
 }
 
-void CTLiteView::OnAgentdataShowcompletetrajectory()
-{
-		m_bShowCompleteTrajectory = !m_bShowCompleteTrajectory;
-		Invalidate();
 
-}
 
-void CTLiteView::OnUpdateAgentdataShowcompletetrajectory(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowCompleteTrajectory);
-}
 
-void CTLiteView::OnAgentdataShow()
-{
-	m_bShowAllCompleteTrajectory = !m_bShowAllCompleteTrajectory;
-}
-
-void CTLiteView::OnUpdateAgentdataShow(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowAllCompleteTrajectory);
-}
-
-
-void CTLiteView::OnDetectorUnlock()
-{
-	if (m_ToolMode != sensor_location_move_tool)
-		m_ToolMode = sensor_location_move_tool;
-	else
-		m_ToolMode = move_tool;
-
-}
-
-
-void CTLiteView::OnUpdateDetectorUnlock(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_ToolMode == sensor_location_move_tool ? 1 : 0);
-
-}
-
-
-void CTLiteView::OnDetectorShowsensordescription33769()
-{
-	m_bShowSensorDecription = !m_bShowSensorDecription;
-	Invalidate();
-}
-
-
-void CTLiteView::OnUpdateDetectorShowsensordescription33769(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowSensorDecription == true ? 1 : 0);
-}
-
-
-void CTLiteView::OnDetectorShowmatchedlinkforsensor()
-{
-	m_bShowSensorMatchedLink = !m_bShowSensorMatchedLink;
-	Invalidate();
-
-}
-
-
-void CTLiteView::OnUpdateDetectorShowmatchedlinkforsensor(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowSensorMatchedLink == true ? 1 : 0);
-}
-
-
-void CTLiteView::OnGridUnlock()
-{
-
-
-	if (m_ToolMode != network_coordinate_tool)
-		m_ToolMode = network_coordinate_tool;
-	else
-		m_ToolMode = move_tool;
-
-	m_bShowGrid = true;
-	
-	if (m_bNetworkCooridinateHints == false)
-	{
-		AfxMessageBox("Hints:\n1. Please use mouse to move the reference network and shift its coordinates;\n2. Use mouse wheel to adjust the size of the reference network (zoom);\n3. Click shift or control key together to change the horizonal or vertical size, respectively;\n4. Click on the other toolbar button to turn on disable this moving-reference-network mode.", MB_ICONINFORMATION);
-		m_bNetworkCooridinateHints = false;
-	}
-
-	Invalidate();
-
-}
-
-
-void CTLiteView::OnUpdateGridUnlock(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_ToolMode == network_coordinate_tool ? 1 : 0);
-}
-
-
-void CTLiteView::OnLinkShowhidereferencenetwork()
-{
-	m_bShowReferenceNetwork = !m_bShowReferenceNetwork;
-}
-
-
-void CTLiteView::OnUpdateLinkShowhidereferencenetwork(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowReferenceNetwork ? 1 : 0);
-}
-
-
-void CTLiteView::OnEditMovereferencenetworkcoordinates()
-{
-	if (m_ToolMode != network_coordinate_tool)
-	{
-		m_MoveLayerNo = 1; //reference layer
-		m_bShowGrid = true;
-		if (m_bNetworkCooridinateHints == false)
-		{
-			AfxMessageBox("Hints:\n1. Please use mouse to move the reference network and shift its coordinates;\n2. Use mouse wheel to adjust the size of the reference network (zoom);\n3. Click shift or control key together to change the horizonal or vertical size, respectively;\n4. Click on the other toolbar button to turn on disable this moving-reference-network mode.", MB_ICONINFORMATION);
-			m_bNetworkCooridinateHints = true;
-		}
-		m_ToolMode = network_coordinate_tool;
-	}
-	else
-		m_ToolMode = move_tool;
-
-	Invalidate();
-}
-
-
-void CTLiteView::OnUpdateEditMovereferencenetworkcoordinates(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_ToolMode == network_coordinate_tool ? 1 : 0);
-}
-
-void CTLiteView::OnDetectorShowfixedcountdetectorlocation()
-{
-	m_bShowFixedDetectorLocation = !m_bShowFixedDetectorLocation;
-	Invalidate();
-
-}
-
-
-void CTLiteView::OnDetectorShowspeedsensorlocation()
-{
-	m_bShowSpeedSensorLocation = !m_bShowSpeedSensorLocation;
-	Invalidate();
-}
-
-
-void CTLiteView::OnUpdateDetectorShowfixedcountdetectorlocation(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowFixedDetectorLocation ? 1 : 0);
-}
-
-
-void CTLiteView::OnUpdateDetectorShowspeedsensorlocation(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_bShowSpeedSensorLocation ? 1 : 0);
-}
-
-
-
-
-void CTLiteView::OnShowallowedlinksfordemandtypeDemandtype1()
-{
-	m_DislayedAgentType = 1;
-	Invalidate();
-}
-
-
-
-void CTLiteView::OnShowallowedlinksfordemandtypeDemandtype2()
-{
-	m_DislayedAgentType = 2;
-	Invalidate();
-}
-
-
-void CTLiteView::OnShowallowedlinksfordemandtypeDemandtype3()
-{
-	m_DislayedAgentType = 3;
-	Invalidate();
-}
-
-
-void CTLiteView::OnShowallowedlinksfordemandtypeDemandtype4()
-{
-	m_DislayedAgentType = 4;
-	Invalidate();
-}
-
-
-void CTLiteView::OnUpdateShowallowedlinksfordemandtypeDemandtype1(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_DislayedAgentType ==1);
-}
-
-
-void CTLiteView::OnUpdateShowallowedlinksfordemandtypeDemandtype2(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_DislayedAgentType == 2);
-}
-
-
-void CTLiteView::OnUpdateShowallowedlinksfordemandtypeDemandtype3(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_DislayedAgentType == 3);
-}
-
-
-void CTLiteView::OnUpdateShowallowedlinksfordemandtypeDemandtype4(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_DislayedAgentType == 4);
-}
-
-
-void CTLiteView::OnShowallowedlinksfordemandtypeShowall()
-{
-	m_DislayedAgentType = 0;
-	Invalidate();
-}
-
-
-void CTLiteView::OnUpdateShowallowedlinksfordemandtypeShowall(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_DislayedAgentType == 0);
-}
-
-
-void CTLiteView::OnReferencelineShowreferencelineno()
-{
-	m_DislayReferenceLineNo = true;
-	Invalidate();
-
-}
 
 
 void CTLiteView::OnBnClickedButtonSearch()
 {
 	OnSearchFindlink();
+}
+
+
+void CTLiteView::OnNodeZoneDisplay()
+{
+	// TODO: Add your command handler code here
+}
+
+
+void CTLiteView::OnToolsSubarea()
+{
+	m_ToolMode = subarea_tool;
+	CMainFrame* pMainFrame = (CMainFrame*) AfxGetMainWnd();
+
+	GetDocument()->m_SubareaShapePoints.clear();
+
+	CListCtrl * pGISLayerList = (CListCtrl *)(pMainFrame->m_GISLayerBar).GetDlgItem(IDC_LIST_GISLAYER);
+	pGISLayerList->Invalidate(1);  // update display of selected layer
+}
+
+
+void CTLiteView::OnUpdateToolsSubarea(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_ToolMode == subarea_tool ? 1 : 0);
+}
+
+
+void CTLiteView::OnCreatesubareaWritesubareafile()
+{
+	// TODO: Add your command handler code here
 }

@@ -27,10 +27,6 @@ void CDlg_DisplayConfiguration::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST_LINK_TEXT_LABEL, m_Link_Label);
 	DDX_Control(pDX, IDC_LIST_NODE_TEXT_LABEL, m_Node_Label);
-	//	DDX_Control(pDX, IDC_MOE_AGGREGATION_INTERVAL_LIST, m_AggregationIntervalList);
-	DDX_Control(pDX, IDC_LIST_MOVEMENT_TEXT_LABEL, m_Movement_Label);
-	//	DDX_Control(pDX, IDC_LIST_GPS_TEXT_LABEL, m_GPS_Label);
-	DDX_Check(pDX, IDC_CHECK_SIGNAL_NODE_ONLY, m_bShowSignalNodeMovementOnly);
 }
 
 
@@ -90,8 +86,14 @@ BOOL CDlg_DisplayConfiguration::OnInitDialog()
 	m_Node_Label.AddString("Zone ID");
 	m_Node_Label.AddString("Node Name");
 	m_Node_Label.AddString("Main Node ID");
-	//m_Node_Label.AddString("Control Type");
-	//m_Node_Label.AddString("Distance from Source Node in Mile");
+	m_Node_Label.AddString("Node Type");
+	for (int k = 1; k <= 5; k++)
+	{
+		if (theApp.m_Node_Additional_Field[k].GetLength() > 0)
+		{
+			m_Node_Label.AddString(theApp.m_Node_Additional_Field[k]);
+		}
+	}
 
 
 	m_Node_Label.SetCurSel ((int)(m_ShowNodeTextMode));
@@ -110,67 +112,34 @@ BOOL CDlg_DisplayConfiguration::OnInitDialog()
 	m_Link_Label.AddString("Lane Capacity");
 	m_Link_Label.AddString("Link Capacity");
 	m_Link_Label.AddString("Free Flow Travel Time");
-
 	m_Link_Label.AddString("Link type In Text");
 	m_Link_Label.AddString("Link type In Number");
+	m_Link_Label.AddString("macro_node_id");
 	m_Link_Label.AddString("main node id");
-	m_Link_Label.AddString("movement str");
-	m_Link_Label.AddString("NEMA phase number");
-	m_Link_Label.AddString("Total Link Volume");
-	m_Link_Label.AddString("Hourly Link Volume");
-	m_Link_Label.AddString("Lane Link Volume");
-	m_Link_Label.AddString("Avg Speed");
-	m_Link_Label.AddString("Avg Travel Time (min)");
-	m_Link_Label.AddString("V/C ratio");
+	m_Link_Label.AddString("mvmt txt id");
+	m_Link_Label.AddString("cycle length");
+	m_Link_Label.AddString("green time (start, end)");
+	m_Link_Label.AddString("Static Total Link Volume");
+	m_Link_Label.AddString("Static Hourly Link Volume");
+	m_Link_Label.AddString("Static Lane Link Volume");
+	m_Link_Label.AddString("Static Avg Static Speed");
+	m_Link_Label.AddString("Static Avg Static Travel Time (min)");
+	m_Link_Label.AddString("Static V/C ratio");
 	m_Link_Label.AddString("TD Link Volume");
 	m_Link_Label.AddString("TD Lane Volume");
 	m_Link_Label.AddString("TD Density");
 	m_Link_Label.AddString("TD Speed");
+	m_Link_Label.AddString("TD Queue Length");
 
+	for (int k = 1; k <= 5; k++)
+	{
+		if(theApp.m_Link_Additional_Field[k].GetLength() > 0)
+		{
+		m_Link_Label.AddString(theApp.m_Link_Additional_Field[k]);
+		}
+	}
 
 	m_Link_Label.SetCurSel ((int)(pView->m_ShowLinkTextMode));
-
-
-
-	m_Movement_Label.AddString("None");
-	m_Movement_Label.AddString ("Turn Type");
-	m_Movement_Label.AddString("Turn Direction");
-//	m_Movement_Label.AddString("ib_lane");
-//	m_Movement_Label.AddString("ob_lane");
-	m_Movement_Label.AddString("prohibition_flag");
-//	m_Movement_Label.AddString("capacity");
-
-		//	m_Movement_Label.AddString ("# of Lanes");
-//	m_Movement_Label.AddString ("Simulated Hourly Count");
-//	m_Movement_Label.AddString ("Simulated Turning %");
-//	m_Movement_Label.AddString ("Simulated Turn Delay (sec)");
-
-
-	m_Movement_Label.SetCurSel ((int)(pView->m_ShowMovementTextMode));
-
-	//m_GPS_Label.AddString("None");
-	//m_GPS_Label.AddString("Agent ID");
-	//m_GPS_Label.AddString("Timestamp in min");
-	//m_GPS_Label.AddString("Time Gap in min");
-	//m_GPS_Label.AddString("GPS Speed");
-	//m_GPS_Label.AddString("All Trajectories");
-	//m_GPS_Label.SetCurSel ((int)(pView->m_ShowGPSTextMode));
-
-
-	movement_text_size_vector.push_back(10);
-	movement_text_size_vector.push_back(50);
-	movement_text_size_vector.push_back(100);
-	movement_text_size_vector.push_back(150);
-	movement_text_size_vector.push_back(200);
-	movement_text_size_vector.push_back(250);
-	movement_text_size_vector.push_back(300);
-	movement_text_size_vector.push_back(500);
-	movement_text_size_vector.push_back(1000);
-	movement_text_size_vector.push_back(2000);
-	movement_text_size_vector.push_back(5000);
-
-	
-
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -199,8 +168,6 @@ void CDlg_DisplayConfiguration::OnBnClickedOk()
 
 void CDlg_DisplayConfiguration::OnLbnSelchangeListMovementTextLabel()
 {
-	pView->m_ShowMovementTextMode  = (movement_text_display_mode)m_Movement_Label.GetCurSel();
-
 	pView->Invalidate ();
 }
 

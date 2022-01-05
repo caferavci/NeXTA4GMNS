@@ -32,8 +32,6 @@
 #include "ChildFrm.h"
 #include "TLiteDoc.h"
 #include "TLiteView.h"
-#include "TSView.h"
-
 #include "DlgMOE.h"
 #include "Dlg_VehicleClassification.h"
 #include "Dlg_Legend.h"
@@ -76,12 +74,12 @@ CTLiteApp theApp;
 CTLiteApp::CTLiteApp()
 {
 
-	m_FreewayColor = RGB(030,144,255);
-	m_RampColor = RGB(160,032,240); 
-	m_ArterialColor = RGB(034,139,034);
-	m_ConnectorColor = RGB(255,165,000);
-	m_TransitColor = RGB(255,0,255);
-	m_WalkingColor = RGB(127,255,0);
+	m_Link1Color = RGB(030,144,255);
+	m_Link2Color = RGB(160,032,240); 
+	m_Link3Color = RGB(034,139,034);
+	m_Link4Color = RGB(102, 102, 255);
+	m_Link5Color = RGB(255,0,255);
+	m_Link6Color = RGB(127,255,0);
 
 	m_BackgroundColor =  RGB(255,255,255);
 
@@ -93,10 +91,14 @@ CTLiteApp::CTLiteApp()
 
 	m_ZoneColor = RGB(000,191,255);
 
-	m_AgentColor[1] = RGB(030, 144, 255);
-	m_AgentColor[2] = RGB(160, 032, 240); 
-	m_AgentColor[3] = RGB(160, 032, 240);
-	m_AgentColor[4] = RGB(160, 032, 240);
+	m_AgentColor[0] = RGB(190, 190, 190);
+	m_AgentColor[1] = RGB(190, 190, 190);
+	m_AgentColor[2] = RGB(0, 255, 0);
+	m_AgentColor[3] = RGB(255, 250, 117);
+	m_AgentColor[4] = RGB(255, 250, 0);
+	m_AgentColor[5] = RGB(255, 216, 0);
+	m_AgentColor[6] = RGB(255, 153, 0);
+	m_AgentColor[7] = RGB(255, 0, 0);
 
 	m_NEXTA_use_flag = 0;
 	m_bLoadNetworkOnly = false;
@@ -131,43 +133,7 @@ BOOL CTLiteApp::InitInstance()
 		m_NEXTA_use_flag = (int)g_GetPrivateProfileDouble("initialization", "nexta", 0, NEXTASettingsPath);
 		WritePrivateProfileString("initialization", "nexta","1",NEXTASettingsPath);
 
-		m_FreewayColor = (DWORD )g_GetPrivateProfileDouble("initialization", "FreewayColor", -1, NEXTASettingsPath);
-
-		if(m_FreewayColor<0)
-			m_FreewayColor =  RGB(030,144,255);
-
-		m_RampColor = (DWORD )g_GetPrivateProfileDouble("initialization", "RampColor", -1, NEXTASettingsPath);
-
-		if(m_RampColor<0)
-			m_RampColor =  RGB(160,032,240); 
-
-		double value = g_GetPrivateProfileDouble("initialization", "ArterialColor", -1, NEXTASettingsPath);
-
-		if(value<0)
-			m_ArterialColor =  RGB(160,032,240); 
-		else
-			m_ArterialColor = (DWORD)  value;
-
-		value = (DWORD )g_GetPrivateProfileDouble("initialization", "ConnectorColor", -1, NEXTASettingsPath);
-
-		if(value<0)
-			m_ConnectorColor =  RGB(160,032,240); 
-		else
-			m_ConnectorColor = (DWORD)  value;
-
-		value = (DWORD )g_GetPrivateProfileDouble("initialization", "TransitColor", -1, NEXTASettingsPath);
-
-		if(value<0)
-			m_TransitColor =  RGB(160,032,240); 
-		else
-			m_TransitColor = (DWORD)  value;
-
-		value = (DWORD )g_GetPrivateProfileDouble("initialization", "WalkingColor", -1, NEXTASettingsPath);
-
-		if(value<0)
-			m_WalkingColor =  RGB(160,032,240); 
-		else
-			m_WalkingColor = (DWORD)  value;
+		double value;
 			
 
 		value = (DWORD )g_GetPrivateProfileDouble("initialization", "BackgroundColor", -1, NEXTASettingsPath);
@@ -192,17 +158,37 @@ BOOL CTLiteApp::InitInstance()
 		else
 			m_NodeBrushColor = (DWORD)  value;
 
-		m_AgentColor[1] = (DWORD)g_GetPrivateProfileDouble("initialization", "AgentColor1", -1, NEXTASettingsPath);
-		m_AgentColor[2] = (DWORD)g_GetPrivateProfileDouble("initialization", "AgentColor2", -1, NEXTASettingsPath);
-		m_AgentColor[3] = (DWORD)g_GetPrivateProfileDouble("initialization", "AgentColor3", -1, NEXTASettingsPath);
-		m_AgentColor[4] = (DWORD)g_GetPrivateProfileDouble("initialization", "AgentColor4", -1, NEXTASettingsPath);
+
+		char additional_field[MAX_PATH + 1];
+		char additional_field_name[MAX_PATH + 1];
+
+
+		CString Additional_Field;
+
+		for(int k = 1; k<=5; k++)
+		{
+		sprintf(additional_field_name, "field%d", k);
+		g_GetProfileString("Node_additional_fields", additional_field_name, "", additional_field, 80, NEXTASettingsPath);
+		m_Node_Additional_Field[k].Format("%s", additional_field);
+		}
+
+		for (int k = 1; k <= 5; k++)
+		{
+			sprintf(additional_field_name, "field%d", k);
+			g_GetProfileString("Link_additional_fields", additional_field_name, "", additional_field, 80, NEXTASettingsPath);
+			m_Link_Additional_Field[k].Format("%s", additional_field);
+		}
+
+
+		//m_AgentColor[1] = (DWORD)g_GetPrivateProfileDouble("initialization", "AgentColor1", -1, NEXTASettingsPath);
+		//m_AgentColor[2] = (DWORD)g_GetPrivateProfileDouble("initialization", "AgentColor2", -1, NEXTASettingsPath);
+		//m_AgentColor[3] = (DWORD)g_GetPrivateProfileDouble("initialization", "AgentColor3", -1, NEXTASettingsPath);
+		//m_AgentColor[4] = (DWORD)g_GetPrivateProfileDouble("initialization", "AgentColor4", -1, NEXTASettingsPath);
 
 
    char lpbuffer[_MAX_PATH];
    
    int visualization_template = 1;
-
-	m_VisulizationTemplate = e_traffic_assignment;
 
 
 			m_pDocTemplate2DView = new CMultiDocTemplate(IDR_TLiteTYPE1,
@@ -215,12 +201,6 @@ BOOL CTLiteApp::InitInstance()
                 return FALSE;
         AddDocTemplate(m_pDocTemplate2DView);
 		
-		m_pTemplateTimeTableView = new CMultiDocTemplate(
-			IDR_TLiteTYPE1,
-			RUNTIME_CLASS(CTLiteDoc),
-			RUNTIME_CLASS(CChildFrame),
-			RUNTIME_CLASS(CTimeSpaceView));
-
     //The AddDocTemplate() call generated by AppWizard established the primary document/frame/view combination for the application that is effective 
         //when the program starts. 
         //The template object below is a secondary template that can be activated in response to the New GLView Window menu item.

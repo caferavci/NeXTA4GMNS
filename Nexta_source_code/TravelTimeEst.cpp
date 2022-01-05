@@ -34,11 +34,9 @@
 #include "DlgFileLoading.h"
 #include "MainFrm.h"
 #include "Shellapi.h"
-#include "DlgAssignmentSettings.h"
 #include "DlgLinkList.h"
 
 #include "Shellapi.h"
-#include "DlgNetworkAlignment.h"
 #include "Dlg_VehEmissions.h"
 #include "DlgPathList.h"
 extern CDlgPathList* g_pPathListDlg;

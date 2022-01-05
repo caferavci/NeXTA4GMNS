@@ -22,12 +22,10 @@ IMPLEMENT_DYNAMIC(CDlgLinkList, CDialog)
 CDlgLinkList::CDlgLinkList(CWnd* pParent /*=NULL*/)
 : CBaseDialog(CDlgLinkList::IDD, pParent)
 , m_ZoomToSelectedLink(FALSE)
-, m_StrDocTitles(_T(""))
 {
 
 	m_pDoc = NULL;
-	m_pDoc2 = NULL;
-	m_bDoc2Ready = false;
+
 
 }
 
@@ -41,10 +39,6 @@ void CDlgLinkList::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST, m_ListCtrl);
 	DDX_Check(pDX, IDC_CHECK_ZOOM_TO_SELECTED_LINK, m_ZoomToSelectedLink);
-	DDX_Text(pDX, IDC_DOC_TITLE, m_StrDocTitles);
-	DDX_Control(pDX, IDC_COMBO_Link_Selection, m_ComboBox);
-	DDX_Control(pDX, IDC_COMBO_StartTime, m_StartHour);
-	DDX_Control(pDX, IDC_COMBO_EndTime, m_EndHour);
 }
 
 
@@ -52,24 +46,10 @@ BEGIN_MESSAGE_MAP(CDlgLinkList, CDialog)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST, &CDlgLinkList::OnLvnItemchangedList)
 	ON_BN_CLICKED(IDOK, &CDlgLinkList::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &CDlgLinkList::OnBnClickedCancel)
-	ON_COMMAND(ID_LINKSELECTION_SHOWALLLINKS, &CDlgLinkList::OnLinkselectionShowalllinks)
-	ON_COMMAND(ID_LINKSELECTION_SHOWHIGHWAYLINKSONLY, &CDlgLinkList::OnLinkselectionShowhighwaylinksonly)
-	ON_COMMAND(ID_LINKSELECTION_SHOWRAMPLINKSONLY, &CDlgLinkList::OnLinkselectionShowramplinksonly)
-	ON_COMMAND(ID_LINKSELECTION_SHOWARTERIALLINKSONLY, &CDlgLinkList::OnLinkselectionShowarteriallinksonly)
-	ON_COMMAND(ID_LINKSELECTION_SHOWALLLINKSEXCEPTCONNECTORS, &CDlgLinkList::OnLinkselectionShowalllinksexceptconnectors)
-	ON_UPDATE_COMMAND_UI(ID_LINKSELECTION_SHOWALLLINKS, &CDlgLinkList::OnUpdateLinkselectionShowalllinks)
-	ON_UPDATE_COMMAND_UI(ID_LINKSELECTION_SHOWHIGHWAYLINKSONLY, &CDlgLinkList::OnUpdateLinkselectionShowhighwaylinksonly)
-	ON_UPDATE_COMMAND_UI(ID_LINKSELECTION_SHOWRAMPLINKSONLY, &CDlgLinkList::OnUpdateLinkselectionShowramplinksonly)
-	ON_UPDATE_COMMAND_UI(ID_LINKSELECTION_SHOWARTERIALLINKSONLY, &CDlgLinkList::OnUpdateLinkselectionShowarteriallinksonly)
-	ON_UPDATE_COMMAND_UI(ID_LINKSELECTION_SHOWALLLINKSEXCEPTCONNECTORS, &CDlgLinkList::OnUpdateLinkselectionShowalllinksexceptconnectors)
 	ON_BN_CLICKED(IDC_CHECK_ZOOM_TO_SELECTED_LINK, &CDlgLinkList::OnBnClickedCheckZoomToSelectedLink)
 	ON_BN_CLICKED(IDBARCHARTPIECHART, &CDlgLinkList::OnBnClickedBarchartpiechart)
-	ON_COMMAND(ID_LINKSELECTION_SHOWSELECTEDLINKSONLY, &CDlgLinkList::OnLinkselectionShowselectedlinksonly)
-	ON_UPDATE_COMMAND_UI(ID_LINKSELECTION_SHOWSELECTEDLINKSONLY, &CDlgLinkList::OnUpdateLinkselectionShowselectedlinksonly)
 	ON_CBN_SELCHANGE(IDC_COMBO_Link_Selection, &CDlgLinkList::OnCbnSelchangeComboLinkSelection)
 	ON_BN_CLICKED(ID_EXPORT, &CDlgLinkList::OnBnClickedExport)
-	ON_CBN_SELCHANGE(IDC_COMBO_StartTime, &CDlgLinkList::OnCbnSelchangeComboStarttime)
-	ON_CBN_SELCHANGE(IDC_COMBO_EndTime, &CDlgLinkList::OnCbnSelchangeComboEndtime)
 	ON_STN_CLICKED(IDC_DOC_TITLE, &CDlgLinkList::OnStnClickedDocTitle)
 
 END_MESSAGE_MAP()
@@ -82,32 +62,6 @@ END_MESSAGE_MAP()
 BOOL CDlgLinkList::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-
-
-	m_ComboBox.AddString ("All Links");
-	m_ComboBox.AddString ("Selected Links");
-	m_ComboBox.AddString ("Within Subarea");
-	m_ComboBox.AddString ("Freeway");
-	m_ComboBox.AddString ("Highway");
-	m_ComboBox.AddString ("Arterial");
-	m_ComboBox.AddString ("Ramp");
-	m_ComboBox.AddString ("Connectors");
-	m_ComboBox.AddString ("All Links Except Connectors");
-
-
-	for (int i = 0; i<= 24; i++)
-	{
-		CString str;
-		str.Format("%d",i);
-	
-		m_StartHour.AddString (str);
-		m_EndHour.AddString (str);
-	}
-
-	m_StartHour.SetCurSel(0);
-	m_EndHour.SetCurSel(24);
-
-	m_ComboBox.SetCurSel (0);
 
 	// Give better margin to editors
 	m_ListCtrl.SetCellMargin(1.2);
@@ -134,11 +88,6 @@ void CDlgLinkList::ReloadData()
 	}
 
 	m_ListedLinkNoVector.clear();
-	if(m_bDoc2Ready)
-	{
-		m_StrDocTitles.Format("1: %s; 2: %s", m_pDoc->m_ProjectTitle , m_pDoc2->m_ProjectTitle); 
-		UpdateData(0);
-	}
 
 	std::vector<std::string> m_Column_names;
 
@@ -161,20 +110,11 @@ void CDlgLinkList::ReloadData()
 	m_Column_names.push_back ("Total Volume");
 	m_Column_names.push_back ("Hourly Volume");
 	m_Column_names.push_back ("Hourly Lane Volume");
-	m_Column_names.push_back("Travel Time");
 	m_Column_names.push_back("Speed");
 	m_Column_names.push_back("VOC");
 
 //	m_Column_names.push_back ("Waiting Time at Origin");
 
-
-	if(m_bDoc2Ready)
-	{
-		m_Column_names.push_back ("P2 total link volume");
-		m_Column_names.push_back("P2 Speed");
-		m_Column_names.push_back ("Diff total Volume");
-		m_Column_names.push_back ("Diff Speed");
-	}
 
 	//Add Columns and set headers
 	for (size_t i=0;i<m_Column_names.size();i++)
@@ -187,8 +127,6 @@ void CDlgLinkList::ReloadData()
 	}
 	m_ListCtrl.SetColumnWidth(0, 80);
 
-	int MOE_start_time_in_min = m_StartHour.GetCurSel()*60;
-	int MOE_end_time_in_min =  m_EndHour.GetCurSel()*60;
 
 	std::list<DTALink*>::iterator iLink;
 	int i = 0;
@@ -277,13 +215,10 @@ void CDlgLinkList::ReloadData()
 		column_index++;
 
 
-		sprintf_s(text, "%.0f",pLink1->m_total_link_volume);
+		sprintf_s(text, "%.0f",pLink1->m_static_link_volume);
 		m_ListCtrl.SetItemText(Index,column_index++,text);
 
 		sprintf_s(text, "%.0f", pLink1->m_hourly_link_volume);
-		m_ListCtrl.SetItemText(Index,column_index++,text);
-
-		sprintf_s(text, "%.0f", pLink1->m_hourly_link_volume /max(1,pLink1->m_NumberOfLanes) );
 		m_ListCtrl.SetItemText(Index,column_index++,text);
 
 //		float max_density , avg_density;
@@ -302,50 +237,8 @@ void CDlgLinkList::ReloadData()
 		sprintf_s(text, "%.2f", (*iLink)->m_MeanSpeed);
 		m_ListCtrl.SetItemText(Index, column_index++, text);
 
-		sprintf_s(text, "%.2f", pLink1->m_VoCRatio);
+		sprintf_s(text, "%.2f", pLink1->m_StaticVoCRatio);
 		m_ListCtrl.SetItemText(Index,column_index++,text);
-
-		//sprintf_s(text, "%.1f",pLink1->m_avg_waiting_time_on_loading_buffer       );
-		//m_ListCtrl.SetItemText(Index,column_index++,text);
-
-		//sprintf_s(text, "%.0f",pLink1->m_total_sensor_link_volume        );
-		//m_ListCtrl.SetItemText(Index,column_index++,text);
-
-		//float error = 0;
-		//if( pLink1->m_ReferenceFlowVolume >=1)
-		//	error = pLink1->m_total_link_volume - pLink1->m_total_sensor_link_volume ;
-		//sprintf_s(text, "%.0f", error);
-		//m_ListCtrl.SetItemText(Index,column_index++,text);
-
-		//float error_percentage = error / max(1,pLink1->m_total_sensor_link_volume)*100 ;
-		//sprintf_s(text, "%.1f", error_percentage);
-		//m_ListCtrl.SetItemText(Index,column_index++,text);
-
-		if(m_bDoc2Ready)
-		{
-			DTALink* pLink2 = m_pDoc2->FindLinkWithNodeIDs (pLink1->m_FromNodeID ,pLink1->m_ToNodeID );
-			if(pLink2!=NULL)  // a link is found in the second document
-			{
-				sprintf_s(text, "%.0f",pLink2->m_total_link_volume        );
-			m_ListCtrl.SetItemText(Index,column_index++,text);
-
-				sprintf_s(text, "%5.2f",pLink2->m_MeanSpeed);
-				m_ListCtrl.SetItemText(Index,column_index++,text);
-		//	 calculate difference
-				sprintf_s(text, "%.0f",pLink2->m_total_link_volume  - pLink1->m_total_link_volume     );
-				m_ListCtrl.SetItemText(Index,column_index++,text);
-
-				sprintf_s(text, "%5.2f",pLink2->m_MeanSpeed - pLink1->m_MeanSpeed);
-				m_ListCtrl.SetItemText(Index,column_index++,text);
-
-		//		double total_travel_time = pLink2->m_total_link_volume* pLink2->m_Length / max (0.1, pLink2->m_TD_speed);
-		//		double total_travel_time_2 = pLink1 ->m_total_link_volume*pLink1->m_Length / max (0.1, pLink1->m_TD_speed);
-		//		sprintf_s(text, "%.2f",total_travel_time -  total_travel_time_2   );
-		//		m_ListCtrl.SetItemText(Index,column_index++,text);
-
-			}
-		} // second document
-		// 16
 
 
 		m_ListedLinkNoVector.push_back(pLink1->m_LinkNo );
@@ -363,17 +256,9 @@ void CDlgLinkList::OnLvnItemchangedList(NMHDR *pNMHDR, LRESULT *pResult)
 	if(g_TestValidDocument(m_pDoc)==false)
 		return;
 
-	if(m_bDoc2Ready)
-	{
-		if(g_TestValidDocument(m_pDoc2)==false)
-			return;
-	}
-
 	// 
 	m_pDoc->m_SelectedLinkNo = -1;
 
-	if(m_bDoc2Ready)
-		m_pDoc2->m_SelectedLinkNo = -1;
 
 	g_ClearLinkSelectionList();
 
@@ -390,8 +275,6 @@ void CDlgLinkList::OnLvnItemchangedList(NMHDR *pNMHDR, LRESULT *pResult)
 		int LinkNo = atoi(str);
 		m_pDoc->m_SelectedLinkNo = LinkNo;
 
-		if(m_pDoc2)
-			m_pDoc2->m_SelectedLinkNo = LinkNo;
 		DTALink* pLink = m_pDoc->m_LinkNoMap [LinkNo];
 
 		g_AddLinkIntoSelectionList(pLink,LinkNo,m_pDoc->m_DocumentNo );
@@ -403,16 +286,11 @@ void CDlgLinkList::OnLvnItemchangedList(NMHDR *pNMHDR, LRESULT *pResult)
 
 		m_pDoc->ZoomToSelectedLink(m_pDoc->m_SelectedLinkNo);
 
-		if(m_bDoc2Ready)
-			m_pDoc2->ZoomToSelectedLink(m_pDoc->m_SelectedLinkNo);
 	}
 
 	Invalidate();
 
 	m_pDoc->UpdateAllViews(0);
-
-	if(m_bDoc2Ready)
-		m_pDoc2->UpdateAllViews(0);
 
 }
 
@@ -429,62 +307,6 @@ void CDlgLinkList::OnBnClickedCancel()
 }
 
 
-void CDlgLinkList::OnLinkselectionShowalllinks()
-{
-	m_LinkSelectionMode = eLinkSelection_AllLinks;
-	ReloadData();
-}
-
-
-void CDlgLinkList::OnLinkselectionShowhighwaylinksonly()
-{
-	m_LinkSelectionMode = eLinkSelection_FreewayOnly;
-	ReloadData();
-}
-void CDlgLinkList::OnLinkselectionShowramplinksonly()
-{
-	m_LinkSelectionMode = eLinkSelection_RampOnly;
-	ReloadData();
-}
-
-void CDlgLinkList::OnLinkselectionShowarteriallinksonly()
-{
-	m_LinkSelectionMode = eLinkSelection_ArterialOnly;
-	ReloadData();
-
-}
-
-void CDlgLinkList::OnLinkselectionShowalllinksexceptconnectors()
-{
-	m_LinkSelectionMode = eLinkSelection_NoConnectors;
-	ReloadData();
-}
-
-void CDlgLinkList::OnUpdateLinkselectionShowalllinks(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_LinkSelectionMode == eLinkSelection_AllLinks);
-}
-
-void CDlgLinkList::OnUpdateLinkselectionShowhighwaylinksonly(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_LinkSelectionMode == eLinkSelection_FreewayOnly);
-}
-
-void CDlgLinkList::OnUpdateLinkselectionShowramplinksonly(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_LinkSelectionMode == eLinkSelection_RampOnly);
-}
-
-void CDlgLinkList::OnUpdateLinkselectionShowarteriallinksonly(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_LinkSelectionMode == eLinkSelection_ArterialOnly);
-}
-
-void CDlgLinkList::OnUpdateLinkselectionShowalllinksexceptconnectors(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(m_LinkSelectionMode == eLinkSelection_NoConnectors);
-}
-
 
 void CDlgLinkList::OnBnClickedCheckZoomToSelectedLink()
 {
@@ -493,12 +315,16 @@ void CDlgLinkList::OnBnClickedCheckZoomToSelectedLink()
 
 void CDlgLinkList::OnBnClickedBarchartpiechart()
 {
-	CDlg_AgentClassification dlg;
-	dlg.m_pDoc = m_pDoc;
-	m_pDoc->m_AgentSelectionMode = CLS_link_set;
 
-	dlg.m_AgentSelectionNo  = CLS_link_set;
-	dlg.DoModal ();
+	if(m_pDoc!=NULL)
+	{
+		CDlg_AgentClassification dlg;
+		dlg.m_pDoc = m_pDoc;
+		m_pDoc->m_AgentSelectionMode = CLS_link_set;
+
+		dlg.m_AgentSelectionNo  = CLS_link_set;
+		dlg.DoModal ();
+	}
 
 }
 
@@ -517,92 +343,15 @@ void CDlgLinkList::OnUpdateLinkselectionShowselectedlinksonly(CCmdUI *pCmdUI)
 void CDlgLinkList::OnCbnSelchangeComboLinkSelection()
 {
 
-	m_LinkSelectionMode = (eLinkSelectionMode) m_ComboBox.GetCurSel();
-	ReloadData();
-
 }
 
 void CDlgLinkList::OnBnClickedExport()
 {
 
-	if(m_pDoc->m_ProjectDirectory .GetLength () > 0)
-	{
-	CString fname;
-	
-		fname = m_pDoc->m_ProjectDirectory + "export_link_moe_list.csv"; 
-		CWaitCursor wait;
-
-		if(!ExportDataToCSVFile(fname))
-		{ CString str;
-			str.Format("The file %s could not be opened.\nPlease check if it is opened by Excel.", fname);
-			AfxMessageBox(str);
-		}else
-		{
-			m_pDoc->OpenCSVFileInExcel(fname);
-		}
-	}
-
 }
 
 
-bool CDlgLinkList::ExportDataToCSVFile(CString csv_file)
-{
-	FILE* st;
-	fopen_s(&st,csv_file,"w");
-	CWaitCursor wc;
 
-	if(st!=NULL)
-	{
-		fprintf(st,"geometry,");  // for GIS data conversion
-		for(int column = 0; column < m_ListCtrl.GetColumnCount (); column++)
-		{
-			fprintf(st,"%s,", m_ListCtrl.GetColumnHeading (column));
-		}
-		fprintf(st,"\n");  // for GIS data conversion
-
-		for(int row = 0; row < m_ListCtrl.GetItemCount (); row++)
-		{
-			std::string  geo_string = "\"" + m_pDoc->m_LinkNoMap[m_ListedLinkNoVector[row]]->m_geo_string + "\"";
-
-			fprintf(st,"%s,",geo_string.c_str ());
-
-			for(int column = 0; column < m_ListCtrl.GetColumnCount (); column++)
-			{
-				char str[100];
-				m_ListCtrl.GetItemText (row,column,str,100);
-
-				fprintf(st,"%s,",str);
-			}
-
-			fprintf(st,"\n");
-
-		}
-
-		fclose(st);
-		return true;
-	}
-
-	return false;
-}
-
-
-void CDlgLinkList::OnCbnSelchangeComboStarttime()
-{
-
-	if(m_StartHour.GetCurSel() >= m_EndHour.GetCurSel())
-		m_EndHour.SetCurSel(min(24,m_StartHour.GetCurSel()+1));
-
-	ReloadData();
-
-}
-
-void CDlgLinkList::OnCbnSelchangeComboEndtime()
-{
-	if(m_StartHour.GetCurSel() >= m_EndHour.GetCurSel())
-		m_EndHour.SetCurSel(min(24,m_StartHour.GetCurSel()+1));
-
-	ReloadData();
-}
 
 void CDlgLinkList::OnStnClickedDocTitle()
 {

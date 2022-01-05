@@ -39,8 +39,7 @@ public:
 	int nLane;
 	int LinkType;
 
-	CComboBox m_LinkTypeComboBox;
-	
+
 	float DefaultSpeedLimit;
 	int DefaultCapacity;
 	int DefaultnLane;
@@ -54,6 +53,10 @@ public:
 	afx_msg void OnCbnSelchangeCombo1();
 	CString m_LinkID;
 	CString StreetName;
+	CString mvmt_txt_id;
+	CString main_node_id;
+	CString nema_phase;
+
 	afx_msg void OnEnChangeEditLength();
 	afx_msg void OnBnClickedButtonUpdate();
 	afx_msg void OnEnChangeEditStreetName();
@@ -75,4 +78,17 @@ public:
 	afx_msg void OnEnChangeEditNumlanesRightTurn();
 	afx_msg void OnEnChangeEdit8();
 	afx_msg void OnBnClickedCheck2();
+	int m_cycle_length;
+	int m_start_green;
+	int m_end_of_green;
+	CStatic m_AddField1;
+	CStatic m_AddField2;
+	CStatic m_AddField3;
+	CStatic m_AddField4;
+	CStatic m_AddField5;
+	CString m_AddFieldValue1;
+	CString m_AddFieldValue2;
+	CString m_AddFieldValue3;
+	CString m_AddFieldValue4;
+	CString m_AddFieldValue5;
 };

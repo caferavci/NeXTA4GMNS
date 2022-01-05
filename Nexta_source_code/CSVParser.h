@@ -38,12 +38,52 @@ public:
 	ifstream inFile;
 	vector<string> LineFieldsValue;
 	vector<string> Headers;
+
 	map<string,int> FieldsIndices;
+
+	map<string, int> FieldsIndices_read;
 
 	vector<string> ParseLine(string line);
 	vector<int> LineIntegerVector;
 
 public:
+	string GetUnreadHeaders()
+	{
+		string str_UnreadHeaders;
+		
+		for (unsigned i = 0; i < Headers.size(); i++)
+		{
+			if (FieldsIndices_read.find(Headers[i]) == FieldsIndices_read.end())  // unread
+			{
+
+				str_UnreadHeaders += Headers[i];
+				str_UnreadHeaders += ",";
+			}
+		}
+
+		return str_UnreadHeaders;
+
+	}
+
+	string GetUnreadLineFieldsValues()
+	{
+		string str_LineFieldsValues;
+
+		for (unsigned i = 0; i < Headers.size(); i++)
+		{
+			if (FieldsIndices_read.find(Headers[i]) == FieldsIndices_read.end())  // unread
+			{
+
+				if(i < LineFieldsValue.size() &&  LineFieldsValue[i].size() > 0)
+				str_LineFieldsValues += LineFieldsValue[i];
+
+				str_LineFieldsValues += ",";
+
+			}
+		}
+		return str_LineFieldsValues;
+
+	}
 	void  ConvertLineStringValueToIntegers()
 	{
 		LineIntegerVector.clear();
@@ -137,31 +177,36 @@ public:
 
 			return false;
 	}
-	template <class T> bool GetValueByFieldName(string field_name, T& value, bool NonnegativeFlag  = true)
+	template <class T> int GetValueByFieldName(string field_name, T& value, bool NonnegativeFlag  = true)
 	{
-		if (FieldsIndices.find(field_name) == FieldsIndices.end())
+		if (FieldsIndices.find(field_name) == FieldsIndices.end())  // field not defined
 		{
-			return false;
+			return -1;
 		}
 		else
-		{
+		{	// field is defined 
+
 			if (LineFieldsValue.size() == 0)
 			{
-				return false;
+				return 0;
 			}
 
 			int size = (int)(LineFieldsValue.size());
 			if(FieldsIndices[field_name]>= size)
 			{
-				return false;
+				return 0;
 			}
 
 			string str_value = LineFieldsValue[FieldsIndices[field_name]];
 
+			FieldsIndices_read[field_name] = 1;  // the data item has been read
+
+
 			if (str_value.length() <= 0)
 			{
-				return false;
+				return 0;
 			}
+
 
 			istringstream ss(str_value);
 
@@ -170,14 +215,14 @@ public:
 
 			if (/*!ss.eof() || */ ss.fail())
 			{
-				return false;
+				return 0;
 			}
 
 			if(NonnegativeFlag && converted_value<0)
 				converted_value = 0;
 
 			value = converted_value;
-			return true;
+			return 1;
 		}
 	}
 
@@ -200,6 +245,8 @@ public:
 				return false;
 			}
 			string str_value = LineFieldsValue[index];
+
+			FieldsIndices_read[field_name] = 1;  // the data item has been read
 
 			if (str_value.length() <= 0)
 			{

@@ -34,6 +34,30 @@ CGeometry::CGeometry(string s)
 
 		m_Type = POINT;
 	}
+	else if (s.find("MULTILINESTRING ") != std::string::npos)
+	{
+		tmp = s.substr(s.find_first_not_of(' '));
+		size_t start_idx = tmp.find_first_of('((');
+		size_t end_idx = tmp.find_first_of('))');
+
+		if (start_idx == std::string::npos || end_idx == std::string::npos)
+			return;
+
+		string type_str = tmp.substr(0, start_idx);
+		type_str.erase(type_str.find_last_not_of(" ") + 1);		// works for 'LINESTRING (....' and 'LINESTRING(....'
+
+		string start_tag = "((";
+		string end_tag = "))";
+
+		start_idx = tmp.find(start_tag);
+		start_idx += start_tag.length();
+		end_idx = tmp.find(end_tag);
+
+		tmp = tmp.substr(start_idx, end_idx - start_idx);
+
+
+		m_Type = LINE;
+	}
 	else if (s.find("LINESTRING") != std::string::npos)
 	{
 		tmp = s.substr(s.find_first_not_of(' '));

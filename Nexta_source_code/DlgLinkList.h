@@ -16,11 +16,6 @@ class CDlgLinkList : public CBaseDialog
 {
 	DECLARE_DYNAMIC(CDlgLinkList)
 	CTLiteDoc* m_pDoc;
-	CTLiteDoc* m_pDoc2;
-	bool m_bDoc2Ready;
-
-
-	bool ExportDataToCSVFile(CString csv_file);
 
 public:
 
@@ -43,29 +38,12 @@ public:
 	afx_msg void OnLvnItemchangedList(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedCancel();
-	afx_msg void OnLinkselectionShowalllinks();
-	afx_msg void OnLinkselectionShowhighwaylinksonly();
-	afx_msg void OnLinkselectionShowramplinksonly();
-	afx_msg void OnLinkselectionShowarteriallinksonly();
-	afx_msg void OnLinkselectionShowalllinksexceptconnectors();
-	afx_msg void OnUpdateLinkselectionShowalllinks(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateLinkselectionShowhighwaylinksonly(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateLinkselectionShowramplinksonly(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateLinkselectionShowarteriallinksonly(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateLinkselectionShowalllinksexceptconnectors(CCmdUI *pCmdUI);
 	BOOL m_ZoomToSelectedLink;
-	CString m_StrDocTitles;
-
 	afx_msg void OnBnClickedCheckZoomToSelectedLink();
 	afx_msg void OnBnClickedBarchartpiechart();
 	afx_msg void OnLinkselectionShowselectedlinksonly();
 	afx_msg void OnUpdateLinkselectionShowselectedlinksonly(CCmdUI *pCmdUI);
-	CComboBox m_ComboBox;
 	afx_msg void OnCbnSelchangeComboLinkSelection();
 	afx_msg void OnBnClickedExport();
-	CComboBox m_StartHour;
-	CComboBox m_EndHour;
-	afx_msg void OnCbnSelchangeComboStarttime();
-	afx_msg void OnCbnSelchangeComboEndtime();
 	afx_msg void OnStnClickedDocTitle();
 };

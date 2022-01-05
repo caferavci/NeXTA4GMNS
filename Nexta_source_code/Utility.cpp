@@ -263,20 +263,37 @@ double g_GetPoint2Point_Distance(GDPoint p1, GDPoint p2)
 return pow(((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y)),0.5);
 }
 
-double g_CalculateP2PDistanceInMileFromLatitudeLongitude(GDPoint p1, GDPoint p2)
+double g_CalculateP2PDistanceInMeterFromLatitudeLongitude(GDPoint p1, GDPoint p2)
 {
-	       double Equatorial_Radius = 3963.19059; // unit: mile
-	       double toradians=3.1415926/180.0;
-	       double todeg = 180.0/PI;
+	double longitud1;
+	double latitud1;
+	double longitud2;
+	double latitud2;
 
-	       double p2lat= p2.x*toradians;
-	       double p2lng= p2.y*toradians;
+	longitud1 = p1.x;
+	latitud1 = p1.y;
 
-	       double p1lat= p1.x*toradians;
-	       double p1lng= p1.y*toradians;
+	longitud2 = p2.x;
+	latitud2 = p2.y;
 
-	       double distance=acos(sin(p1lat)*sin(p2lat)+cos(p1lat)*cos(p2lat)*cos(p2lng-p1lng))*Equatorial_Radius;  // unit: mile
-		   return distance;
+	double PI_constant = 3.14159265358979323846;
+	double RADIO_TERRESTRE = 6372797.56085;
+	double GRADOS_RADIANES = PI_constant / 180;
+
+	double haversine;
+	double temp;
+	double distancia_puntos;
+
+	latitud1 = latitud1 * GRADOS_RADIANES;
+	longitud1 = longitud1 * GRADOS_RADIANES;
+	latitud2 = latitud2 * GRADOS_RADIANES;
+	longitud2 = longitud2 * GRADOS_RADIANES;
+
+	haversine = (pow(sin((1.0 / 2) * (latitud2 - latitud1)), 2)) + ((cos(latitud1)) * (cos(latitud2)) * (pow(sin((1.0 / 2) * (longitud2 - longitud1)), 2)));
+	temp = 2 * asin(fmin(1.0, sqrt(haversine)));
+	distancia_puntos = RADIO_TERRESTRE * temp ;
+
+	return distancia_puntos;
 }
 
 

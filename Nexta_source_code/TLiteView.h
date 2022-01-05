@@ -35,16 +35,11 @@ enum tool
    select_link_tool, 
    select_feature_tool, 
    backgroundimage_tool,
-   network_coordinate_tool, 
    create_1waylink_tool,
    create_2waylinks_tool, 
    create_node_tool, 
    subarea_tool,
    move_node_tool,
-   add_zone_tool,
-   sensor_location_move_tool,
-   network_location_move_tool
-
    };
 
 enum link_text_display_mode
@@ -61,7 +56,12 @@ enum link_text_display_mode
    link_display_free_flow_travel_time, 
    link_display_link_type_in_text,
    link_display_link_type_in_number,
-     link_display_total_link_volume,
+   link_display_macro_node_id,
+   link_display_main_node_id,
+   link_display_mvmt_text_id,
+   link_display_timing_cycle_length,
+   link_display_timing_green_time,
+   link_display_total_link_volume,
    link_display_hourly_link_volume,
    link_display_hourly_lane_volume,
    link_display_avg_speed,
@@ -72,6 +72,11 @@ enum link_text_display_mode
    link_display_time_dependent_density,
    link_display_time_dependent_speed_mph,
    link_display_time_dependent_queue_length,
+   link_display_additional_field1,
+   link_display_additional_field2,
+   link_display_additional_field3,
+   link_display_additional_field4,
+   link_display_additional_field5,
 
    link_display_separator_3,
 
@@ -86,51 +91,6 @@ enum link_text_display_mode
 	link_display_time_dependent_congestion_start_time,
 
 };
-enum movement_text_display_mode
-   { 
-   movement_display_none = 0, 
-   movement_display_turn_type, 
-   movement_display_turn_direction,
-   movement_display_turn_prohibited,
-
-   movement_display_sim_turn_percentage, 
-   movement_display_sim_turn_delay, 
-   movement_display_QEM_Phase1,
-   movement_display_QEM_EffectiveGreen,
-
-   movement_display_turn_up_node_number, 
-   movement_display_turn_dest_node_number, 
-   movement_display_turn_three_node_numbers, 
-
-   movement_display_sim_turn_count, 
-
-
-
-   movement_display_sim_turn_delay_in_min, 
-   movement_display_obs_turn_hourly_count,
-   movement_display_obs_turn_percentage, 
-   movement_display_obs_turn_delay,
-
-   movement_display_QEM_Shared,
-   movement_display_QEM_Width,
-   movement_display_QEM_Storage,
-   movement_display_QEM_StLanes,
-   movement_display_QEM_Grade,
-   movement_display_QEM_Speed,
-   movement_display_QEM_IdealFlow,
-   movement_display_QEM_LostTime,
-   movement_display_QEM_PermPhase1,
-   movement_display_QEM_DetectPhase1,
-
-   movement_display_QEM_TurnVolume,
-   movement_display_QEM_TurnPercentage,
-
-   movement_display_QEM_Capacity,
-   movement_display_QEM_VOC,
-   movement_display_QEM_SatFlow,
-   movement_display_QEM_Delay,
-   movement_display_QEM_LOS,
-};
 
 enum node_display_mode
    { node_display_none = 0, 
@@ -138,13 +98,12 @@ enum node_display_mode
    node_display_zone_number, 
    node_display_intersection_name,
    node_display_main_node_id,
-   node_display_sequential_node_number,
    node_display_control_type,
-   node_display_cycle_length_in_second,
-   node_display_cycle_length_in_second_for_signal_only, 
-   node_display_offset_in_second_for_signal_only, 
-   node_display_travel_time_from_origin
-
+   node_display_additional_field1,
+   node_display_additional_field2,
+   node_display_additional_field3,
+	node_display_additional_field4,
+	node_display_additional_field5
 };
 
 enum GPS_display_mode
@@ -388,7 +347,6 @@ bool RectIsInsideScreen(CRect rect, CRect screen_bounds)
 	bool m_bShowTransit;
 	bool m_bShowAVISensor;
 	
-	bool m_bShowReferenceNetwork;
 	bool m_bShowSensorDecription;
 	bool m_bShowSensorMatchedLink;
 	LPPOINT m_subarea_points;
@@ -416,13 +374,12 @@ bool RectIsInsideScreen(CRect rect, CRect screen_bounds)
 	GPS_display_mode m_ShowGPSTextMode;
 
 	link_text_display_mode m_ShowLinkTextMode;
-	movement_text_display_mode m_ShowMovementTextMode;
 
 	double 	m_MovmentTextSize;
 	double 	m_LinkTextSize;
 	int m_NodeDisplayBoundarySize; 
 
-	bool m_bShowAgentNumber;
+	bool m_bShowAgentID;
 	bool m_bShowSelectedAgentOnly;
 	bool m_bShowImage;
 	bool m_bShowLinkType;
@@ -436,8 +393,6 @@ bool RectIsInsideScreen(CRect rect, CRect screen_bounds)
 	void FitNetworkToScreen();
 	void DrawObjects(CDC* pDC);
 	void DrawBitmap(CDC *pDC, CPoint point,UINT nIDResource );
-	void DrawPublicTransitLayer(CDC *pDC);
-	void DrawPublicTransitAccessibilityLayer(CDC *pDC);
 	void DrawTemporalLink(CPoint start_point, CPoint end_point);
 
 
@@ -517,11 +472,11 @@ bool RectIsInsideScreen(CRect rect, CRect screen_bounds)
 			if(bConnected)
 			{
 				if(pDoc->m_LongLatFlag)  // bLongLatFlag is user input,  m_LongLatFlag is the system input from the project file 
-					(*iLink)->m_Length   =  g_CalculateP2PDistanceInMileFromLatitudeLongitude((*iLink)->m_FromPoint , (*iLink)->m_ToPoint);
+					(*iLink)->m_Length   =  g_CalculateP2PDistanceInMeterFromLatitudeLongitude((*iLink)->m_FromPoint , (*iLink)->m_ToPoint);
 				else 
 					(*iLink)->m_Length   = (*iLink)->DefaultDistance()/max(0.0000001,pDoc->m_UnitDistance);
 
-				(*iLink)->UpdateShapePointsBasedOnEndPoints(pDoc->m_UnitDistance*pDoc->m_LaneWidthInKM);  // 20 feet per lane)
+				(*iLink)->UpdateShapePointsBasedOnEndPoints(pDoc->m_UnitDistance*pDoc->m_LaneWidthInMeter);  // 20 feet per lane)
 			}
 		}
 	}
@@ -567,9 +522,6 @@ public:
 	int m_NodeTextFontSize;
 
 	void DrawNode(CDC *pDC, DTANode* pNode, CPoint point, int node_size,TEXTMETRIC tm);
-	void DrawNodePieChart(CDC *pDC, DTANode* pNode, CPoint point, int chart_size, int LOS);
-	void DrawNodeRadarChart(CDC *pDC, DTANode* pNode, CPoint point, int chart_size, float delay_ratio, int LOS);
-
 
 
 	
@@ -655,14 +607,6 @@ void ArrowTo(HDC hDC, const POINT *lpTo, ARROWSTRUCT *pA)
 	}
 }
 
-bool m_bShowTransitAccessibility;
-bool m_bShowProhibitedMovements;
-
-bool m_bShowTransitLinksOnly;
-bool m_bShowWalkLinksOnly;
-
-bool m_bShowFixedDetectorLocation;
-bool m_bShowSpeedSensorLocation;
 
 int m_DislayedAgentType;
 bool m_DislayReferenceLineNo;
@@ -671,9 +615,6 @@ public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-	int m_MoveLayerNo;
-	bool m_bShowCompleteTrajectory;
-	bool m_bShowAllCompleteTrajectory;
 protected:
 
 // Implementation
@@ -710,8 +651,6 @@ protected:
 public:
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnSearchFindlink();
-	afx_msg void OnEditChangebackgroupimagethroughmouse();
-	afx_msg void OnUpdateEditChangebackgroupimagethroughmouse(CCmdUI *pCmdUI);
 	afx_msg void OnViewBackgroundimage();
 	afx_msg void OnUpdateViewBackgroundimage(CCmdUI *pCmdUI);
 	afx_msg void OnViewShowlinktype();
@@ -731,7 +670,6 @@ public:
 	afx_msg void OnShowLinkarrow();
 	afx_msg void OnUpdateShowLinkarrow(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMoeAgent(CCmdUI *pCmdUI);
-	afx_msg void OnImageLockbackgroundimageposition();
 	afx_msg void OnViewTextlabel();
 	afx_msg void OnUpdateViewTextlabel(CCmdUI *pCmdUI);
 	afx_msg void OnLinkDelete();
@@ -743,12 +681,6 @@ public:
 	afx_msg void OnEditSelectnode();
 	afx_msg void OnViewSelectNode();
 	afx_msg void OnUpdateViewSelectNode(CCmdUI *pCmdUI);
-	afx_msg void OnEditCreatesubarea();
-	afx_msg void OnUpdateEditCreatesubarea(CCmdUI *pCmdUI);
-	afx_msg void OnToolsRemovenodesandlinksoutsidesubarea();
-	afx_msg void OnViewShowAVISensor();
-	afx_msg void OnUpdateViewShowAVISensor(CCmdUI *pCmdUI);
-	afx_msg void OnFileDataexchangewithgooglefusiontables();
 	afx_msg void OnEditDeletelinksoutsidesubarea();
 	afx_msg void OnEditMovenetworkcoordinates();
 	afx_msg void OnUpdateEditMovenetworkcoordinates(CCmdUI *pCmdUI);
@@ -762,8 +694,6 @@ public:
 	afx_msg void OnLinkIncreasebandwidth();
 	afx_msg void OnLinkDecreasebandwidth();
 	afx_msg void OnLinkSwichtolineBandwidthMode();
-	afx_msg void OnViewTransitlayer();
-	afx_msg void OnUpdateViewTransitlayer(CCmdUI *pCmdUI);
 	afx_msg void OnNodeMovementproperties();
 	afx_msg void OnLinkLinedisplaymode();
 	afx_msg void OnUpdateLinkLinedisplaymode(CCmdUI *pCmdUI);
@@ -777,9 +707,6 @@ public:
 	afx_msg void OnUpdateMoeOddemand(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateLinkIncreasebandwidth(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateLinkDecreasebandwidth(CCmdUI *pCmdUI);
-	afx_msg void OnExportCreatevissimfiles();
-	afx_msg void OnDebugShowAgentswithincompletetripsonly();
-	afx_msg void OnUpdateDebugShowAgentswithincompletetripsonly(CCmdUI *pCmdUI);
 	afx_msg void OnAgentAgentnumber();
 	afx_msg void OnUpdateAgentAgentnumber(CCmdUI *pCmdUI);
 	afx_msg void OnAgentShowselectedAgentonly();
@@ -794,9 +721,6 @@ public:
 	afx_msg void OnEditMovenode();
 	afx_msg void OnUpdateEditMovenode(CCmdUI *pCmdUI);
 
-	afx_msg void OnBackgroundimageMarklongA();
-	afx_msg void OnBackgroundimageMarklongB();
-	afx_msg void OnBackgroundimageAddlat();
 	afx_msg void OnZoneHighlightassociatedacititylocations();
 	afx_msg void OnUpdateZoneHighlightassociatedacititylocations(CCmdUI *pCmdUI);
 	afx_msg void OnZoneCreatezone();
@@ -812,7 +736,6 @@ public:
 	afx_msg void OnMovementHighlightprohibitedmovements();
 	afx_msg void OnUpdateMovementHighlightprohibitedmovements(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateTransitShowtransitlinksonly(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateTransitShowwalklinksonly(CCmdUI *pCmdUI);
 	afx_msg void OnFilePrint();
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnFilePrintSetup();
@@ -820,51 +743,14 @@ public:
 	afx_msg void OnUpdateAgentdataShowcompletetrajectory(CCmdUI *pCmdUI);
 	afx_msg void OnAgentdataShow();
 	afx_msg void OnUpdateAgentdataShow(CCmdUI *pCmdUI);
-	afx_msg void OnDetectorUnlock();
-	afx_msg void OnUpdateDetectorUnlock(CCmdUI *pCmdUI);
-	afx_msg void OnDetectorShowsensordescription33769();
-	afx_msg void OnUpdateDetectorShowsensordescription33769(CCmdUI *pCmdUI);
-	afx_msg void OnDetectorShowmatchedlinkforsensor();
-	afx_msg void OnUpdateDetectorShowmatchedlinkforsensor(CCmdUI *pCmdUI);
 	afx_msg void OnGridUnlock();
 	afx_msg void OnUpdateGridUnlock(CCmdUI *pCmdUI);
-	afx_msg void OnLinkShowhidereferencenetwork();
-	afx_msg void OnUpdateLinkShowhidereferencenetwork(CCmdUI *pCmdUI);
-	afx_msg void OnEditMovereferencenetworkcoordinates();
-	afx_msg void OnUpdateEditMovereferencenetworkcoordinates(CCmdUI *pCmdUI);
-	afx_msg void OnReferenceShowreferencelinkidandbaselinespeedsensorid();
-	afx_msg void OnUpdateReferenceShowreferencelinkidandbaselinespeedsensorid(CCmdUI *pCmdUI);
-	afx_msg void OnDetectorShowspeedsensorlocation();
-	afx_msg void OnUpdateDetectorShowfixedcountdetectorlocation(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateDetectorShowspeedsensorlocation(CCmdUI *pCmdUI);
-	afx_msg void OnDetectorShowfixedcountdetectorlocation();
-	afx_msg void OnShowallowedlinksfordemandtypeDemandtype1();
-	afx_msg void OnShowallowedlinksfordemandtypeDemandtype2();
-	afx_msg void OnShowallowedlinksfordemandtypeDemandtype3();
-	afx_msg void OnShowallowedlinksfordemandtypeDemandtype4();
-	afx_msg void OnUpdateShowallowedlinksfordemandtypeDemandtype1(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateShowallowedlinksfordemandtypeDemandtype2(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateShowallowedlinksfordemandtypeDemandtype3(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateShowallowedlinksfordemandtypeDemandtype4(CCmdUI *pCmdUI);
-	afx_msg void OnShowallowedlinksfordemandtypeShowall();
-	afx_msg void OnUpdateShowallowedlinksfordemandtypeShowall(CCmdUI *pCmdUI);
-	afx_msg void OnReferencelineShowreferencelineno();
-	afx_msg void OnBnClickedButtonSearch();
-};
-struct PieInfo
-{
-	public:
 
-    CString desc;
-    double percentage;
-    COLORREF color;
-    PieInfo() { }
-    PieInfo(CString d, double p, COLORREF c)
-    {
-        desc =d;
-        percentage = p;
-        color = c;
-    }
+	afx_msg void OnBnClickedButtonSearch();
+	afx_msg void OnNodeZoneDisplay();
+	afx_msg void OnToolsSubarea();
+	afx_msg void OnUpdateToolsSubarea(CCmdUI* pCmdUI);
+	afx_msg void OnCreatesubareaWritesubareafile();
 };
 
 extern std::list<CTLiteView*>	g_ViewList;

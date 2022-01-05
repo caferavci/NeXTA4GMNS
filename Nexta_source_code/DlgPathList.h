@@ -52,7 +52,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 
-	afx_msg void OnPaint();
 	CGridListCtrlEx m_ListCtrl;
 	virtual BOOL OnInitDialog();
 	afx_msg void OnLvnItemchangedList(NMHDR *pNMHDR, LRESULT *pResult);
@@ -68,15 +67,9 @@ public:
 	afx_msg void OnBnClickedExportRoute();
 	afx_msg void OnPathDataExportCSV();
 		afx_msg void OnBnClickedCheckZoomToSelectedLink();
-	CListBox m_PathList;
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnBnClickedDataAnalysis();
 	afx_msg void OnDataCleanallpaths();
-	CComboBox m_StartHour;
-	CComboBox m_EndHour;
-	afx_msg void OnCbnSelchangeComboStarthour();
-	afx_msg void OnCbnSelchangeComboEndhour();
-	CComboBox m_AggregationIntervalList;
 	afx_msg void OnCbnSelchangeComboAggintrevallist();
 	afx_msg void OnCbnSelchangeComboPlotType();
 	afx_msg void OnSize(UINT nType, int cx, int cy);

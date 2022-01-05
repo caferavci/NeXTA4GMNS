@@ -46,6 +46,7 @@ class CMainFrame : public CMDIFrameWnd
 public:
 
 	float m_simulation_time_step;
+	int simulation_animation_resolution_in_mili_second;
 	CMainFrame();
 
 // Attributes
@@ -86,7 +87,6 @@ public:
     CPlayerSeekBar m_wndPlayerSeekBar;
 
    CToolBar m_MOEToolBar;
-   CToolBar m_AMSToolBar;
 
    bool m_bShowGISLayerToolBar;
 
@@ -104,7 +104,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnWindowNew3dview();
-	afx_msg void OnShowTimetable();
 	afx_msg void OnUpdateWindowNew3dview(CCmdUI *pCmdUI);
 	afx_msg void OnWindow2dview();
 	afx_msg void OnWindowShow2dview();

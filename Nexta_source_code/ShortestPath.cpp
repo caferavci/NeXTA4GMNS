@@ -236,4 +236,147 @@ int DTANetworkForSP::SimplifiedTDLabelCorrecting_DoubleQueue(int origin, int dep
 
 
 
+int DTANetworkForSP::LabelCorrecting_RouteGeneration(int origin, int departure_time, std::vector<int> zone_node_vector, 
+	std::map<int, int>	zone_node_map, int pricing_type, float VOT,
+	int ZoneNodePathLinkList[10][MAX_NODE_SIZE_IN_A_PATH],
+	int ZoneNodePathNoList[10],
+	int& ZoneNodePathNoSize,
+
+	float& TotalCost, bool distance_flag, bool check_connectivity_flag, bool debug_flag, float RandomCostCoef)   // Pointer to previous node (node)
+// time -dependent label correcting algorithm with deque implementation
+{
+
+	float CostUpperBound = MAX_SPLABEL;
+
+	int	temp_reversed_PathLinkList[MAX_NODE_SIZE_IN_A_PATH];
+	int i;
+	debug_flag = 1;
+
+	if (m_OutboundSizeAry[origin] == 0)
+		return 0;
+
+
+	for (i = 0; i < m_NodeSize; i++) // Initialization for all nodes
+	{
+		NodePredAry[i] = -1;
+		NodeStatusAry[i] = 0;
+
+		LabelTimeAry[i] = MAX_SPLABEL;
+		LabelCostAry[i] = MAX_SPLABEL;
+
+	}
+
+	// Initialization for origin node
+	LabelTimeAry[origin] = float(departure_time);
+	LabelCostAry[origin] = 0;
+
+	SEList_clear();
+	SEList_push_front(origin);
+
+	int FromNodeNo, LinkNo, ToNodeNo;
+
+
+	float NewTime, NewCost;
+	while (!SEList_empty())
+	{
+		FromNodeNo = SEList_front();
+		SEList_pop_front();
+
+
+		if (FromNodeNo != origin && zone_node_map.find(FromNodeNo) != zone_node_map.end())
+		{
+			continue;  // skip a zone node forward
+		}
+
+		if (debug_flag)
+			TRACE("\nScan from node %d", FromNodeNo);
+
+		NodeStatusAry[FromNodeNo] = 2;        //scaned
+
+		for (i = 0; i < m_OutboundSizeAry[FromNodeNo]; i++)  // for each arc (i,j) belong A(j)
+		{
+			LinkNo = m_OutboundLinkAry[FromNodeNo][i];
+			ToNodeNo = m_OutboundNodeAry[FromNodeNo][i];
+
+			if (ToNodeNo == origin)
+				continue;
+
+
+			TRACE("\n   to node %d", ToNodeNo);
+			// need to check here to make sure  LabelTimeAry[FromNodeNo] is feasible.
+
+			float travel_cost = m_LinkTimeAry[LinkNo];
+			NewTime = LabelTimeAry[FromNodeNo] + travel_cost;  // time-dependent travel times come from simulator
+			NewCost = LabelCostAry[FromNodeNo] + travel_cost;       // costs come from time-dependent tolls, VMS, information provisions
+
+			if (NewCost < LabelCostAry[ToNodeNo]) // be careful here: we only compare cost not time
+			{
+
+				LabelTimeAry[ToNodeNo] = NewTime;
+				LabelCostAry[ToNodeNo] = NewCost;
+				NodePredAry[ToNodeNo] = FromNodeNo;
+				LinkNoAry[ToNodeNo] = LinkNo;
+
+
+				// Dequeue implementation
+				//
+				if (NodeStatusAry[ToNodeNo] == 2) // in the SEList_TD before
+				{
+					SEList_push_front(ToNodeNo);
+					NodeStatusAry[ToNodeNo] = 1;
+				}
+				if (NodeStatusAry[ToNodeNo] == 0)  // not be reached
+				{
+					SEList_push_back(ToNodeNo);
+					NodeStatusAry[ToNodeNo] = 1;
+				}
+
+				//another condition: in the SELite now: there is no need to put this node to the SEList, since it is already there.
+			}
+
+		}      // end of for each link
+
+	} // end of while
+
+	ZoneNodePathNoSize = 0;
+
+	for (int z = 0; z < zone_node_vector.size(); z++)
+	{
+		int destination = zone_node_vector[z];
+		ZoneNodePathNoList[ZoneNodePathNoSize] = destination;
+
+		TotalCost = LabelCostAry[destination];
+
+		if (TotalCost > MAX_SPLABEL - 10)
+		{
+			//ASSERT(false);
+			return 0;
+		}
+
+		int LinkSize = 0;
+		int PredNode = NodePredAry[destination];
+		temp_reversed_PathLinkList[LinkSize++] = LinkNoAry[destination];
+
+		while (PredNode != origin && PredNode != -1 && LinkSize < MAX_NODE_SIZE_IN_A_PATH) // scan backward in the predessor array of the shortest path calculation results
+		{
+			ASSERT(LinkSize < MAX_NODE_SIZE_IN_A_PATH - 1);
+			temp_reversed_PathLinkList[LinkSize++] = LinkNoAry[PredNode];
+
+			PredNode = NodePredAry[PredNode];
+		}
+
+		int j = 0;
+		for (i = LinkSize - 1; i >= 0; i--)
+		{
+			ZoneNodePathLinkList[ZoneNodePathNoSize][j++] = temp_reversed_PathLinkList[i];
+		}
+		ZoneNodePathNoSize++;
+
+		if (ZoneNodePathNoSize >= 9)
+			break;
+		
+		}
+
+
+}
 

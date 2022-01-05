@@ -5779,7 +5779,8 @@ void CGridCtrl::OnMouseMove(UINT /*nFlags*/, CPoint point)
             CCellID idCurrentCell;
             if (!GetVirtualMode() || m_bTitleTips)
             {
-                // Let the cell know that a big fat cursor is currently hovering
+                // Let the cell know that a big fat cursor is currently 
+                // ering
                 // over it.
                 idCurrentCell = GetCellFromPt(point);
                 pCell = GetCell(idCurrentCell.row, idCurrentCell.col);

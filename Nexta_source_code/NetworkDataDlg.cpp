@@ -33,10 +33,8 @@
 using std::vector;
 using std::string;
 
-//_NODE_DATA = 0, _LINK_DATA, _MOVEMENT_DATA, _ZONE_DATA, _DEMAND_DATA, _TIMING_DATA, _SERVICE_DATA, TRAJECTORY_DATA, _AGENT_DATA,
-
-static LPTSTR NetworkData_Element[MAX_NUM_OF_NETWORK_DATA_FILES] = {"Node", "Link", "Movement","Zone", "Demand","Timing", "Service","Link Performance","Scenario","Trajectory","Agent"};
-static LPTSTR NetworkData_FileName[MAX_NUM_OF_NETWORK_DATA_FILES] = {"node","link", "movement","zone", "demand","timing","service","link_performance","scenario","trajectory","agent" };
+static LPTSTR NetworkData_Element[MAX_NUM_OF_NETWORK_DATA_FILES] = {"Node", "Link", "Settings", "Demand","Link Performance","od_accessibility","Route Assignment","Agent"};
+static LPTSTR NetworkData_FileName[MAX_NUM_OF_NETWORK_DATA_FILES] = {"node","link", "Settings","demand","statcic_link_performance","od_accessibility","route_assignment","agent" };
 
 // CNetworkDataSettingDlg dialog
 
@@ -162,8 +160,6 @@ BEGIN_MESSAGE_MAP(CNetworkDataSettingDlg, CDialog)
 	ON_BN_CLICKED(IDOK, &CNetworkDataSettingDlg::OnBnClickedOk)
 	ON_NOTIFY(TCN_SELCHANGE, IDC_SETTING_TAB, &CNetworkDataSettingDlg::OnTcnSelchangeSettingTab)
 	ON_BN_CLICKED(IDCANCEL, &CNetworkDataSettingDlg::OnBnClickedCancel)
-	ON_BN_CLICKED(IDC_BUTTON_ADD, &CNetworkDataSettingDlg::OnBnClickedButtonAdd)
-	ON_BN_CLICKED(IDC_BUTTON_COPY, &CNetworkDataSettingDlg::OnBnClickedButtonCopy)
 	ON_BN_CLICKED(IDC_BUTTON_EDIT_DATA_IN_EXCEL, &CNetworkDataSettingDlg::OnBnClickedButtonEditDataInExcel)
 	ON_BN_CLICKED(IDC_BUTTON_DELETE, &CNetworkDataSettingDlg::OnBnClickedButtonDelete)
 	ON_BN_CLICKED(IDC_CHECK_ZOOM_TO_SELECTED_OBJECT, &CNetworkDataSettingDlg::OnBnClickedCheckZoomToSelectedObject)

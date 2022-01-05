@@ -22,7 +22,6 @@
     <ProjectGuid>{7A853D47-92AB-4875-BBD6-926A5B677A94}</ProjectGuid>
     <RootNamespace>TLite</RootNamespace>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -220,22 +219,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AMS_Import.cpp" />
-    <ClCompile Include="AssignmentSimulationSettingDlg.cpp" />
     <ClCompile Include="AssignmentSimulationTabDlg.cpp" />
     <ClCompile Include="BaseDialog.cpp" />
     <ClCompile Include="CDlg_UserInput.cpp" />
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="CSVParser.cpp" />
-    <ClCompile Include="Data-Interface\DYNASMART-interface.cpp" />
-    <ClCompile Include="DlgTrajectoryList.cpp" />
     <ClCompile Include="Dlg_DisplayConfiguration.cpp" />
     <ClCompile Include="Dlg_Find_Vehicle.cpp" />
     <ClCompile Include="Dlg_Legend.cpp" />
     <ClCompile Include="Dlg_NodeProperties.cpp" />
     <ClCompile Include="Dlg_VehEmissions.cpp" />
     <ClCompile Include="Dlg_VehicleClassification.cpp" />
-    <ClCompile Include="DlgAssignmentSettings.cpp" />
     <ClCompile Include="DlgFileLoading.cpp" />
     <ClCompile Include="DlgFindALink.cpp" />
     <ClCompile Include="DlgLinkList.cpp" />
@@ -243,16 +237,12 @@
     <ClCompile Include="DlgMOE.cpp" />
     <ClCompile Include="DlgMOETabSubView.cpp" />
     <ClCompile Include="DlgMOETabView.cpp" />
-    <ClCompile Include="DlgNetworkAlignment.cpp" />
     <ClCompile Include="DlgPathList.cpp" />
     <ClCompile Include="DlgScenarioTab.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="NetworkDataDlg.cpp" />
     <ClCompile Include="NetworkDataTabDlg.cpp" />
-    <ClCompile Include="Page_Node_LaneTurn.cpp" />
-    <ClCompile Include="Page_Node_Movement.cpp" />
-    <ClCompile Include="Page_Node_Phase.cpp" />
     <ClCompile Include="PlayerSeekBar.cpp" />
     <ClCompile Include="ShortestPath.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -265,9 +255,7 @@
     <ClCompile Include="TLite.cpp" />
     <ClCompile Include="TLiteDoc.cpp" />
     <ClCompile Include="TLiteView.cpp" />
-    <ClCompile Include="Transit.cpp" />
     <ClCompile Include="TravelTimeEst.cpp" />
-    <ClCompile Include="TSView.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="GridCtrl_src\GridCell.cpp" />
     <ClCompile Include="GridCtrl_src\GridCellBase.cpp" />
@@ -283,11 +271,9 @@
     <ClCompile Include="CGridListCtrlEx\CGridListCtrlGroups.cpp" />
     <ClCompile Include="CGridListCtrlEx\CGridRowTraitText.cpp" />
     <ClCompile Include="CGridListCtrlEx\CGridRowTraitXP.cpp" />
-    <ClCompile Include="cross-resolution-model\CrossResolutionModel.cpp" />
     <ClCompile Include="Chart_Control\NSChartCtrl.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssignmentSimulationSettingDlg.h" />
     <ClInclude Include="AssignmentSimulationTabDlg.h" />
     <ClInclude Include="CDlg_UserInput.h" />
     <ClInclude Include="CGridListCtrlEx\CGridColumnTrait.h" />
@@ -303,8 +289,6 @@
     <ClInclude Include="CGridListCtrlEx\CGridRowTraitText.h" />
     <ClInclude Include="CGridListCtrlEx\CGridRowTraitVisitor.h" />
     <ClInclude Include="CGridListCtrlEx\CGridRowTraitXP.h" />
-    <ClInclude Include="Data-Interface\DYNASMART-interface.h" />
-    <ClInclude Include="DlgTrajectoryList.h" />
     <ClInclude Include="LinePlot\memdc.h" />
     <ClInclude Include="BaseDialog.h" />
     <ClInclude Include="ChildFrm.h" />
@@ -316,7 +300,6 @@
     <ClInclude Include="Dlg_NodeProperty.h" />
     <ClInclude Include="Dlg_VehEmissions.h" />
     <ClInclude Include="Dlg_VehicleClassification.h" />
-    <ClInclude Include="DlgAssignmentSettings.h" />
     <ClInclude Include="DlgFileLoading.h" />
     <ClInclude Include="DlgFindALink.h" />
     <ClInclude Include="DlgLinkList.h" />
@@ -324,7 +307,6 @@
     <ClInclude Include="DlgMOE.h" />
     <ClInclude Include="DlgMOETabSubView.h" />
     <ClInclude Include="DlgMOETabView.h" />
-    <ClInclude Include="DlgNetworkAlignment.h" />
     <ClInclude Include="DlgPathList.h" />
     <ClInclude Include="DlgScenarioTab.h" />
     <ClInclude Include="FrameGISLayer.h" />
@@ -337,8 +319,6 @@
     <ClInclude Include="Chart_Control\NSChartCtrl.h" />
     <ClInclude Include="Chart_Control\NSChartCtrl_Demand.h" />
     <ClInclude Include="ogr_libkml.h" />
-    <ClInclude Include="Page_Node_Movement.h" />
-    <ClInclude Include="Page_Node_Phase.h" />
     <ClInclude Include="PlayerSeekBar.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="cross-resolution-model\SignalNode.h" />
@@ -347,7 +327,6 @@
     <ClInclude Include="TLite.h" />
     <ClInclude Include="TLiteDoc.h" />
     <ClInclude Include="TLiteView.h" />
-    <ClInclude Include="Transit.h" />
     <ClInclude Include="TSView.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="GridCtrl_src\CellRange.h" />
@@ -373,6 +352,8 @@
     <Image Include="res\bmp00005.bmp" />
     <Image Include="res\bmp00006.bmp" />
     <Image Include="res\bmp00007.bmp" />
+    <Image Include="res\bmp00008.bmp" />
+    <Image Include="res\bmp00009.bmp" />
     <Image Include="res\brttoll1.bmp" />
     <Image Include="res\busmovin.bmp" />
     <Image Include="res\bustoll1.bmp" />
@@ -390,6 +371,7 @@
     <Image Include="res\rampmete.bmp" />
     <Image Include="res\rampmeter.bmp" />
     <Image Include="..\..\..\temp\rowlist\res\smallico.bmp" />
+    <Image Include="res\red_sign.bmp" />
     <Image Include="res\smallico.bmp" />
     <Image Include="res\sta_tool.bmp" />
     <Image Include="res\stateico.bmp" />
@@ -419,9 +401,6 @@
     <None Include="res\cursor2.cur" />
     <None Include="res\TLite.rc2" />
     <None Include="ClassDiagram1.cd" />
-    <None Include="Dlg_Display_Configuration_Node.htm">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TLite.rc" />

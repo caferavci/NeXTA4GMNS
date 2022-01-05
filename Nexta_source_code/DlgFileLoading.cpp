@@ -51,16 +51,20 @@ BOOL CDlgFileLoading::OnInitDialog()
 		m_ListBox_NetworkData.AddString(m_pDoc->m_SignalDataLoadingStatus);
 	}
 	m_ListBox_NetworkData.AddString (m_pDoc->m_LinkDataLoadingStatus);
-	
+	m_ListBox_NetworkData.AddString(m_pDoc->m_AccessLinkDataLoadingStatus);
+	m_ListBox_NetworkData.AddString(m_pDoc->m_SubareaDataLoadingStatus);
 
-
-	
 
 	m_ListBox_NetworkData.AddString (m_pDoc->m_DemandDataLoadingStatus);
 	
 	if(m_pDoc->m_BackgroundBitmapLoaded)
 	m_ListBox_NetworkData.AddString (m_pDoc->m_BackgroundImageFileLoadingStatus);
 	
+	if (m_pDoc->m_SimulationLinkMOEDataLoadingStatus.GetLength() > 0)
+	{
+		m_ListBox_OutputData.AddString(m_pDoc->m_SimulationLinkMOEDataLoadingStatus);
+	}
+
 
 	if(m_pDoc->m_SimulationLinkTDMOEDataLoadingStatus.GetLength ()>0)
 	{
@@ -69,10 +73,17 @@ BOOL CDlgFileLoading::OnInitDialog()
 	
 	
 
-	if(m_pDoc->m_SimulationAgentDataLoadingStatus.GetLength ()>0)
+	if(m_pDoc->m_RouteAssignmentDataLoadingStatus.GetLength ()>0)
 	{
-	m_ListBox_OutputData.AddString(m_pDoc->m_SimulationAgentDataLoadingStatus);
+	m_ListBox_OutputData.AddString(m_pDoc->m_RouteAssignmentDataLoadingStatus);
 	}
+
+	if (m_pDoc->m_SimulationTrajectoryDataLoadingStatus.GetLength() > 0)
+	{
+		m_ListBox_OutputData.AddString(m_pDoc->m_SimulationTrajectoryDataLoadingStatus);
+	}
+
+	
 
 	
 	if(m_pDoc->m_MovementDataLoadingStatus.GetLength ()>0)
