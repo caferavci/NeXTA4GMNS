@@ -5,7 +5,7 @@ https://github.com/caferavci
 
 Dr. Xuesong (Simon) Zhou’ research group at Arizona State University
 
-Contact: https://github.com/caferavci; xzhou74\@asu.edu
+Contact: cafer.avci@cornell.edu; xzhou74@asu.edu
 
 Table of Contents
 
