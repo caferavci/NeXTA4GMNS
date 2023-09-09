@@ -64,17 +64,17 @@ Contact: cafer.avci@cornell.edu; xzhou74@asu.edu
 
 # Part I: Foundational Knowledge of GMNS Visualization
 
-## 1. Introduction: The Synergy of GMNS, AMS, QGIS, and NeXTA
+## 1.1. Introduction: The Synergy of GMNS, AMS, QGIS, and NeXTA
 
 
-### 1.1 What is GMNS? An Overview
+### 1.1.1 What is GMNS? An Overview
 
 General Travel Network Format Specification is a product of Zephyr Foundation,
 which aims to advance the field through flexible and efficient support,
 education, guidance, encouragement, and incubation.
 <https://zephyrtransport.org/projects/2-network-standard-and-tools/>
 
-### 1.2 Role of AMS in Transportation Network Analysis
+### 1.1.2 Role of AMS in Transportation Network Analysis
 
 As stated in FHWA website,
 <https://cms7.fhwa.dot.gov/research/operations/analysis-modeling-simulation/analysis-modeling-simulation-overview>,
@@ -86,7 +86,7 @@ solutions to a wide range of issues. These solutions include leveraging emerging
 technologies, data sources, and alternative (non-traditional) strategies. AMS
 tools will continue to play a critical role in evaluating these solutions.
 
-### 1.3 QGIS: A Powerful Tool for Geospatial Data
+### 1.1.3 QGIS: A Powerful Tool for Geospatial Data
 
 QGIS is a free and open-source cross-platform desktop geographic information
 system (GIS) application that supports viewing, editing, and analysis of
@@ -105,7 +105,7 @@ georeference images.
 
 **Source:** <https://en.wikipedia.org/wiki/QGIS>
 
-### 1.4 NeXTA's Position in Modern Network Analysis
+### 1.1.4 NeXTA's Position in Modern Network Analysis
 
 NeXTA: Network explorer for Traffic Analysis
 
@@ -133,8 +133,8 @@ GMNS-compatible files for use in QGIS from an OSM network and how to display
 GMNS file including node.csv, link.csv, timing.csv, agent.csv and
 link_performance.csv in NeXTA.
 
-## 2 Importing GMNS Files into QGIS
-### 2.1. Procedure for Handling GMNS Files with Geometry Fields.**
+## 1.2 Importing GMNS Files into QGIS
+### 1.2.1. Procedure for Handling GMNS Files with Geometry Fields.**
 Open GMNS node.csv and link.csv in Excel to verify the existence of the geometry
 field.
 
@@ -145,8 +145,8 @@ selected as geometry definition. Sample data set:
 
 ![](media/79125164d610fd87d8e4b44e55a73ca8.png)
 
-### 3 Enhancing QGIS with XYZ Tiles
-### 3.1. Steps to Load Background Maps using XYZ Tiles 
+### 1.3 Enhancing QGIS with XYZ Tiles
+### 1.3.1. Steps to Load Background Maps using XYZ Tiles 
 Find XYZ Tiles and double-click OpenStreetMap on Browser panel. Please move the
 background layer to the bottom to show the GMNS network.
 
@@ -157,8 +157,8 @@ Refence:
 
 ![](media/a91eb5417dbf0d19408d851652edef9f.png)
 
-## 4. Advanced Visualization in QGIS
-### 4.1. A Step-by-Step Guide to Visualizing link_performance.csv
+## 1.4. Advanced Visualization in QGIS
+### 1.4.1. A Step-by-Step Guide to Visualizing link_performance.csv
 The 'geometry' field can be obtained from link.csv file. Then open this file in
 the same way as above. (Layer-\>Add Layer-\>Add Delimited Text Layer)
 
@@ -185,8 +185,8 @@ Then you can display traffic assignment result with following picture.
 
 ![](media/dbacff02995f468ad926646ac0cf731e.png)
 
-## 5. Exploring NeXTA's GMNS Capabilities
-### 5.1. How to View and Edit GMNS Network Data in NeXTA
+## 1.5. Exploring NeXTA's GMNS Capabilities
+### 1.5.1. How to View and Edit GMNS Network Data in NeXTA
 Step 1: Download and Open NeXTA, Open the Tempe ASU Network
 
 Before going into too much detail, first makes sure you’re using the most
@@ -296,8 +296,8 @@ the path.
 
 ![](media/050b92a2325bc9fa322cbcde67935ba9.jpeg)
 
-## 6. Integrating QGIS and NeXTA
-### 6.1. Leveraging QGIS for Background Image Loading in NeXTA
+## 1.6. Integrating QGIS and NeXTA
+### 1.6.1. Leveraging QGIS for Background Image Loading in NeXTA
 Open base map in QGIS
 
 ![](media/ec81f14928696f919656d661d0b083da.jpeg)
@@ -334,8 +334,8 @@ automatically.
 
 # Part II: Advanced Topics: Create GMNS Networks
 
-## 1. Building from Scratch: GMNS Network Creation in NeXTA
-### 1.1 Setting Up a Network Without Relying on Background Images
+## 2.1. Building from Scratch: GMNS Network Creation in NeXTA
+### 2.1.1 Setting Up a Network Without Relying on Background Images
 Step 1: Open NeXTA
 
 open NeXTA.exe
@@ -423,8 +423,8 @@ Click the “save”
 toggle button and to save the files of “node.csv” and “link.csv” to the local
 project folder.
 
-## 3. File Conversion: Bridging SHAPE and CSV
-### 3.1 Techniques and Best Practices for Efficient Conversion
+## 2.3. File Conversion: Bridging SHAPE and CSV
+### 2.3.1 Techniques and Best Practices for Efficient Conversion
 
 Shape files are commonly used in different GIS and transportation planning
 tools.
@@ -580,8 +580,8 @@ field, and then click on the button “Export to GIS Shape File”.
 
 ![](media/18a370c54848467709596971324f9a34.png)
 
-## 4. The Power of Visualization: Using NeXTA for Trajectory Display
-### 4.1. Steps and Insights for Trajectory Visualization in NeXTA 
+## 2.4. The Power of Visualization: Using NeXTA for Trajectory Display
+### 2.4.1. Steps and Insights for Trajectory Visualization in NeXTA 
 NGSIM data set
 
 <https://ops.fhwa.dot.gov/trafficanalysistools/ngsim.htm>
