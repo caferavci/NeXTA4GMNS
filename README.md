@@ -32,12 +32,12 @@ Contact: cafer.avci@cornell.edu; xzhou74@asu.edu
       1.3.1. [A Step-by-Step Guide to Visualizing link_performance.csv](#131-a-step-by-step-guide-to-visualizing-link_performancecsv)
    
   1.4. [Exploring NeXTA's GMNS Capabilities](#14-exploring-nextas-gmns-capabilities)
-   
-      1.4.1. [How to View and Edit GMNS Network Data in NeXTA](#141-how-to-view-and-edit-gmns-network-data-in-nexta)
+  
+   1.4.1. [How to View and Edit GMNS Network Data in NeXTA](#141-how-to-view-and-edit-gmns-network-data-in-nexta)
    
    1.5. [Integrating QGIS and NeXTA](#15-integrating-qgis-and-nexta)
    
-      1.5.1. [Leveraging QGIS for Background Image Loading in NeXTA](#151-leveraging-qgis-for-background-image-loading-in-nexta)
+   1.5.1. [Leveraging QGIS for Background Image Loading in NeXTA](#151-leveraging-qgis-for-background-image-loading-in-nexta)
 
 2. [Part II: Dive Deep: Constructing GMNS Networks](#part-ii-dive-deep-constructing-gmns-networks)
    
