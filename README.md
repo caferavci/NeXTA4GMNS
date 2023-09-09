@@ -11,7 +11,7 @@ Contact: cafer.avci@cornell.edu; xzhou74@asu.edu
 
 ## Part I: Foundational Knowledge of GMNS Visualization
 
-1. [Introduction: The Synergy of GMNS, AMS, QGIS, and NeXTA](#introduction)
+1. [Introduction: The Synergy of GMNS, AMS, QGIS, and NeXTA](#1-introduction)
 
    - [What is GMNS? An Overview.](#gmns-overview)
    - [Role of AMS in Transportation Network Analysis.](#role-of-ams)
