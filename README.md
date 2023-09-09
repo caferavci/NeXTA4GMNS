@@ -10,30 +10,54 @@ Contact: cafer.avci@cornell.edu; xzhou74@asu.edu
 # Table of Contents
 
 1. [Part I: Foundational Knowledge of GMNS Visualization](#part-i-foundational-knowledge-of-gmns-visualization)
+   
    1.1. [Introduction: The Synergy of GMNS, AMS, QGIS, and NeXTA](#introduction-the-synergy-of-gmns-ams-qgis-and-nexta)
+   
       1.1.1. [What is GMNS? An Overview.](#what-is-gmns-an-overview)
+   
       1.1.2. [Role of AMS in Transportation Network Analysis.](#role-of-ams-in-transportation-network-analysis)
+   
       1.1.3. [QGIS: A Powerful Tool for Geospatial Data.](#qgis-a-powerful-tool-for-geospatial-data)
+   
       1.1.4. [NeXTA's Position in Modern Network Analysis.](#nextas-position-in-modern-network-analysis)
+   
       1.1.5. [Importing GMNS Files into QGIS](#importing-gmns-files-into-qgis)
+   
    1.2. [Enhancing QGIS with XYZ Tiles](#enhancing-qgis-with-xyz-tiles)
+   
       1.2.1. [Steps to Load Background Maps using XYZ Tiles.](#steps-to-load-background-maps-using-xyz-tiles)
+   
    1.3. [Advanced Visualization in QGIS](#advanced-visualization-in-qgis)
+   
       1.3.1. [A Step-by-Step Guide to Visualizing link_performance.csv.](#a-step-by-step-guide-to-visualizing-link_performancecsv)
+   
    1.4. [Exploring NeXTA's GMNS Capabilities](#exploring-nextas-gmns-capabilities)
+   
       1.4.1. [How to View and Edit GMNS Network Data in NeXTA.](#how-to-view-and-edit-gmns-network-data-in-nexta)
+   
    1.5. [Integrating QGIS and NeXTA](#integrating-qgis-and-nexta)
+   
       1.5.1. [Leveraging QGIS for Background Image Loading in NeXTA.](#leveraging-qgis-for-background-image-loading-in-nexta)
+   
 
 2. [Part II: Dive Deep: Constructing GMNS Networks](#part-ii-dive-deep-constructing-gmns-networks)
+   
    2.1. [Building from Scratch: GMNS Network Creation in NeXTA](#building-from-scratch-gmns-network-creation-in-nexta)
+   
       2.1.1. [Setting Up a Network Without Relying on Background Images.](#setting-up-a-network-without-relying-on-background-images)
+   
    2.2. [Mapping it Out: Generating Networks from Background Imagery](#mapping-it-out-generating-networks-from-background-imagery)
+   
       2.2.1. [How NeXTA Utilizes Background Maps for Network Development.](#how-nexta-utilizes-background-maps-for-network-development)
+   
    2.3. [File Conversion: Bridging SHAPE and CSV](#file-conversion-bridging-shape-and-csv)
+   
       2.3.1. [Techniques and Best Practices for Efficient Conversion.](#techniques-and-best-practices-for-efficient-conversion)
+   
    2.4. [The Power of Visualization: Using NeXTA for Trajectory Display](#the-power-of-visualization-using-nexta-for-trajectory-display)
+   
       2.4.1. [Steps and Insights for Trajectory Visualization in NeXTA.](#steps-and-insights-for-trajectory-visualization-in-nexta)
+   
 
 
 
