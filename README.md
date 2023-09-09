@@ -62,9 +62,10 @@ Contact: cafer.avci@cornell.edu; xzhou74@asu.edu
 
 
 
-## Part I: Foundational Knowledge of GMNS Visualization {#part-i-foundational-knowledge-of-gmns-visualization}
+# Part I: Foundational Knowledge of GMNS Visualization {#part-i-foundational-knowledge-of-gmns-visualization}
 
-## 1.1 Introduction: The Synergy of GMNS, AMS, QGIS, and NeXTA {#introduction-the-synergy-of-gmns-ams-qgis-and-nexta}
+## 1. Introduction: The Synergy of GMNS, AMS, QGIS, and NeXTA {#1-introduction-the-synergy-of-gmns-ams-qgis-and-nexta}
+
 
 **What is GMNS? An Overview.** {#gmns-overview}
 
