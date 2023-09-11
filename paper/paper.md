@@ -24,6 +24,8 @@ bibliography: paper.bib
 
 # Summary
 
+This study discusses the integration of GMNS (General Mobility Network Specification), AMS (Analysis, Modeling, and Simulation), QGIS (Quantum Geographic Information System), and NeXTA (Network Extraction from Textual Annotations) in transportation network analysis. These tools aim to provide comprehensive insights into urban mobility systems. NeXTA4GMNS is introduced as a versatile software suite with open-source capabilities for researchers and developers. It allows users to visualize traffic dynamics, serves as an educational tool, and manages GMNS datasets. The paper is a valuable resource for transportation professionals, urban planners, and researchers seeking to enhance decision-making in urban mobility systems.
+
 # Statement of need
 
 
