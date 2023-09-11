@@ -1,55 +1,93 @@
 ---
-title: 'Gala: A Python package for galactic dynamics'
+title: 'The Power of Visualization:Using NeXTa4GMNS for Trajectory Display'
 tags:
-  - Python
-
+  - Transportation Network
+  - Trajectory
+  - General Modeling Network Specification
+  - Visualization
 authors:
-  - name: Adrian M. Price-Whelan
-    orcid: 0000-0003-0872-7098
+  - name: Cafer Avci
+    equal-contrib: true
     affiliation: 1
+  - name: Xuesong (Simon) Zhou
+    equal-contrib: true
+    affiliation: 2
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name: School of Civil and Environmental Engineering, Cornell University, Ithaca, NY, 14853, USA
    index: 1
-date: 13 August 2017
+ - name: School of Sustainable Engineering and the Built Environment, Arizona State University, Tempe, AZ, 85281, USA
+   index: 2
+date: 01 October 2023
 bibliography: paper.bib
+
 ---
 
 # Summary
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+# Statement of need
 
-``Gala`` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for ``Gala`` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. ``Gala`` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the ``Astropy`` package [@astropy] (``astropy.units`` and
-``astropy.coordinates``).
 
-``Gala`` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in ``Gala`` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike. The source code for ``Gala`` has been
-archived to Zenodo with the linked DOI: [@zenodo]
+In the field of transportation analysis and modeling, the essential integration of tools and technologies has become critical for obtaining comprehensive insights into intricate urban mobility systems. Traffic flow studies, one of the core aspects of this complexity, examine the interactions between diverse traffic elements and infrastructure to elucidate how individual participants shape traffic patterns, relying extensively on precise real-world data for empirical research.
+
+Researchers have been working to improve traffic flow measurements since the 1920s, initially relying on manual methods like stopwatches and making assumptions that may not align with modern congested traffic scenarios due to limitations in data collection technology. While new methods like radar-based devices and loop detectors have limitations in capturing comprehensive traffic flow details, recent technologies such as onboard radar detectors, cameras, and laser sensors offer more accurate data but are still limited in scope and monitored vehicles. Advances in traffic monitoring now involve GPS-equipped probe vehicles that upload real-time data about their position, speed, and direction via wireless communication, but they too have limitations in capturing complete traffic flow dynamics. This evolution in traffic measurement methods has transitioned from high-cost aerial photography to the use of drones for trajectory data collection, and the deployment of roadside video cameras and video-based traffic flow monitoring systems has provided valuable high-accuracy data for traffic flow studies, with the the next generation simulation (NGSIM) dataset being a widely utilized resource in this field.
+
+
+
+
+
+In general, the software suite of NeXTA4GMNS aims to:
+
+(1) Provide an open-source code base to enable transportation researchers and software developers to expand its range of capabilities to various traffic management application.
+
+(2) Present results to other users by visualizing time-varying traffic flow dynamics and traveler route choice behavior in an integrated environment.
+
+(3) Provide a free, educational tool for students to understand the complex decision-making process in transportation planning and optimization processes.
+
+(4) By managing GMNS data sets in both QGIS and NeXTA platforms, users can visualize the background GIS map for a GMNS network, in a broader spatial context, while NeXTA can provide time-dependent link performance visualization, path-level and agent-level analysis, and time-dependent agent trajectory visualization.
+
+
+
+This paper presents a comprehensive guide to harnessing the combined power of GMNS (General Mobility Network Specification), AMS (Analysis, Modeling, and Simulation), QGIS (Quantum Geographic Information System), and NeXTA (Network Extraction from Textual Annotations) for advanced transportation analysis.
+
+
+This paper serves as an invaluable resource for transportation professionals, urban planners, and researchers seeking a holistic understanding of GMNS-based transportation analysis, visualization, and modeling. Through a blend of theory and practical guidance, it empowers users to leverage GMNS, AMS, QGIS, and NeXTA to unlock the potential of rich transportation data and enhance decision-making in urban mobility systems.
+
+This abstract discusses the integration of General Travel Network Format Specification (GMNS), Analysis Modeling Simulation (AMS), Quantum Geographic Information System (QGIS), and NeXTA in the field of transportation network analysis. GMNS, developed by the Zephyr Foundation, promotes flexibility and efficiency in supporting transportation innovations. AMS, endorsed by FHWA, plays a crucial role in addressing transportation system complexities and evaluating solutions driven by emerging technologies. QGIS is a free and open-source geospatial tool that empowers transportation professionals for spatial data analysis. NeXTA aims to provide an open-source code base for transportation researchers and software developers, enable result presentation through traffic dynamics visualization, serve as an educational resource for transportation planning, and manage GMNS datasets in both QGIS and NeXTA, offering spatial context and time-dependent analysis. This document explains the process of obtaining GMNS-compatible files (node.csv, link.csv, timing.csv, agent.csv, link_performance.csv) from OpenStreetMap for use in QGIS and NeXTA, enhancing transportation network analysis capabilities.
+
+
+
+
+This document describes the process of obtaining [node.csv, link.csv, etc] GMNS-compatible files for use in QGIS from an OSM network and how to display GMNS file including node.csv, link.csv, timing.csv, agent.csv and link_performance.csv in NeXTA.
+
+
+
+
+# Citations
+
+Citations to entries in paper.bib should be in
+[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
+format.
+
+If you want to cite a software repository URL (e.g. something on GitHub without a preferred
+citation) then you can do it with the example BibTeX entry below for @fidgit.
+
+For a quick reference, the following citation commands can be used:
+- `@author:2001`  ->  "Author et al. (2001)"
+- `[@author:2001]` -> "(Author et al., 2001)"
+- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
+
+# Figures
+
+Figures can be included like this:
+![Caption for example figure.\label{fig:example}](figure.png)
+and referenced from text using \autoref{fig:example}.
+
+Figure sizes can be customized by adding an optional second parameter:
+![Caption for example figure.](figure.png){ width=20% }
 
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+The authors would like to thank the anonymous reviewers for their helpful suggestions to improve this paper.
 
 # References
+
