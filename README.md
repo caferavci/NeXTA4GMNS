@@ -21,23 +21,25 @@ Contact: cafer.avci@cornell.edu; xzhou74@asu.edu
    
       1.1.4. [NeXTA's Position in Modern Network Analysis](#114-nextas-position-in-modern-network-analysis)
    
-      1.1.5. [Importing GMNS Files into QGIS](#115-importing-gmns-files-into-qgis)
+   1.2. [Importing GMNS Files into QGIS](#12-importing-gmns-files-into-qgis)
+
+      1.2.1. [Procedure for Handling GMNS Files with Geometry Fields](#121-procedure-for-handling-gmns-files-with-geometry-fields)
    
-   1.2. [Enhancing QGIS with XYZ Tiles](#12-enhancing-qgis-with-xyz-tiles)
+   1.3. [Enhancing QGIS with XYZ Tiles](#13-enhancing-qgis-with-xyz-tiles)
    
-      1.2.1. [Steps to Load Background Maps using XYZ Tiles](#121-steps-to-load-background-maps-using-xyz-tiles)
+      1.3.1. [Steps to Load Background Maps using XYZ Tiles](#131-steps-to-load-background-maps-using-xyz-tiles)
    
-   1.3. [Advanced Visualization in QGIS](#13-advanced-visualization-in-qgis)
+   1.4. [Advanced Visualization in QGIS](#14-advanced-visualization-in-qgis)
    
-      1.3.1. [A Step-by-Step Guide to Visualizing link_performance.csv](#131-a-step-by-step-guide-to-visualizing-link_performancecsv)
+      1.4.1. [A Step-by-Step Guide to Visualizing link_performance.csv](#141-a-step-by-step-guide-to-visualizing-link_performancecsv)
+
+   1.5. [Exploring NeXTA's GMNS Capabilities](#15-exploring-nextas-gmns-capabilities)
+
+      1.5.1. [How to View and Edit GMNS Network Data in NeXTA](#151-how-to-view-and-edit-gmns-network-data-in-nexta)
+
+   1.6. [Integrating QGIS and NeXTA](#16-integrating-qgis-and-nexta)
    
-  1.4. [Exploring NeXTA's GMNS Capabilities](#14-exploring-nextas-gmns-capabilities)
-  
-   1.4.1. [How to View and Edit GMNS Network Data in NeXTA](#141-how-to-view-and-edit-gmns-network-data-in-nexta)
-   
-   1.5. [Integrating QGIS and NeXTA](#15-integrating-qgis-and-nexta)
-   
-   1.5.1. [Leveraging QGIS for Background Image Loading in NeXTA](#151-leveraging-qgis-for-background-image-loading-in-nexta)
+      1.6.1. [Leveraging QGIS for Background Image Loading in NeXTA](#161-leveraging-qgis-for-background-image-loading-in-nexta)
 
 2. [Part II: Dive Deep: Constructing GMNS Networks](#part-ii-dive-deep-constructing-gmns-networks)
    
@@ -45,17 +47,13 @@ Contact: cafer.avci@cornell.edu; xzhou74@asu.edu
    
       2.1.1. [Setting Up a Network Without Relying on Background Images](#211-setting-up-a-network-without-relying-on-background-images)
    
-   2.2. [Mapping it Out: Generating Networks from Background Imagery](#22-mapping-it-out-generating-networks-from-background-imagery)
+   2.2. [File Conversion: Bridging SHAPE and CSV](#22-file-conversion-bridging-shape-and-csv)
    
-      2.2.1. [How NeXTA Utilizes Background Maps for Network Development](#221-how-nexta-utilizes-background-maps-for-network-development)
+      2.2.1. [Techniques and Best Practices for Efficient Conversion](#221-techniques-and-best-practices-for-efficient-conversion)
    
-   2.3. [File Conversion: Bridging SHAPE and CSV](#23-file-conversion-bridging-shape-and-csv)
+   2.3. [The Power of Visualization: Using NeXTA for Trajectory Display](#23-the-power-of-visualization-using-nexta-for-trajectory-display)
    
-      2.3.1. [Techniques and Best Practices for Efficient Conversion](#231-techniques-and-best-practices-for-efficient-conversion)
-   
-   2.4. [The Power of Visualization: Using NeXTA for Trajectory Display](#24-the-power-of-visualization-using-nexta-for-trajectory-display)
-   
-      2.4.1. [Steps and Insights for Trajectory Visualization in NeXTA](#241-steps-and-insights-for-trajectory-visualization-in-nexta)
+      2.3.1. [Steps and Insights for Trajectory Visualization in NeXTA](#231-steps-and-insights-for-trajectory-visualization-in-nexta)
    
 
    
@@ -332,7 +330,7 @@ automatically.
 
 ![](media/8cdf10ddb7b764bf5ef8e959317759a5.jpeg)
 
-# Part II: Advanced Topics: Create GMNS Networks
+# Part II: Dive Deep: Constructing GMNS Networks
 
 ## 2.1. Building from Scratch: GMNS Network Creation in NeXTA
 ### 2.1.1 Setting Up a Network Without Relying on Background Images
@@ -423,8 +421,8 @@ Click the “save”
 toggle button and to save the files of “node.csv” and “link.csv” to the local
 project folder.
 
-## 2.3. File Conversion: Bridging SHAPE and CSV
-### 2.3.1 Techniques and Best Practices for Efficient Conversion
+## 2.2. File Conversion: Bridging SHAPE and CSV
+### 2.2.1 Techniques and Best Practices for Efficient Conversion
 
 Shape files are commonly used in different GIS and transportation planning
 tools.
@@ -542,7 +540,7 @@ CSV files.
 NEXTA to first open the CSV file and save the project, to generate “geometry”
 field automatically.
 
-**3 File Conversion: Bridging SHAPE and CSV**
+**File Conversion: Bridging SHAPE and CSV**
 
 **Step 1: Open the CSV file in Excel to check the “geometry” field**
 
@@ -580,8 +578,8 @@ field, and then click on the button “Export to GIS Shape File”.
 
 ![](media/18a370c54848467709596971324f9a34.png)
 
-## 2.4. The Power of Visualization: Using NeXTA for Trajectory Display
-### 2.4.1. Steps and Insights for Trajectory Visualization in NeXTA 
+## 2.3. The Power of Visualization: Using NeXTA for Trajectory Display
+### 2.3.1. Steps and Insights for Trajectory Visualization in NeXTA 
 NGSIM data set
 
 <https://ops.fhwa.dot.gov/trafficanalysistools/ngsim.htm>
