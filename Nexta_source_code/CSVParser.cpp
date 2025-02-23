@@ -13,7 +13,7 @@ CCSVParser::CCSVParser(void)
 	Delimiter = ',';
 	IsFirstLineHeader = true;
 	m_bSkipFirstLine = false;
-	m_bLastSectionRead = false;
+
 	m_EmptyLineCount++;
 }
 
@@ -74,41 +74,7 @@ bool CCSVParser::OpenCSVFile(string fileName, bool bIsFirstLineHeader)
 	}
 }
 
-bool CCSVParser::ReadSectionHeader(string s)
-{
-	//skip // data 
 
-	Headers.clear();
-	FieldsIndices.clear();
-
-
-	if (s.length() == 0)
-		return true;
-
-	vector<string> FieldNames = ParseLine(s);
-
-	for (size_t i = 0; i < FieldNames.size(); i++)
-	{
-		string tmp_str = FieldNames.at(i);
-		size_t start = tmp_str.find_first_not_of(" ");
-
-		string name;
-		if (start == string::npos)
-		{
-			name = "";
-		}
-		else
-		{
-			name = tmp_str.substr(start);
-		}
-		Headers.push_back(name);
-		FieldsIndices[name] = (int)i;
-	}
-
-
-	return true;
-
-}
 void CCSVParser::CloseCSVFile(void)
 {
 	inFile.close();
@@ -134,97 +100,37 @@ bool CCSVParser::ReadRecord()
 		std::getline(inFile,s);
 		if (s.length() >= 1)
 		{
-			if(m_bSynchroSingleCSVFile && s.find("[") != string::npos)  // synchro single csv file
-			{
-				LineFieldsValue = ParseLine(s);
+			//if(m_bSynchroSingleCSVFile && s.find("[") != string::npos)  // synchro single csv file
+			//{
+			//	LineFieldsValue = ParseLine(s);
 
-				if(LineFieldsValue.size()>=1) 
-				{
-					m_SynchroSectionName = LineFieldsValue[0];
+			//	if(LineFieldsValue.size()>=1) 
+			//	{
+			//		m_SynchroSectionName = LineFieldsValue[0];
 
-					if(m_SynchroSectionName.find("Phases") != string::npos)
-					{
-						m_bLastSectionRead  = true;
-					}
-				}
+			//		if(m_SynchroSectionName.find("Phases") != string::npos)
+			//		{
+			//			m_bLastSectionRead  = true;
+			//		}
+			//	}
 
-				//re-read section header
-				ReadSectionHeader(s);
-				std::getline(inFile,s);  // read the line for field values
+			//	//re-read section header
+			//	ReadSectionHeader(s);
+			//	std::getline(inFile,s);  // read the line for field values
 
 
 
-			}
+			//}
 			LineFieldsValue = ParseLine(s);
 			return true;
 		}
 		else
 		{
 
-			if(m_bSynchroSingleCSVFile)
-			{
-				if(m_bLastSectionRead)  // reach the last section
-					return false;
-				else
-				{
-					if(inFile.eof ())
-						return false;
-					else
-						return true;
-				}
-			}else //non - synchro
+
 			{
 				return false;
 			}
-		}
-	}
-	else
-	{
-		return false;
-	}
-}
-
-bool CCSVParser::ReadRecord_Section()
-{
-	LineFieldsValue.clear();
-
-	if (inFile.is_open())
-	{
-		string s;
-		std::getline(inFile, s);
-		if (s.length() > 0)
-		{
-			if (s.find("[") != string::npos)  // synchro single csv file
-			{
-				LineFieldsValue = ParseLine(s);
-
-				if (LineFieldsValue.size() >= 1)
-				{
-					SectionName = LineFieldsValue[0];
-
-				}
-
-				//re-read section header
-				ReadSectionHeader(s);
-				std::getline(inFile, s);
-
-			}
-			LineFieldsValue = ParseLine(s);
-			return true;
-		}
-		else
-		{
-
-			if (m_bLastSectionRead)  // reach the last section
-				return false;
-			else
-			{
-				if (inFile.eof())
-					return false;
-				else
-					return true;
-			}
-
 		}
 	}
 	else

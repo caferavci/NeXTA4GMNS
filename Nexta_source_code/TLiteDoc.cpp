@@ -2282,7 +2282,8 @@ bool CTLiteDoc::ReadLinkCSVFile(LPCTSTR lpszFileName, bool bCreateNewNodeFlag = 
 	bool capacity_field_warning = false;
 	bool type_field_warning = false;
 
-
+	int link_count = 0; 
+	string good_link_id;
 	CCSVParser parser;
 	if (parser.OpenCSVFile(lpszFileName))
 	{
@@ -2306,12 +2307,22 @@ bool CTLiteDoc::ReadLinkCSVFile(LPCTSTR lpszFileName, bool bCreateNewNodeFlag = 
 
 			if (!parser.GetValueByFieldName("link_id", link_id))  // no value
 			{
+			
 				// mark it as 0 first, and we then find a new unique link id after reading all links
+			}else
+			{ 
+
+				if (link_id.size() >0)
+					good_link_id = link_id;
 			}
 
 			if (!parser.GetValueByFieldName("name", name))
 				name = "";
-
+	
+			if (link_id.size() == 0)
+			{
+				name = "";
+			}
 
 			if (parser.GetValueByFieldName("from_node_id", from_node_id)==-1)
 			{
@@ -2809,7 +2820,7 @@ bool CTLiteDoc::ReadLinkCSVFile(LPCTSTR lpszFileName, bool bCreateNewNodeFlag = 
 				}
 			}
 
-
+			link_count++; 
 			//end of reading
 		}
 
@@ -2981,12 +2992,9 @@ bool CTLiteDoc::ReadLinkTypeCSVFile(LPCTSTR lpszFileName)
 	if (parser.OpenCSVFile(lpszFileName))
 	{
 		m_LinkTypeMap.clear();
-		while(parser.ReadRecord_Section())
+		while(parser.ReadRecord())
 		{
-			if (parser.SectionName == "[link_type]")
-			{
-
-			DTALinkType element;
+				DTALinkType element;
 
 			if(parser.GetValueByFieldName("link_type",element.link_type ) == false)
 			{
@@ -3034,8 +3042,7 @@ bool CTLiteDoc::ReadLinkTypeCSVFile(LPCTSTR lpszFileName)
 			}
 			lineno++;
 			
-		}
-
+		
 		CString msg;
 		msg.Format("Imported %d link types from file %s",m_LinkTypeMap.size(),lpszFileName);
 		m_MessageStringVector.push_back (msg);
@@ -3682,7 +3689,7 @@ void CTLiteDoc::ReadPathFlowCSVFile_Parser(LPCTSTR lpszFileName)
 
 				string m_AgentID;
 
-					if (parser_test.GetValueByFieldName("route_seq_id", m_AgentID) ==-1)
+					if (parser_test.GetValueByFieldName("route_id", m_AgentID) ==-1)
 					{
 						AfxMessageBox("Field route_seq_id does not exist in route_assignment.csv");
 						return;
@@ -3720,7 +3727,7 @@ void CTLiteDoc::ReadPathFlowCSVFile_Parser(LPCTSTR lpszFileName)
 
 
 			string m_AgentID;
-			parser.GetValueByFieldName("route_seq_id", m_AgentID);
+			parser.GetValueByFieldName("route_id", m_AgentID);
 
 			if(m_AgentID.size()==0)
 				break;
@@ -3763,20 +3770,19 @@ void CTLiteDoc::ReadPathFlowCSVFile_Parser(LPCTSTR lpszFileName)
 			string time_period;
 			vector<float> timestamp_vector;
 
-			parser.GetValueByFieldName("travel_time",pAgent->m_Simu_TripTime );
+			parser.GetValueByFieldName("total_travel_time",pAgent->m_Simu_TripTime );
 
-			parser.GetValueByFieldName("distance_km",pAgent->m_Distance  );
+			parser.GetValueByFieldName("total_distance_km", pAgent->m_Distance);
 
-			parser.GetValueByFieldName("volume", pAgent->m_Volume);
-			parser.GetValueByFieldName("mode_type",pAgent->m_AgentType );
-			parser.GetValueByFieldName("demand_period", pAgent->m_demand_period);
 
-			if (m_demand_period_Map.find(pAgent->m_demand_period) == m_demand_period_Map.end())
-			{
-				m_demand_period_Map[pAgent->m_demand_period] = m_demand_period_Map.size()+1;
-			}
+			parser.GetValueByFieldName("volume", pAgent->m_Volume,0.00001);
+			if (pAgent->m_Volume < 0.00001)
+				pAgent->m_Volume = 0.00002;
 
-			pAgent->m_demand_period_no = m_demand_period_Map[pAgent->m_demand_period];
+			parser.GetValueByFieldName("mode",pAgent->m_AgentType );
+
+	
+			pAgent->m_demand_period_no = 0;
 
 			if (m_AgentTypeMap.find(pAgent->m_AgentType) != m_AgentTypeMap.end())
 			{
@@ -3801,7 +3807,7 @@ void CTLiteDoc::ReadPathFlowCSVFile_Parser(LPCTSTR lpszFileName)
 		  //physcial node sequence
 
 			std::string path_node_sequence, path_time_sequence, path_state_sequence;
-			parser.GetValueByFieldName("node_sequence",path_node_sequence );
+			parser.GetValueByFieldName("node_ids",path_node_sequence );
 			string time_sequence_str;
 			parser.GetValueByFieldName("time_sequence", time_sequence_str);
 

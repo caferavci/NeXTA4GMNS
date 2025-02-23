@@ -53,7 +53,6 @@ void CDlg_VehPathAnalysis::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PATHLIST, m_PathListCtrl);
 	DDX_Control(pDX, IDC_COMBO_Origin, m_OriginBox);
 	DDX_Control(pDX, IDC_COMBO_Destination, m_DestinationBox);
-	DDX_Control(pDX, IDC_COMBO_DepartureTime, m_DepartureTimeBox);
 	DDX_Control(pDX, IDC_COMBO_Min_Number_of_Agents, m_MinAgentSizeBox);
 	DDX_Control(pDX, IDC_COMBO_ImpactLink, m_ImpactLinkBox);
 	DDX_Control(pDX, IDC_SUMMARY_INFO, m_Summary_Info_Edit);
@@ -67,7 +66,6 @@ BEGIN_MESSAGE_MAP(CDlg_VehPathAnalysis, CDialog)
 	ON_LBN_SELCHANGE(IDC_LIST_LINK2, &CDlg_VehPathAnalysis::OnLbnSelchangeListLink2)
 	ON_CBN_SELCHANGE(IDC_COMBO_Origin, &CDlg_VehPathAnalysis::OnCbnSelchangeComboOrigin)
 	ON_CBN_SELCHANGE(IDC_COMBO_Destination, &CDlg_VehPathAnalysis::OnCbnSelchangeComboDestination)
-	ON_CBN_SELCHANGE(IDC_COMBO_DepartureTime, &CDlg_VehPathAnalysis::OnCbnSelchangeComboDeparturetime)
 	ON_CBN_SELCHANGE(IDC_COMBO_AgentType, &CDlg_VehPathAnalysis::OnCbnSelchangeComboAgenttype)
 	ON_CBN_SELCHANGE(IDC_COMBO_TimeInterval, &CDlg_VehPathAnalysis::OnCbnSelchangeComboTimeinterval)
 	ON_CBN_SELCHANGE(IDC_COMBO_Min_Number_of_Agents, &CDlg_VehPathAnalysis::OnCbnSelchangeComboMinNumberofAgents)
@@ -99,6 +97,7 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 	CDialog::OnInitDialog();
 	CString str;
 
+	m_CurrentSelectedLinkNo = -1; 
 	m_ImpactLinkBox.AddString ("N/A");
 	std::list<DTALink*>::iterator iLink;
 	if(m_pDoc->m_SelectedLinkNo >=0)
@@ -107,7 +106,7 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 
 			str.Format ("%d->%d, Selected Link", pLink ->m_FromNodeID,pLink ->m_ToNodeID );
 			m_ImpactLinkBox.AddString (str);
-
+			m_CurrentSelectedLinkNo = m_pDoc->m_SelectedLinkNo;
 	}
 
 	m_ImpactLinkBox.SetCurSel (0);
@@ -129,8 +128,12 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 	m_OriginBox.SetCurSel (0);
 	m_DestinationBox.SetCurSel (0);
 
-
-
+	m_MinAgentSizeBox.AddString("0");
+	m_MinAgentSizeBox.AddString("1");
+	m_MinAgentSizeBox.AddString("5");
+	m_MinAgentSizeBox.AddString("10");
+	m_MinAgentSizeBox.AddString("100");
+	m_MinAgentSizeBox.AddString("1000");
 	std::list<CTLiteDoc*>::iterator iDoc = g_DocumentList.begin ();
 	int project_index = 0 ;
 	while (iDoc != g_DocumentList.end())
@@ -170,18 +173,8 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 
 	std::map<string, int>::const_iterator itr;
 	
-	m_DepartureTimeBox.AddString("All");
 
-		char text[100];
-		for (itr = m_pDoc->m_demand_period_Map.begin(); itr != m_pDoc->m_demand_period_Map.end(); itr++)
-		{
-			sprintf_s(text, "%s", itr->first.c_str());
-			m_DepartureTimeBox.AddString(text);
-		}
-		m_DepartureTimeBox.SetCurSel(0);
-
-
-
+	m_pDoc->m_ZoneNoSize = m_pDoc->m_ZoneID2ZoneNoMap.size();
 	if(m_pDoc->m_ZoneNoSize <100)
 		m_MinAgentSizeBox.SetCurSel (0);  //2
 	else if (m_pDoc->m_ZoneNoSize <200)
@@ -221,11 +214,11 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 			CString str;
 			str.Format ("Volume");
 			ColumnLabelVector.push_back (str);
-			ColumnLabelVector.push_back ("Avg Travel Time");
-			ColumnLabelVector.push_back ("Avg Distance");
-			ColumnLabelVector.push_back ("Avg Speed");
-
-
+			ColumnLabelVector.push_back ("Avg Travel Time (min)");
+			ColumnLabelVector.push_back ("Avg Distance (km)");
+			ColumnLabelVector.push_back ("Avg Speed (kmph)");
+			ColumnLabelVector.push_back("Avg Distance (ml)");
+			ColumnLabelVector.push_back("Avg Speed (mph)");
 			if(project_index>=1)
 			{
 				ColumnLabelVector.push_back ("Diff of Distance");
@@ -247,10 +240,10 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 		m_ListCtrl.InsertColumnTrait((int)i,ColumnLabelVector[i],LVCFMT_LEFT,-1,-1, pTrait);
 //		pTrait->SetSortFormatNumber(true);	
 //		m_ListCtrl.SetColumnWidth((int)i,LVSCW_AUTOSIZE_USEHEADER);
-		m_ListCtrl.SetColumnWidth((int)i,80);
+		m_ListCtrl.SetColumnWidth((int)i,100);
 	}
 
-	m_pDoc->m_ZoneNoSize = m_pDoc->m_ZoneID2ZoneNoMap.size();
+
 
 	if(m_ODMOEMatrix == NULL  && m_pDoc->m_ZoneNoSize >0 )
 	{
@@ -276,10 +269,11 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 	ColumnPathLabelVector.push_back ("Path No");
 	ColumnPathLabelVector.push_back ("Volume");
 	ColumnPathLabelVector.push_back ("Percentage");
-	ColumnPathLabelVector.push_back ("Travel Time");
-	ColumnPathLabelVector.push_back ("Distance");
-	ColumnPathLabelVector.push_back ("Speed");
-
+	ColumnPathLabelVector.push_back ("Travel Time (min)");
+	ColumnPathLabelVector.push_back ("Distance (km)");
+	ColumnPathLabelVector.push_back ("Speed (kmph)");
+	ColumnPathLabelVector.push_back("Distance (ml)");
+	ColumnPathLabelVector.push_back("Speed (mph)");
 
 	
 	for (unsigned i=0;i< ColumnPathLabelVector.size();i++)
@@ -287,7 +281,7 @@ BOOL CDlg_VehPathAnalysis::OnInitDialog()
 		CGridColumnTraitText* pTrait = NULL;
 
 		m_PathListCtrl.InsertColumnTrait((int)i,ColumnPathLabelVector[i],LVCFMT_LEFT,-1,-1, pTrait);
-		m_PathListCtrl.SetColumnWidth((int)i,80);
+		m_PathListCtrl.SetColumnWidth((int)i,100);
 	}
 	
 	FilterOriginDestinationPairs();
@@ -302,6 +296,23 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 {
 	m_pDoc->ResetODMOEMatrix();
 
+	if(m_CurrentSelectedLinkNo >=0 && m_CurrentSelectedLinkNo != m_pDoc->m_SelectedLinkNo)
+	{
+		m_ImpactLinkBox.ResetContent();
+		m_ImpactLinkBox.Clear();
+		CString str; 
+		m_ImpactLinkBox.AddString("N/A");
+		std::list<DTALink*>::iterator iLink;
+		if (m_pDoc->m_SelectedLinkNo >= 0)
+		{
+			DTALink* pLink = m_pDoc->m_LinkNoMap[m_pDoc->m_SelectedLinkNo];
+
+			str.Format("%d->%d, Selected Link", pLink->m_FromNodeID, pLink->m_ToNodeID);
+			m_ImpactLinkBox.AddString(str);
+			m_ImpactLinkBox.SetCurSel(0);
+			m_CurrentSelectedLinkNo = -1;
+		}
+	}
 
 	m_ListCtrl.DeleteAllItems();
 
@@ -331,6 +342,7 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 	int ImpactLinkNo = -1;
 	if(m_ImpactLinkBox.GetCurSel()>0)
 	{
+		m_CurrentSelectedLinkNo = m_pDoc->m_SelectedLinkNo;
 		char m_Text[MAX_STRING_LENGTH];
 		int FromNodeID, ToNodeID;
 		m_ImpactLinkBox.GetLBText (m_ImpactLinkBox.GetCurSel(), m_Text);
@@ -362,7 +374,7 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 
 		char str[MAX_STRING_LENGTH];
 
-		int demand_peroid_no = m_DepartureTimeBox.GetCurSel();
+		int demand_peroid_no = 0;
 
 
 		m_MinAgentSizeBox.GetLBText(m_MinAgentSizeBox.GetCurSel(), str);
@@ -427,32 +439,6 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 			count = 0;
 			//		m_ODList.ResetContent ();
 
-					// variability measure
-			for (iAgent = (*iDoc)->m_RouteAssignmentSet.begin(); iAgent != (*iDoc)->m_RouteAssignmentSet.end(); iAgent++, count++)
-			{
-				DTAAgent* pAgent = (*iAgent);
-				int OrgNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_o_ZoneID];
-				int DesNo = (*iDoc)->m_ZoneID2ZoneNoMap[pAgent->m_d_ZoneID];
-
-
-				if (OrgNo >= 0 && DesNo >= 0 /*pAgent->m_NodeSize >= 2 && */ && pAgent->m_bComplete)  // with physical path in the network
-				{
-					if (
-
-						(pAgent->m_o_ZoneID == Origin || Origin == 0) &&
-						(pAgent->m_d_ZoneID == Destination || Destination == 0) &&
-						(pAgent->m_AgentTypeNo == AgentTypeNo || AgentTypeNo == 0) &&
-						(demand_peroid_no == 0 || pAgent->m_demand_period_no == demand_peroid_no))
-					{
-						float AvgTravelTime = m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTime / max(1, m_ODMOEMatrix[p][OrgNo][DesNo].TotalAgentSize);
-
-						m_ODMOEMatrix[p][OrgNo][DesNo].AvgDistance = m_ODMOEMatrix[p][OrgNo][DesNo].TotalDistance / max(1, m_ODMOEMatrix[p][OrgNo][DesNo].TotalAgentSize);;
-						m_ODMOEMatrix[p][OrgNo][DesNo].AvgTravelTime = AvgTravelTime;
-						m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTimeVariance += (pAgent->m_Simu_TripTime - AvgTravelTime) * (pAgent->m_Simu_TripTime - AvgTravelTime);
-						m_ODMOEMatrix[p][OrgNo][DesNo].TotalTravelTimePerMileVariance += (pAgent->m_Simu_TripTime - AvgTravelTime) * (pAgent->m_Simu_TripTime - AvgTravelTime) / max(0.01, pAgent->m_Distance * pAgent->m_Distance);
-					}
-				}
-			}
 
 
 		}
@@ -469,6 +455,7 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 
 		int row_index = 0;
 		for(i=0; i < m_pDoc->m_ZoneNoSize  ; i++)
+		{ 
 			for(j=0; j< m_pDoc->m_ZoneNoSize  ; j++)
 			{
 
@@ -482,7 +469,7 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 			{
 
 				
-				if(  m_ODMOEMatrix[0][i][j].TotalAgentSize>0 && 
+				if(  m_ODMOEMatrix[0][i][j].TotalAgentSize>=0.00001 && 
 					(ImpactLinkNo<0 || (ImpactLinkNo >=0 && m_ODMOEMatrix[0][i][j].bImpactFlag == true)))
 				{
 					float AvgDistance = m_ODMOEMatrix[p][i][j].TotalDistance /m_ODMOEMatrix[p][i][j].TotalAgentSize;
@@ -531,6 +518,12 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 		sprintf_s(text, "%3.1f",AvgSpeed);
 		m_ListCtrl.SetItemText(Index,column_index++,text );
 
+		sprintf_s(text, "%3.1f", AvgDistance/1.609);
+		m_ListCtrl.SetItemText(Index, column_index++, text);
+
+
+		sprintf_s(text, "%3.1f", AvgSpeed/1.609);
+		m_ListCtrl.SetItemText(Index, column_index++, text);
 		
 		if(p>=1)
 		{
@@ -544,48 +537,21 @@ void CDlg_VehPathAnalysis::FilterOriginDestinationPairs()
 
 		count ++;
 
-		if(count>=50000)
-			break;
-//
-//						if(ImpactLinkNo<0)  // no impact link is selected
-//						{
-//						if(count<10000)
-//						{
-//							total_summary.TotalAgentSize +=m_ODMOEMatrix[p][i][j].TotalAgentSize;
-//							total_summary.TotalTravelTime +=m_ODMOEMatrix[p][i][j].TotalTravelTime;
-//							total_summary.TotalDistance +=m_ODMOEMatrix[p][i][j].TotalDistance;
-//							total_summary.TotalCost +=m_ODMOEMatrix[p][i][j].TotalCost;
-//							total_summary.emissiondata .Energy += m_ODMOEMatrix[p][i][j].emissiondata .Energy ;
-//							total_summary.emissiondata .CO2  += m_ODMOEMatrix[p][i][j].emissiondata .CO2  ;
-//
-////							m_ODList.AddString (ODInfoString);
-//						}
-//
-//						}else
-//						{ // ImpactLinkNo>0: impact link is selected
-//						
-//						if(count<10000 && m_ODMOEMatrix[p][i][j].bImpactFlag == true)
-//						{
-//							total_summary.TotalAgentSize +=m_ODMOEMatrix[p][i][j].TotalAgentSize;
-//							total_summary.TotalTravelTime +=m_ODMOEMatrix[p][i][j].TotalTravelTime;
-//							total_summary.TotalDistance +=m_ODMOEMatrix[p][i][j].TotalDistance;
-//							total_summary.TotalCost  +=m_ODMOEMatrix[p][i][j].TotalCost;
-//							total_summary.emissiondata .Energy += m_ODMOEMatrix[p][i][j].emissiondata .Energy ;
-//							total_summary.emissiondata .CO2  += m_ODMOEMatrix[p][i][j].emissiondata .CO2  ;
-//
-////							m_ODList.AddString (ODInfoString);
-//						}
+
 
 					
 						}
 					} // OD demand > 0 
-			
+
 		p++;
 		}
 			iDoc++;
 		} //document
-		}
 
+		}
+			if (count >= 500)
+				break;
+		}
 		if(count < 50000)
 		SummaryInfoString.Format("%d OD pair(s) selected.",count);
 		else
@@ -612,7 +578,7 @@ void CDlg_VehPathAnalysis::FilterPaths()
 	
 	char str[50];
 
-	int demand_peroid_no = m_DepartureTimeBox.GetCurSel();
+	int demand_peroid_no = 0;
 	m_MinAgentSizeBox.GetLBText(m_MinAgentSizeBox.GetCurSel(), str);
 	int MinAgentSize = atoi(str);
 
@@ -623,6 +589,10 @@ void CDlg_VehPathAnalysis::FilterPaths()
 
 	for (iAgent = m_pDoc->m_RouteAssignmentSet.begin(); iAgent != m_pDoc->m_RouteAssignmentSet.end(); iAgent++, count++)
 	{
+
+		if (m_PathVector.size() > 500)
+			break; 
+
 		DTAAgent* pAgent = (*iAgent);
 			pAgent->m_bODMarked = false;
 
@@ -642,28 +612,6 @@ void CDlg_VehPathAnalysis::FilterPaths()
 
 			pAgent->m_bODMarked = true;
 
-				for(int p = 0; p< m_PathVector.size(); p++)
-				{
-					
-
-					//existing path
-					if(pAgent->m_NodeIDSum == m_PathVector[p].NodeIDSum  && pAgent->m_NodeSize == m_PathVector[p].NodeSize )
-					{
-						
-						m_PathVector[p].departure_time_in_min = pAgent->m_DepartureTime ;
-						m_PathVector[p].TotalAgentSize+= pAgent->m_Volume ;
-						m_PathVector[p].TotalTravelTime  += (pAgent->m_Simu_TripTime* pAgent->m_Volume);
-						m_PathVector[p].TotalDistance   += (pAgent->m_Distance* pAgent->m_Volume);
-
-						m_PathVector[p].m_TravelTimeVector.push_back(pAgent->m_Simu_TripTime);
-
-						Agent_count += pAgent->m_Volume;
-
-						m_PathVector[p].m_AgentVector.push_back(pAgent);
-						bFingFlag = true;
-						break;
-					}
-				}
 				if(bFingFlag == false)
 				{
 					// new path
@@ -698,7 +646,7 @@ void CDlg_VehPathAnalysis::FilterPaths()
 	}
 
 	int row_index = 0;
-	for(int p = 0; p< m_PathVector.size(); p++)
+	for(int p = 0; p< min(50,m_PathVector.size()); p++)
 	{
 		float AvgDistance = m_PathVector[p].TotalDistance /m_PathVector[p].TotalAgentSize;
 		float AvgTravelTime = m_PathVector[p].TotalTravelTime /m_PathVector[p].TotalAgentSize;
@@ -734,6 +682,10 @@ void CDlg_VehPathAnalysis::FilterPaths()
 		sprintf_s(text, "%3.1f", AvgSpeed);
 		m_PathListCtrl.SetItemText(Index,column_index++,text );
 
+		sprintf_s(text, "%3.1f", AvgDistance / 1.609);
+		m_PathListCtrl.SetItemText(Index, column_index++, text);
+		sprintf_s(text, "%3.1f", AvgSpeed/1.609);
+		m_PathListCtrl.SetItemText(Index, column_index++, text);
 	}
 
 	
@@ -1017,7 +969,7 @@ void CDlg_VehPathAnalysis::OnBnClickedExportAgentData()
 
 void CDlg_VehPathAnalysis::OnBnClickedFindcriticalod()
 {
-	m_MinAgentSizeBox.SetCurSel(9);
+	m_MinAgentSizeBox.SetCurSel(1);
 	m_MinDistanceBox.SetCurSel(2);
 	FilterOriginDestinationPairs();
 

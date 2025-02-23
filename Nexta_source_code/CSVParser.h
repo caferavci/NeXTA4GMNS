@@ -103,19 +103,13 @@ public:
 	}
 
 	int m_EmptyLineCount ;
-	bool m_bSynchroSingleCSVFile;
-	string m_SynchroSectionName;
-	string SectionName;
-	bool m_bLastSectionRead;
 
-	bool ReadSectionHeader(string s);
 
 	bool m_bSkipFirstLine;  // for synchro CSV files
 	CCSVParser(void);
 	bool OpenCSVFile(string fileName, bool bIsFirstLineHeader = true);
 	void CloseCSVFile(void);
 	bool ReadRecord();
-	bool ReadRecord_Section();
 	vector<string> GetLineRecord(void);
 	vector<string> GetHeaderList();
 

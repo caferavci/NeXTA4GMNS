@@ -35,6 +35,7 @@ public:
 
 	std::vector<PathStatistics> m_PathVector;
 
+	int m_CurrentSelectedLinkNo; 
 	void FilterOriginDestinationPairs();
 	void FilterPaths();
 	void ShowSelectedPath();
@@ -60,7 +61,6 @@ public:
 	CListBox m_LinkList;
 	CComboBox m_OriginBox;
 	CComboBox m_DestinationBox;
-	CComboBox m_DepartureTimeBox;
 	CComboBox m_AgentTypeBox;
 	virtual BOOL OnInitDialog();
 	afx_msg void OnLbnSelchangeListAgent();

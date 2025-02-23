@@ -60,6 +60,7 @@ int g_ParserFloatSequence(std::string str, std::vector<float> &vect)
 
 std::replace( str.begin(), str.end(), '<', ' '); 
 std::replace( str.begin(), str.end(), '>', ' '); 
+std::replace(str.begin(), str.end(), '_', ' '); // Added line to handle underscores
 std::stringstream ss(str);
 
 float i;
