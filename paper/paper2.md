@@ -99,7 +99,7 @@ In Layer 1, OD flows $F_{OD}$ are mapped to path flows $f_P$ using an OD-to-path
 
 NeXTA provides OD pair and path-based filtering to analyze travel behavior across spatial and temporal dimensions. Users can filter trajectories by OD zones, departure time windows, and vehicle classes, then examine resulting impacts on link-level congestion and performance.
 
-![OD Pair and Path-based vehicle trajectory filtering in NeXTA, showing the interface for analyzing travel patterns across different origin-destination pairs.\label{fig:ODFiltering}](figures/NeXTAmultiLayer.jpg)
+![OD Pair and Path-based vehicle trajectory filtering in NeXTA, showing the interface for analyzing travel patterns across different origin-destination pairs.\label{fig:ODFiltering}](figures/NeXTamultiLayer.jpg)
 
 This workflow aligns with FHWA trajectory analysis practices [@FHWA2011] while embedding them in a GMNS-compliant, path-aware environment.
 
