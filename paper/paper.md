@@ -1,155 +1,127 @@
 ---
-title: 'The Power of Visualization: Using NeXTa4GMNS for Trajectory Display'
+title: 'The Power of Visualization: Using NeXTA4GMNS for Trajectory Display'
 tags:
-  - Transportation Network
-  - Trajectory
-  - General Modeling Network Specification
+  - Python
+  - Transportation
   - Visualization
+  - Trajectories
+  - GMNS
+  - Traffic Simulation
 authors:
   - name: Cafer Avci
-    equal-contrib: true
-    affiliation: 1  
+    affiliation: 1
+    corresponding: true
   - name: Yajun Liu
-    equal-contrib: true
     affiliation: 2
   - name: Xuesong (Simon) Zhou
-    equal-contrib: true
     affiliation: 2
 affiliations:
- - name: School of Civil and Environmental Engineering, Cornell University, Ithaca, NY, 14853, USA
-   index: 1
- - name: School of Sustainable Engineering and the Built Environment, Arizona State University, Tempe, AZ, 85281, USA
-   index: 2
-date: May 1, 2023
-bibliography: nexta.bib
-
+  - name: School of Civil and Environmental Engineering, Cornell University, Ithaca, NY, 14853, USA
+    index: 1
+  - name: School of Sustainable Engineering and the Built Environment, Arizona State University, Tempe, AZ, 85281, USA
+    index: 2
+date: 1 May 2025
+bibliography: paper.bib
 ---
 
 # Summary
 
-The GMNS network community requires tools for network visualization, tra-
-jectory visualization, and link performance assessment. Nexta, an open-source
-tool, provides the basic node-link structure, allowing users to edit nodes and
-links using the standard GMNS format. It also supports FHWA analysis and
-AMS simulation modeling frameworks by enabling visualization of network com-
-ponents, trajectories, and shortest paths. Nexta offers advantages over QGIS
-by focusing on trajectory visualization and network debugging, allowing users
-to operate and refine model networks for optimal performance.
-Nexta further provides link performance and moving trajectory visualization,
-helping users understand tensor concepts more easily. Since tensors are mul-
-tidimensional arrays, visualizing these structures and their trajectories within
-Nexta simplifies interpretation. With capabilities for OD trip, OD path, and
-vehicle path visualization, users can classify each engine, destination, and OD
-pair, observing trip lines and obtaining multi-view tensor visualizations. With-
-out such tools, understanding tensors in this context is challenging.
+Contemporary transportation modeling increasingly relies on large and heterogeneous data sources, including multi-resolution network topologies, time-varying traffic states, microscopic vehicle trajectories, and large-scale simulation outputs. Making sense of these data requires visualization tools that are both accurate and usable by researchers and practitioners.
 
-# Statement of need
+NeXTA4GMNS (NeXTA) is an open-source platform for transportation network and trajectory visualization built around the General Modeling Network Specification (GMNS) standard [@GMNS2020]. NeXTA provides editable, multi-resolution node-link representations of transportation networks and supports analysis of link performance metrics such as travel time, traffic volume, and speed across time horizons. Beyond link-level metrics, NeXTA supports visualization and exploration of vehicle trajectories, tensor-based data structures for spatiotemporal processing, and shortest path computations. Unlike general-purpose GIS software, NeXTA is designed for scientific transportation modeling workflows, including trajectory analysis, OD trip and path exploration, and integration with simulation and assignment frameworks such as FHWA’s Analysis, Modeling, and Simulation (AMS) environment [@yelchuru2017analysis].
 
-In the field of transportation analysis and modeling, the essential integration of tools and technologies has become critical for obtaining comprehensive insights into intricate urban mobility systems. Traffic flow studies, one of the core aspects of this complexity, examine the interactions between diverse traffic elements and infrastructure to elucidate how individual participants shape traffic patterns, relying extensively on precise real-world data for empirical research.
+# Statement of Need
 
-Since the 1920s, researchers have been striving to improve traffic flow measurements. Early methods were manual, often involving stopwatches and assumptions that no longer align with today’s congested traffic conditions due to limitations in data collection. Although more recent technologies such as radar-based devices and loop detectors have improved measurement capabilities, they still fall short in capturing the full dynamics of traffic flow. Innovations such as onboard radar detectors, cameras, and laser sensors offer higher accuracy but remain limited in scope and coverage.
+Transportation systems have become increasingly complex, and traditional data collection and analysis approaches often lack the spatial and temporal resolution required to understand modern travel dynamics and to support modeling, validation, and policy analysis [@Papageorgiou1991]. In parallel, the GMNS community has emphasized the importance of standardized network representations and visualization platforms capable of operating at the scale and complexity of real-world datasets [@GMNS2020].
 
-The latest advances include the use of GPS-equipped probe vehicles, which transmit real-time data on position, speed, and direction via wireless communication. However, even these methods have limitations in representing comprehensive traffic behavior. The evolution of traffic measurement has moved from costly aerial photography to drones for trajectory data collection. Additionally, roadside video cameras and video-based traffic flow monitoring systems now offer high-accuracy data. The Next Generation Simulation (NGSIM) dataset, for instance, has become a widely used resource for studying microscopic traffic dynamics.
+NeXTA was developed to address these needs as a GMNS-compliant, open-source visualization platform for transportation network analysis and trajectory interpretation. Rather than focusing only on map rendering, NeXTA supports multi-resolution node-link representations and incorporates tensor-based data structures to enable analysis of spatiotemporal traffic patterns grounded in traffic flow theory [@Lighthill1955; @Richards1956].
 
-As traffic monitoring technologies have matured, there has been a growing need for software tools capable of organizing, visualizing, and analyzing this increasingly rich and complex data. This need is especially prominent within the GMNS (General Modeling Network Specification) community, which focuses on standardized representations of transportation networks. Addressing these requirements, **Nexta**, an open-source tool, provides a foundational node-link structure that allows users to edit networks using the GMNS standard. It supports FHWA analysis and AMS simulation modeling frameworks by enabling detailed visualization of network components, vehicle trajectories, and shortest paths.
+Compared with general-purpose GIS tools such as QGIS, NeXTA offers built-in support for transportation-specific workflows, including microscopic trajectory analysis and direct integration with simulation outputs.
 
-Nexta, an open-source tool, provides a comprehensive node-link structure for editing networks using the GMNS standard, supporting FHWA analysis and AMS modeling frameworks. In comparison to QGIS, Nexta enhances trajectory visualization and model network debugging, offering improved link performance analysis for optimal network tuning. Key features of Nexta include:
+| Feature | NeXTA | QGIS |
+|---|---|---|
+| Network Representation | GMNS-compliant, node-link model | GIS shapefiles and layers |
+| Trajectory Analysis | Built-in support for microscopic trajectory data (e.g., NGSIM) | Requires external plugins |
+| Simulation Integration | Native support for DTALite [@Zhou2012DTALite] and SUMO [@Behrisch2011SUMO] outputs | Limited |
+| Network Editing | Hierarchical, multi-resolution editing | Basic vector editing |
+| Tensor-Based Modeling | Supported | Not available |
+| Target Users | Transportation planners, researchers, educators | General GIS users |
 
-- Multi-resolution network support
-- Tensor-based representation of trajectories
-- Cross-resolution and multi-view trajectory visualization capabilities
-- Integration with scientific computing frameworks
+High-resolution datasets such as the Next Generation Simulation (NGSIM) trajectories [@NGSIM2007] are difficult to analyze without specialized tools. NeXTA enables interactive exploration of such datasets, supporting both research and practice in transportation modeling and simulation.
 
-Nexta further provides link performance and moving trajectory visualization, helping users understand tensor concepts more easily. Since tensors are multidimensional arrays, visualizing these structures and their trajectories within Nexta simplifies interpretation. With capabilities for OD trip, OD path, and vehicle path visualization, users can classify each engine, destination, and OD pair, observing trip lines and obtaining multi-view tensor visualizations. Without such tools, understanding tensors in this context is challenging.
+# Software Description
 
-While Nexta is widely used, a deep understanding of visualization infrastructure is required to fully leverage its scientific computing applications. For scientific computing and planning, Nexta allows users to edit, save network layers, and view multi-resolution networks, Markov chains, MISO, and various transit networks. Its capacity for network visualization, layer editing, and attribute saving makes it an invaluable scientific and educational tool.
+## Core Features and Capabilities
 
-Nexta also supports mathematical modeling of GPS data, including trajectory visualization and GPS point overlays, offering a focused view on transportation networks rather than solely on link mapping. Key features include agent trajectory visualization, route assignment by zone, selection percentages, and sub-area filtering. Proper organization and user guidance are essential to help others utilize Nexta effectively.
+**Multi-resolution network visualization and editing**
 
-For planning and educational purposes, Nexta should be a standard tool in university transportation planning classes. It allows students and professionals to interact with a network beyond the surface level seen in Google Maps, providing an editable and operational view of networks that supports hands-on exploration and understanding.
+NeXTA supports seamless transitions between levels of detail, from link-level inspection for microsimulation to corridor- and zone-level views for planning. Networks can be edited and analyzed at multiple resolutions within a single interface.
 
-## Trajectory Tensor Representation
+**Tensor-based representation of trajectories**
 
-The trajectory tensor $X(a)$ represents each agent’s movements across the network, capturing essential information such as origin-destination (OD) pairs, routes, trip details, and travel times. Each agent trajectory tensor includes:
+Vehicle trajectories are represented as multi-dimensional tensors rather than simple point sequences. This enables compact storage, efficient manipulation, and advanced analytical operations for spatiotemporal filtering and aggregation.
 
-- Agent identity
-- Origin-Destination (OD) pair
-- Route and trip specifics
-- Departure and arrival times
+**Cross-resolution and multi-view trajectory visualization**
 
-## Measurement Tensor and Proportional Mapping
+NeXTA allows simultaneous visualization of individual vehicle trajectories and aggregate network performance, helping users relate microscopic behavior to macroscopic traffic phenomena [@Gazis2002; @Treiber2013].
 
-The measurement tensor $Y(i, j, t, m)$ provides real-time data on link states, including flows, densities, and speeds. This tensor integrates the following matrices for trajectory-to-measurement mapping:
+**Integration with simulation frameworks**
 
-- **Static Proportional Tensor Matrix (SPTM)**: Maps agent trajectories to specific routes or lanes.
-- **Time-Dependent Link Proportional Tensor (TDLP)**: Adjusts trajectory mappings based on temporal changes in flow and density.
+NeXTA integrates with traffic simulation and assignment tools, supporting iterative visualization workflows aligned with FHWA guidance on integrated analysis and modeling [@nevers2013effective; @Papageorgiou2003].
 
-A prior estimate tensor $X_h(a)$ is used as a baseline for trajectory estimation.
+## Multi-dimensional Matrix Representations
 
-## Mathematical Modeling and Optimization
+Agent movements are modeled using a trajectory tensor $X(a)$ that captures identity, origin-destination information, route choice, timing, and behavioral attributes. A baseline prior estimate $X_h(a)$ supports regularization when working with noisy or incomplete data.
 
-We introduce mathematical models essential for Nexta’s framework.
+Network-level conditions are captured by a measurement tensor $Y(i, j, t, m)$, which records link-level states such as flow, density, and speed. The relationship between individual trajectories and aggregate network conditions follows classical traffic assignment theory [@Wardrop1952; @Beckmann1956].
 
-### Flow Dynamics
+## Computational Graph for Traffic Modeling
 
-Define:
+NeXTA organizes OD-to-link relationships using a layered computational graph that supports forward and backward propagation for optimization-based calibration.
 
-- $Q(i, j, t)$: Flow on link $(i, j)$ at time $t$,
-- $C(i, j)$: Capacity of link $(i, j)$,
-- $VOC(i, j, t) = \frac{Q(i, j, t)}{C(i, j)}$:Volume-over-capacity ratio.
+![Layered computational graph representing OD-to-link relationships through path-based assignments and travel time transformations.\label{fig:CompGraph}](figures/MathematicalModel.png)
 
+In Layer 1, OD flows $F_{OD}$ are mapped to path flows $f_P$ using an OD-to-path assignment matrix $B$. In Layer 2, path flows are aggregated to link flows $f_L$ using a path–link incidence matrix $A$. Layers 3 and 4 propagate link travel times back to path- and OD-level travel times. This structure supports gradient-based calibration and direct mapping between modeling constructs and visualization components.
 
+| Modeling Element | NeXTA Visualization Feature |
+|---|---|
+| OD Flows ($F_{OD}$) | OD pair filtering and summaries |
+| Path Flows ($f_P$) | Path and route analysis |
+| Link Flows ($f_L$) | Link performance dashboards |
+| Link Travel Times ($T_L$) | Dynamic heatmaps |
+| Path Travel Times ($T_P$) | Aggregated trajectory profiles |
+| OD Travel Times ($T_{OD}$) | OD travel-time matrices |
+| Trajectory Tensor ($X(a)$) | Multi-dimensional agent tracking |
 
-Traffic flow is limited by link capacity:
+# Practical Applications and Examples
 
-$$
-Q(i, j, t) \leq C(i, j)
-$$
+## OD-Based Trajectory Analysis
 
-### Trajectories
+NeXTA provides OD pair and path-based filtering to analyze travel behavior across spatial and temporal dimensions. Users can filter trajectories by OD zones, departure time windows, and vehicle classes, then examine resulting impacts on link-level congestion and performance.
 
-Trajectories are generated from transfer assignments using tools like DTALite and Path4GMNS. The trajectory data, captured from DLSim, includes loop detector data formulated as link performance metrics. These metrics allow for the verification of path connectivity and show the directionality of each link, enabling a structured approach to formalizing network modeling tools for scientific computing applications.
+![OD Pair and Path-based vehicle trajectory filtering in NeXTA, showing the interface for analyzing travel patterns across different origin-destination pairs.\label{fig:ODFiltering}](figures/NeXTamultiLayer.jpg)
 
-The travel time $T(i, j, t)$ depends on the VOC ratio:
+This workflow aligns with FHWA trajectory analysis practices [@FHWA2011] while embedding them in a GMNS-compliant, path-aware environment.
 
-$$
-T(i, j, t) = T_f(i, j) \left(1 + \alpha \cdot \text{VOC}(i, j, t)^\beta \right)
-$$
+## High-Resolution Empirical Data Analysis
 
-where:
+NeXTA supports detailed exploration of empirical trajectory datasets such as NGSIM. Figure \autoref{fig:NGSIMNeXTA} shows an example using the I-101 dataset with lane, speed, and spacing filters applied.
 
-- $T_f(i, j)$: Free-flow travel time,
-- $\alpha$ and $\beta$: Parameters for congestion effects.
+![2D NGSIM 101 trajectory visualization of Lane 2 with distance and speed selection filters applied to highlight specific vehicle behavior patterns.\label{fig:NGSIMNeXTA}](figures/NeXTaNGSIM.jpg)
 
-### Optimization Objective
+Trajectory-level visualization supports nuanced validation and calibration of microsimulation and behavioral models, complementing aggregate statistics. These capabilities are useful for applications such as traffic prediction [@KIM2020102786], connected and automated vehicle model calibration [@Shladover2012], and evaluation of traffic flow stability [@Talebpour2016].
 
-Minimizing the difference between observed and predicted measurements, the objective function is:
+## Demonstration and Learning Resources
 
-$$
-\min_{X} \quad \| Y - H \cdot X \|^2 + \lambda \| X - X_h \|^2
-$$
+NeXTA includes demonstration materials for researchers, practitioners, and educators. A walkthrough video illustrating network editing, OD filtering, and trajectory visualization is available at:
+https://www.youtube.com/watch?v=example_NeXTA_demo
 
-where:
+# Impact and Future Directions
 
-- $Y$: Measurement tensor,
-- $H$: Mapping operator,
-- $\lambda$: Regularization parameter.
+NeXTA aims to make sophisticated transportation analysis accessible by combining rigorous modeling foundations with interactive visualization. By directly linking OD, path, and link modeling elements to visual representations, NeXTA supports calibration, validation, and communication with both technical and non-technical audiences.
 
-### Traffic Flow Balance
-
-For each node $n$, the balance condition is:
-
-$$
-\sum_{j} Q(j, n, t) = \sum_{k} Q(n, k, t)
-$$
-
-
-
+Future directions include tighter integration of machine learning with traffic flow theory [@Zhang2011], expanded use of connected vehicle data for real-time analysis [@Talebpour2016], and enhanced support for multimodal transportation systems [@Cats2017]. NeXTA’s extensible architecture is designed to accommodate these developments while maintaining GMNS compliance and a focus on trajectory-centric analysis.
 
 # Acknowledgements
 
-The authors would like to thank the anonymous reviewers for their helpful suggestions to improve this paper.
-
-# References
-
-
+The authors thank the anonymous reviewers for their constructive feedback. The authors also acknowledge the GMNS community for ongoing collaboration and the Federal Highway Administration for making the NGSIM dataset publicly available.
