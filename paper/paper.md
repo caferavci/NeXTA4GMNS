@@ -120,7 +120,7 @@ These filtering capabilities are tightly coupled with the platform’s multi-lay
 
 The tool also supports downstream analyses aligned with **Layers 3 and 4**, enabling users to assess how link-level conditions affect cumulative travel experiences across entire paths and back to OD-level performance summaries. This layered perspective ensures that filtered trajectories are not only visualized, but also quantitatively analyzed within a consistent system that spans OD flows, path assignments, and link-level dynamics.
 
-![OD Pair and Path-based vehicle trajectory filtering in NeXTA, showing the interface for analyzing travel patterns across different origin-destination pairs.\label{fig:ODFiltering}](figures/NeXTAmultiLayer.jpg)
+![OD Pair and Path-based vehicle trajectory filtering in NeXTA, showing the interface for analyzing travel patterns across different origin-destination pairs.\label{fig:ODFiltering}](figures/NeXTamultiLayer.jpg)
 
 Building on this structured framework, NeXTA's approach to route-based trajectory visualization aligns closely with established practices in the field—particularly those outlined in the FHWA's comprehensive *Trajectory Processor User's Guide* [@FHWA2011]. At the same time, NeXTA advances these methods by offering a standardized GMNS-compliant environment that integrates OD-based filtering with path-level analysis and link-level performance metrics.
 
